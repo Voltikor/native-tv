@@ -152,6 +152,20 @@ int main(int argc, char **argv) {
         for (int i = 0; i < 200 && !services.idle(); ++i)
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
         check(services.idle(), "With everything answered and drained the adapter reports idle");
+        services.language("pt-BR");
+        services.read("localized", Operation::SearchTitles, fields({{"query", Json::text("filme")}}));
+        response = wait(services, "localized");
+        check(response.ok() && response.json()["language"].string() == "pt-BR", "API reads carry the client's locale");
+        services.write("localized-write", Operation::HomeBeat, Json::object());
+        response = wait(services, "localized-write");
+        check(response.ok() && response.json()["language"].string() == "pt-BR", "API writes carry the client's locale");
+        services.image("recent:8:app.one");
+        response = wait(services, "image:recent:8:app.one");
+        check(response.ok() && response.json()["language"].string().empty(), "Image requests do not carry a locale header");
+        services.language("pt-BR\r\nInjected: yes");
+        services.read("invalid-locale", Operation::SearchTitles, fields({{"query", Json::text("film")}}));
+        response = wait(services, "invalid-locale");
+        check(response.ok() && response.json()["language"].string() == "en", "Unsupported language input cannot inject headers");
         services.read("big", Operation::Apps);
         response = wait(services, "big");
         check(!response.ok() && response.bytes.size() <= 8 * 1024 * 1024,

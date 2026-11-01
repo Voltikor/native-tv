@@ -234,9 +234,10 @@ int64_t systemNow() {
 }
 } // namespace
 
-HomeDiscover::HomeDiscover(std::string dataRoot, Fetcher fetcher, Clock clock)
+HomeDiscover::HomeDiscover(std::string dataRoot, Fetcher fetcher, Clock clock, std::string language)
     : cachePath_((dataRoot.empty() ? "/var/lib/tvweb" : std::move(dataRoot)) +
-                 "/home-discover.json"),
+                 (language == "pt-BR" ? "/home-discover.pt-BR.json" : "/home-discover.json")),
+      language_(language == "pt-BR" ? "pt-BR" : "en-US"),
       fetcher_(std::move(fetcher)), clock_(std::move(clock)) {
     if (!clock_) clock_ = systemNow;
     worker_ = std::thread(&HomeDiscover::workerLoop, this);
@@ -336,7 +337,7 @@ void HomeDiscover::refresh(const std::string &tmdbKey,
     for (const RowSpec &row : kRows) {
         if (tmdbKey.empty()) break;
         std::string url = "https://api.themoviedb.org/3/" + std::string(row.path) +
-            "?api_key=" + urlEncode(tmdbKey) + "&language=en-US";
+            "?api_key=" + urlEncode(tmdbKey) + "&language=" + language_;
         Json document;
         std::string error;
         bool fetched = false;

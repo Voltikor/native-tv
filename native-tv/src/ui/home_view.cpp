@@ -1,3 +1,4 @@
+#include "domain/say.hpp"
 // Home and Apps drawn on the kit from the controller's state and the motion engine's values.
 #include "ui/application.hpp"
 #include "ui/home_layout.hpp"
@@ -176,7 +177,7 @@ void rows(kit::Paint paint, const Frame &frame, float top = 0) {
         }
         kit::Row label;
         label.index = static_cast<int>(ri);
-        label.label = home.editing && ri == home.row && home::isApps(row) ? "Moving apps" : row.title;
+        label.label = home.editing && ri == home.row && home::isApps(row) ? say::msg("launcher.homeview.movingApps", "Moving apps" ): row.title;
         label.dim = static_cast<float>(motion.value(home::id("rd", ri)));
         label.enter = enterOf(motion, home::id("ER", ri));
         // The next row's name is not shown cut by the screen's edge: it fades in as it rises.
@@ -223,7 +224,7 @@ void rows(kit::Paint paint, const Frame &frame, float top = 0) {
                 tile.name = device ? "HDMI " + card.data["port"].string("") : card.title;
                 if (device && card.data["port"].string("").empty())
                     tile.name = card.title;
-                tile.sub = device ? (unused ? "Not connected" : card.title) : card.subtitle;
+                tile.sub = device ? (unused ? say::msg("launcher.homeview.notConnected", "Not connected" ): card.title) : card.subtitle;
                 if (tile.sub == tile.name)
                     tile.sub.clear();
                 tile.icon = device ? "hdmi" : "tv";
@@ -316,7 +317,7 @@ void appRows(kit::Paint paint, const Frame &frame) {
     if (clipped)
         paint.scene.popClip();
     if (home.arranging)
-        hintBand(paint, {{"", "Move"}, {"OK", "Save"}, {"Back", "Cancel"}});
+        hintBand(paint, {{"", say::msg("setup.hint.move", "Move")}, {"OK", say::msg("tv.editor.save", "Save")}, {say::msg("launcher.key.back", "Back"), say::msg("tv.pin.cancel", "Cancel")}});
 }
 
 void banner(kit::Paint paint, float amount) {
@@ -324,10 +325,10 @@ void banner(kit::Paint paint, float amount) {
     scene.shape({0, 0, kit::canvas::width, kit::canvas::height},
                 kit::focus::withAlpha(kit::alpha::scrimStrong, amount));
     scene.pushOpacity(amount);
-    paint.glyphs.text(scene, {400, 430, 1120, kit::type::headline.line}, "Native Tv is not answering",
+    paint.glyphs.text(scene, {400, 430, 1120, kit::type::headline.line}, say::msg("launcher.homeview.nativeTvIsNotAnswering", "Native Tv is not answering"),
                       kit::type::headline, kit::color::onSurface, Node::Align::Center);
     paint.glyphs.text(scene, {560, 500, 800, kit::type::body.line * 2},
-                      "Home comes back when Native Tv answers again.", kit::type::body,
+                      say::msg("launcher.homeview.homeComesBackWhenNativeTvAnswers", "Home comes back when Native Tv answers again."), kit::type::body,
                       kit::color::onSurface2, Node::Align::Center, 2);
     scene.popOpacity();
 }
@@ -372,8 +373,8 @@ void drawHome(kit::Paint paint, const Frame &frame) {
         rows(paint, frame);
         if (home.rows.empty())
             paint.glyphs.text(scene, {kit::canvas::safeX, 800, 1600, kit::type::body.line},
-                              state.catalogue.valid() ? "No items to show. Open Settings to arrange Home."
-                                                      : "Loading Home…",
+                              state.catalogue.valid() ? say::msg("launcher.homeview.noItemsToShowOpenSettingsTo", "No items to show. Open Settings to arrange Home."
+                                                      ): say::msg("launcher.homeview.loadingHome", "Loading Home…"),
                               kit::type::body, kit::color::onSurface2);
     }
     if (home.editing && home.row < home.rows.size() && home.column < home.rows[home.row].cards.size()) {
@@ -382,9 +383,9 @@ void drawHome(kit::Paint paint, const Frame &frame) {
         const bool hidden = home.rows[home.row].cards[home.column].hidden;
         // Home's row and the Apps page each have their own hidden apps.
         const bool onApps = home.tabs[home.tab].key == "apps";
-        const std::string label = hidden ? (onApps ? "Show on Apps" : "Show on Home")
-                                         : (onApps ? "Hide from Apps" : "Hide from Home");
-        hintBand(paint, {{"", "Move"}, {"OK", "Done"}, {"Red", label}});
+        const std::string label = hidden ? (onApps ? say::msg("launcher.homeview.showOnApps", "Show on Apps" ): say::msg("launcher.homeview.showOnHome", "Show on Home"))
+                                         : (onApps ? say::msg("launcher.homeview.hideFromApps", "Hide from Apps" ): say::msg("launcher.homeview.hideFromHome", "Hide from Home"));
+        hintBand(paint, {{"", say::msg("setup.hint.move", "Move")}, {"OK", say::msg("tv.apps.install.dismiss.done", "Done")}, {say::msg("launcher.key.red", "Red"), label}});
         kit::PillButton hide;
         hide.rest = {kit::canvas::width - kit::canvas::safeX - 380, 136, 380, 56};
         hide.id = "edit:hide";

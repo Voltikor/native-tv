@@ -1,3 +1,4 @@
+#include "domain/say.hpp"
 #include "ui/application.hpp"
 #include "ui/controller_helpers.hpp"
 #include <algorithm>
@@ -83,7 +84,7 @@ void Application::response(const Response &response) {
     if (response.channel == "action") {
         state_.busy = false;
         if (!response.ok() || !data.valid() || (data.has("ok") && !data["ok"].boolean())) {
-            toast(data["error"].string("That did not work. Try again."));
+            toast(data["error"].string(say::msg("phone.failed", "That did not work. Try again.")));
             refresh();
             return;
         }
@@ -108,7 +109,7 @@ void Application::response(const Response &response) {
             rebuildMenu();
         } else if (pending_.operation != Operation::OpenHomeItem &&
                    pending_.operation != Operation::Recents)
-            toast("Saved");
+            toast(say::msg("tv.settings.saved", "Saved"));
         if (pending_.operation == Operation::Recents && state_.screen == Screen::Quick &&
             state_.menu.level == "recents") {
             if (pending_.body["action"].string() == "open" ||
@@ -130,12 +131,14 @@ void Application::response(const Response &response) {
             }
         }
         else if (response.channel == "recents" && state_.screen == Screen::Quick &&
-                 state_.menu.level == "recents")
-            state_.recents.status = "Could not load recent apps. Press OK to retry.";
+                 state_.menu.level == "recents") {
+            state_.recents.load = RecentState::Load::Failed;
+            state_.recents.status = say::msg("launcher.datacontroller.couldNotLoadRecentAppsPressOK", "Could not load recent apps. Press OK to retry.");
+        }
         else if (response.channel == "menu") {
             state_.menuData =
                 fields({{"ok", Json::flag(false)},
-                        {"error", Json::text("The server did not answer. Press OK to retry.")}});
+                        {"error", Json::text(say::msg("tv.settings.noAnswer", "The server did not answer. Press OK to retry."))}});
             rebuildMenu();
         }
         return;

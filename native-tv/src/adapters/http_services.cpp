@@ -81,6 +81,7 @@ unsigned HttpServices::get(const std::string &channel, const std::string &path, 
         return 0;
     std::unique_lock<std::mutex> lock(mutex_);
     unsigned generation = ++generations_[channel];
+    if (!image) readChannels_.insert(channel);
     auto &queue = image ? images_ : api_;
     for (auto it = queue.begin(); it != queue.end();) {
         if (it->channel == channel)
@@ -94,7 +95,7 @@ unsigned HttpServices::get(const std::string &channel, const std::string &path, 
         lock.unlock();
         return 0;
     }
-    queue.push_back({channel, path, "", generation, false, readiness});
+    queue.push_back({channel, path, "", image ? "" : language_, generation, false, readiness});
     condition_.notify_all();
     lock.unlock();
     return generation;
@@ -115,7 +116,8 @@ unsigned HttpServices::write(const std::string &channel, Operation operation, co
         return 0;
     }
     unsigned generation = ++generations_[channel];
-    api_.push_back({channel, path, body.dump(), generation, true, false});
+    readChannels_.erase(channel);
+    api_.push_back({channel, path, body.dump(), language_, generation, true, false});
     condition_.notify_all();
     lock.unlock();
     return generation;
@@ -132,6 +134,19 @@ void HttpServices::adminSession(const std::string &session) {
                        session.find_first_not_of("0123456789abcdef") == std::string::npos;
     std::lock_guard<std::mutex> lock(mutex_);
     adminSession_ = valid ? session : std::string();
+}
+void HttpServices::language(const std::string &language) {
+    const std::string next = language == "pt-BR" ? "pt-BR" : "en";
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (next == language_) return;
+    language_ = next;
+    // Advance read generations, including reads already running or awaiting drain.
+    // Writes are allowed to finish; their commands contain language-neutral values.
+    for (const std::string &channel : readChannels_)
+        ++generations_[channel];
+    api_.erase(std::remove_if(api_.begin(), api_.end(), [](const Request &request) {
+        return !request.post;
+    }), api_.end());
 }
 std::vector<Response> HttpServices::drain() {
     std::unique_lock<std::mutex> lock(mutex_);
@@ -223,6 +238,8 @@ void HttpServices::run(bool image) {
                     headers = curl_slist_append(headers, "Content-Type: application/json");
                 if (!session.empty())
                     headers = curl_slist_append(headers, ("X-Admin-Session: " + session).c_str());
+                if (!request.language.empty())
+                    headers = curl_slist_append(headers, ("X-Native-Tv-Lang: " + request.language).c_str());
                 if (headers)
                     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 if (request.post) {

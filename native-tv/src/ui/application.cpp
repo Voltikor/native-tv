@@ -1,4 +1,5 @@
 #include "ui/application.hpp"
+#include "domain/say.hpp"
 #include "ui/controller_helpers.hpp"
 #include "ui/kit/components.hpp"
 #include "ui/kit/tuning.hpp"
@@ -67,8 +68,8 @@ void Application::wallClock(int hour, int minute, int weekday, int day, int mont
         dirty_ = true;
     }
 }
-Application::Application(Services &services, const std::string &initial)
-    : services_(services), initial_(initial),
+Application::Application(Services &services, const std::string &initial, Locale *locale)
+    : services_(services), locale_(locale), initial_(initial),
       clock_([this] { return static_cast<double>(now_); }),
       optimistic_(services, [this] { return clock_.nowMs(); },
                   [this](const std::string &message) { toast(message); }) {
@@ -81,6 +82,20 @@ Application::Application(Services &services, const std::string &initial)
     services_.read("caps", Operation::Capabilities);
     capsAt_ = 2000;
     route(initial);
+}
+void Application::changeLanguage(const std::string &choice) {
+    if (!locale_) return;
+    if (optimistic_.active() || state_.busy) {
+        toast(say::msg("launcher.language.wait", "Wait for the current change to finish."));
+        return;
+    }
+    std::string error;
+    if (!locale_->choose(choice, &error)) {
+        toast(say::msg("launcher.language.saveFailed", "Could not save the language preference."));
+        return;
+    }
+    services_.language(locale_->language());
+    languageChanged_ = true;
 }
 void Application::toast(const std::string &value) {
     state_.toast = value;
@@ -118,6 +133,23 @@ void Application::active(bool value) {
 }
 bool Application::update(uint32_t now) {
     now_ = now;
+    if (languageChanged_) {
+        languageChanged_ = false;
+        const std::string origin = cameFrom_;
+        // Recreate the picker on the next frame, after its input callback returns.
+        // API reads in the previous language were cancelled by Services::language.
+        if (screen_) screen_->leave(*this);
+        screen_.reset();
+        memory_.clear();
+        state_.discover = Json();
+        state_.toast.clear();
+        rebuildHome();
+        route("language");
+        cameFrom_ = origin;
+        services_.read("catalogue", Operation::HomeCatalogue);
+        services_.read("discover", Operation::HomeDiscover);
+        dirty_ = true;
+    }
     if (!active_)
         return false;
     if (state_.screen == Screen::Splash)

@@ -24,7 +24,7 @@ jobs:
         run: ./scripts/check-es5.py
 
       - name: strings keyed and translations current
-        run: ./scripts/check-strings.py
+        run: python3 scripts/check-strings.py && python3 scripts/check-launcher-strings.py
 
       - name: screen saver QML matches its declared QtQuick version
         run: ./scripts/check-screensavers.py

@@ -280,7 +280,7 @@ class ProfilesScreen final : public ScreenView {
                             static_cast<float>(28 * motion.value(id("e", count + 1)))};
             kit::pillButton(paint, rename);
         }
-        kit::keyHint(paint, kit::canvas::safeX, 1002, "Back", msg("tv.profiles.return", "Return"),
+        kit::keyHint(paint, kit::canvas::safeX, 1002, say::msg("launcher.key.back", "Back"), msg("tv.profiles.return", "Return"),
                      "profiles:back");
     }
     Json snapshot() const override {

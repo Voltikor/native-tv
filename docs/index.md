@@ -51,6 +51,7 @@ Native Tv grew out of [Glasshouse](https://github.com/rorygallagher2024/glasshou
 * **[Read the TV's logs](dashboard/tools.md)** in one searchable timeline in the browser, with no SSH, and with private details hidden when copied or exported.
 * **[Connect it to Home Assistant](integrations/home-assistant.md).** An MQTT bridge with Discovery exposes the TV as one device; the remote's buttons can trigger automations. [Prometheus metrics](integrations/prometheus.md) and [log forwarding](integrations/syslog.md) are there for monitoring.
 * **[Open the service menu](dashboard/service-menu.md)** from a browser, with no service remote, and unlock it where newer firmware cuts it down.
+* **[Native launcher in English and Brazilian Portuguese](development/launcher-translations.md).** Automatic follows the TV; an explicit choice also sets the movie metadata language.
 * **[Use it in English or Spanish](dashboard/server.md).** The dashboard follows the browser's language, with a Language setting on the Server tab, and shows the TV's own messages in it too. The Spanish is [partly machine-translated](development/strings.md#spanish) and open to review by native speakers.
 * **[Use it on the TV itself](apps/tv-app.md).** A native app on the home screen, driven by the remote and [drawn at 60 frames a second](apps/tv-app.md#how-smooth-it-is).
 

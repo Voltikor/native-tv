@@ -67,6 +67,7 @@ CardRow appsRow(const Json &catalogue, const Json &guide, bool withHidden,
                 const std::string &list = "app");
 // The kind an app card is grouped under (LG Home is "tv").
 std::string kindOf(const Card &card);
+std::string appKindTitle(const std::string &kind, const std::string &label);
 // The order to save for the apps after the visible cards were moved: `shown` is the ids on screen
 // in their new order; ids the row does not show (hidden ones) keep their places in `order`.
 std::vector<std::string> orderAfterMove(const Json &order, const std::vector<std::string> &shown);

@@ -1,6 +1,7 @@
 #pragma once
 #include "core/services.hpp"
 #include "domain/models.hpp"
+#include "domain/locale.hpp"
 #include "ui/kit/widgets.hpp"
 #include "ui/motion/motion.hpp"
 #include "ui/optimistic.hpp"
@@ -77,6 +78,8 @@ struct RecentState {
     enum class Focus { Card, Close, All };
     Focus focus = Focus::Card;
     std::string status;
+    enum class Load { Ready, Loading, Failed };
+    Load load = Load::Ready;
     unsigned revision = 0;
 };
 struct ViewState {
@@ -103,6 +106,8 @@ void drawRecents(kit::Paint paint, const Frame &frame);
 void drawMenu(Scene &scene, const ViewState &state);
 class Application : private ScreenHost {
     Services &services_;
+    Locale *locale_;
+    bool languageChanged_ = false;
     ViewState state_;
     bool dirty_ = true, active_ = true, running_ = true;
     uint32_t now_ = 0, refreshAt_ = 0, toastUntil_ = 0, confirmUntil_ = 0;
@@ -232,7 +237,10 @@ class Application : private ScreenHost {
     ScreenRegistry &screens() {
         return registry_;
     }
-    explicit Application(Services &services, const std::string &initial = "home");
+    explicit Application(Services &services, const std::string &initial = "home",
+                         Locale *locale = nullptr);
+    std::string languageChoice() const override { return locale_ ? locale_->choice() : "auto"; }
+    void changeLanguage(const std::string &choice) override;
     // The real client keeps its first frames behind the ink until the server has said whether
     // first-run setup is needed (up to 2.5 s), so the page about to be replaced is never seen. Not
     // for the kit gallery, setup itself or the splash, which do not ask.

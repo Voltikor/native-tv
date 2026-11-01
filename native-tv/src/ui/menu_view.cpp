@@ -1,3 +1,4 @@
+#include "domain/say.hpp"
 #include "ui/application.hpp"
 #include "ui/kit/components.hpp"
 #include <algorithm>
@@ -103,14 +104,15 @@ void drawMenu(Scene &scene, const ViewState &state) {
     if (state.screen == Screen::Setup)
         title = setupTitle(menu.level);
     else if (state.screen == Screen::Catalog)
-        title = "Homebrew applications";
+        title = say::msg("launcher.menuview.homebrewApplications", "Homebrew applications");
     else if (state.screen == Screen::Qr)
-        title = "Open on a phone";
+        title = say::msg("launcher.menuview.openOnAPhone", "Open on a phone");
     else
         title = menu.level;
     scene.text({left, 172, width, 86}, title, 48, ink);
     if (!menu.sub.empty())
-        scene.text({left, 240, width, 36}, "Back to return  ·  " + menu.sub, 24, muted);
+        scene.text({left, 240, width, 36}, say::msg("launcher.menu.returnToSection", "Back to return  ·  {section}",
+                   fields({{"section", Json::text(menu.sub)}})), 24, muted);
     size_t first = menu.selected > 4 ? menu.selected - 4 : 0;
     for (size_t i = first; i < menu.rows.size() && top < 1030; ++i) {
         const MenuRow &row = menu.rows[i];
@@ -135,15 +137,15 @@ void drawMenu(Scene &scene, const ViewState &state) {
         scene.text({1320, 320, 490, 100}, row.label, 36, ink);
         scene.text({1320, 440, 490, 380}, row.hint, 28, muted);
         if (!row.command.empty())
-            scene.text({1320, 856, 490, 100}, state.busy ? "Working…" : "Press OK to choose", 26,
+            scene.text({1320, 856, 490, 100}, state.busy ? say::msg("launcher.menuview.working", "Working…" ): say::msg("launcher.menuview.pressOKToChoose", "Press OK to choose"), 26,
                        ink);
     }
     if (!state.qr.empty() && (state.screen == Screen::Qr ||
                               (state.screen == Screen::Setup && menu.level == "handoff"))) {
         scene.rect({1290, 370, 480, 480}, {1, 1, 1, 1}, 12);
         scene.image({1310, 390, 440, 440}, "qr:" + state.qr);
-        scene.text({1290, 880, 500, 120}, "Scan with a phone camera", 28, ink);
+        scene.text({1290, 880, 500, 120}, say::msg("launcher.menuview.scanWithAPhoneCamera", "Scan with a phone camera"), 28, ink);
     }
-    scene.button({96, 972, 160, 72}, "Back", "back", false, state.light);
+    scene.button({96, 972, 160, 72}, say::msg("launcher.key.back", "Back"), "back", false, state.light);
 }
 } // namespace nativetv

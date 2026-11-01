@@ -188,7 +188,7 @@ void PinScreen::build(ScreenHost &host, kit::Paint paint) {
     kit::hintBar(paint, kHints,
                  {{"", msg("setup.hint.move", "Move")},
                   {"OK", msg("setup.hint.type", "Type")},
-                  {"Back", msg("tv.pin.cancel", "Cancel")}},
+                  {say::msg("launcher.key.back", "Back"), msg("tv.pin.cancel", "Cancel")}},
                  enterOf(host, Hints));
 }
 } // namespace

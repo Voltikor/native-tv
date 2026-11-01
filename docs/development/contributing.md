@@ -140,3 +140,5 @@ Every pull request has a **Testing** section: the TV and webOS version the chang
 was tried on, what was done and seen, and what was not tested. Say so where a change
 could only be checked on the host. Names of webOS versions are as the TV reports
 them (webOS 4.4, 9, 10); see [tested TVs](../getting-started/tested-tvs.md#webos-version-numbers).
+
+Native launcher text uses keyed `say::msg` messages and the Brazilian Portuguese catalog under `assets/i18n/launcher/`. A text change updates its translation and passes `scripts/check-launcher-strings.py`; [launcher translation rules](launcher-translations.md) cover plurals and fallback.

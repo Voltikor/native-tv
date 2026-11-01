@@ -10,6 +10,8 @@ It is drawn by the Native Tv client in the style of Google TV: a dark page with 
 
 Because the panel is an OLED, no screen of the app holds still at full brightness: thirty seconds without a key or a click dim it to two thirds black, and the first key or click after that only wakes it. This holds for Home, Live, Settings, the catalogue and the setup pages alike; the TV's own screen saver is left as it is set.
 
+**Language** in Quick settings or Settings selects Automatic (the TV's language), English or Português (Brasil). The choice applies to native screens and movie metadata, and is independent of the browser dashboard. [Native launcher translations](../development/launcher-translations.md) describes the fallback and storage.
+
 ### How smooth it is
 
 The app is drawn on the GPU at the display's 60 frames a second, with no browser, JavaScript or garbage collector between the remote and the picture. How it holds that on a TV:

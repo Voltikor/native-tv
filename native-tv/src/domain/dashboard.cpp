@@ -1,3 +1,4 @@
+#include "domain/locale.hpp"
 #include "domain/models.hpp"
 #include "domain/say.hpp"
 #include <algorithm>
@@ -55,20 +56,8 @@ MenuRow &row(Rows &rows, const std::string &label, const std::string &value = ""
 std::string on(bool value) {
     return value ? say::msg("common.on", "On") : say::msg("common.off", "Off");
 }
-std::string grouped(long long value) {
-    std::string digits = std::to_string(value < 0 ? -value : value), result;
-    for (size_t i = 0; i < digits.size(); ++i) {
-        if (i && (digits.size() - i) % 3 == 0)
-            result += ',';
-        result += digits[i];
-    }
-    return value < 0 ? "-" + result : result;
-}
-std::string fixed(double value, int decimals) {
-    char text[48];
-    std::snprintf(text, sizeof(text), "%.*f", decimals, value);
-    return text;
-}
+std::string grouped(long long value) { return localizedInteger(value); }
+std::string fixed(double value, int decimals) { return localizedDecimal(value, decimals); }
 // A number the server sent with or without its unit: the unit is not doubled, and a percent
 // sits against its number.
 std::string withUnit(const Json &value, const std::string &unit) {
@@ -1311,7 +1300,7 @@ void homeSettings(Rows &rows, const Json &data, const std::string &sub) {
             Json next = Json::array();
             for (const std::string &key : moved)
                 next.add(Json::text(key));
-            row(rows, kinds[i]["label"].string(), "",
+            row(rows, appKindTitle(kinds[i]["key"].string(), kinds[i]["label"].string()), "",
                 writable && i > 0 ? post(Operation::SetHomeLayout, fields({{"kinds", next}}))
                                   : Command(),
                 say::msg("home.kindsDesc", "The rows of the Apps screen, top to bottom. On the Apps "
@@ -1621,6 +1610,8 @@ void settings(Rows &rows, const Json &data) {
                        "Assistant’s Mosquitto add-on, so it can join your automations. The "
                        "broker’s details are entered on your phone."),
         say::msg("tv.settings.open", "Open"));
+    row(rows, say::msg("launcher.language.title", "Language"), "", navigate("language"),
+        say::msg("launcher.language.description", "Choose the language of the launcher and movie information."));
     row(rows, say::msg("theme", "Theme"), say::msg("theme.dark", "Dark"), navigate("theme"),
         say::msg("tv.appearance.theme.hint", "Switches the dashboard interface between Dark (true "
                                              "black for OLED) and Light theme."));
@@ -1631,16 +1622,16 @@ void settings(Rows &rows, const Json &data) {
 } // namespace
 
 std::vector<Tab> dashboardTabs() {
-    return {{"system", "Metrics", Operation::Metrics},
-            {"apps", "Apps", Operation::Apps},
-            {"oled", "OLED Care", Operation::OledCare},
-            {"game", "Game", Operation::Game},
-            {"saver", "Screen Saver", Operation::ScreenSaver},
-            {"home", "Home", Operation::HomeStatus},
-            {"privacy", "Privacy", Operation::Privacy},
-            {"service", "Service Menu", Operation::ServiceMenu},
-            {"options", "System", Operation::SystemSettings},
-            {"settings", "Settings", Operation::Setup}};
+    return {{"system", say::msg("tv.settings.group.metrics", "Metrics"), Operation::Metrics},
+            {"apps", say::msg("launcher.apps.title", "Apps"), Operation::Apps},
+            {"oled", say::msg("tv.settings.group.oled", "OLED Care"), Operation::OledCare},
+            {"game", say::msg("tv.settings.group.game", "Game"), Operation::Game},
+            {"saver", say::msg("tv.settings.group.saver", "Screen Saver"), Operation::ScreenSaver},
+            {"home", say::msg("launcher.home.title", "Home"), Operation::HomeStatus},
+            {"privacy", say::msg("tv.settings.group.privacy", "Privacy"), Operation::Privacy},
+            {"service", say::msg("tv.settings.group.service", "Service Menu"), Operation::ServiceMenu},
+            {"options", say::msg("tv.settings.group.system", "System"), Operation::SystemSettings},
+            {"settings", say::msg("tv.settings.group.settings", "Settings"), Operation::Setup}};
 }
 std::vector<MenuRow> dashboardRows(const std::string &tab, const Json &data, const Json &caps,
                                    const std::string &sub) {

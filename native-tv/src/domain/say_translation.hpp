@@ -11,7 +11,7 @@ namespace say {
 // and English template each rendered message came from, and translateJson()
 // swaps those messages for their translations in the fields a page shows.
 
-// Reads <directory>/<xx>.json (a two-letter code), each { "key": { "text":
+// Reads <directory>/<xx>.json and launcher/pt-BR.json, each { "key": { "text":
 // "...", "from": "the English it was made from" } }, and starts remembering
 // messages. Returns the number of languages read; none leaves msg() as it was.
 // Call it before serving, once: it replaces any dictionaries read before.

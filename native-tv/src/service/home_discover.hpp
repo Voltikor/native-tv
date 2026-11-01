@@ -18,7 +18,7 @@ class HomeDiscover {
     using Clock = std::function<int64_t()>;
 
     explicit HomeDiscover(std::string dataRoot, Fetcher fetcher = Fetcher(),
-                          Clock clock = Clock());
+                          Clock clock = Clock(), std::string language = "en-US");
     ~HomeDiscover();
     HomeDiscover(const HomeDiscover &) = delete;
     HomeDiscover &operator=(const HomeDiscover &) = delete;
@@ -41,6 +41,7 @@ class HomeDiscover {
     void saveCacheLocked();
     bool dueLocked(int64_t nowMs, bool tmdbAsked, bool youtubeAsked) const;
     std::string cachePath_;
+    const std::string language_;
     Fetcher fetcher_;
     Clock clock_;
     LinkCheck linkCheck_;

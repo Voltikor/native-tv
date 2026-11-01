@@ -1,3 +1,4 @@
+#include "domain/locale.hpp"
 #include "domain/settings_items.hpp"
 #include "domain/say.hpp"
 #include <algorithm>
@@ -13,15 +14,7 @@ Json vars(std::initializer_list<std::pair<const char *, std::string>> values) {
         result.set(value.first, Json::text(value.second));
     return result;
 }
-std::string groupedNumber(long long value) {
-    std::string digits = std::to_string(value < 0 ? -value : value), result;
-    for (size_t i = 0; i < digits.size(); ++i) {
-        if (i && (digits.size() - i) % 3 == 0)
-            result += ',';
-        result += digits[i];
-    }
-    return value < 0 ? "-" + result : result;
-}
+std::string groupedNumber(long long value) { return localizedInteger(value); }
 // `value` with its first true-or-false turned over: what a switch's command says, said the other
 // way.
 Json flippedOnce(const Json &value, bool &done) {
@@ -204,11 +197,11 @@ std::string settingGroupStatus(const std::string &key, const Json &data) {
 }
 
 bool settingToggleValue(const std::string &value, bool &on) {
-    static const std::map<std::string, bool> words = {
-        {"On", true},        {"Off", false},       {"Shown", true},         {"Hidden", false},
-        {"Visible", true},   {"Kept ready", true}, {"Switched off", false}, {"Active", true},
-        {"Disabled", false}, {"Enabled", true},    {"On Home", true},       {"Not on Home", false},
-        {"Locked", true},    {"Unlocked", false}};
+    const std::map<std::string, bool> words = {
+        {say::msg("common.on", "On"), true},        {say::msg("tv.quick.off", "Off"), false},       {say::msg("tv.options.lgLogo.shown", "Shown"), true},         {say::msg("home.hidden", "Hidden"), false},
+        {say::msg("apps.tile.visible", "Visible"), true},   {say::msg("tv.settings.page.keptReady", "Kept ready"), true}, {say::msg("apps.preload.off", "Switched off"), false}, {say::msg("metrics.hdmi.active", "Active"), true},
+        {say::msg("mqtt.cat.disabled", "Disabled"), false}, {say::msg("mqtt.cat.enabled", "Enabled"), true},    {say::msg("apps.home.onHome", "On Home"), true},       {say::msg("apps.home.notOnHome", "Not on Home"), false},
+        {say::msg("svc.locked", "Locked"), true},    {say::msg("svc.unlocked", "Unlocked"), false}};
     auto found = words.find(value);
     if (found == words.end())
         return false;
@@ -249,7 +242,6 @@ std::vector<SettingPage> settingPages(const std::string &group, const std::vecto
             continue;
         }
         item.icon = iconOf(group, row.label);
-        bool on = false;
         if (row.command.empty())
             item.kind = SettingItem::Kind::Info;
         else if (!row.command.route.empty())
@@ -261,10 +253,7 @@ std::vector<SettingPage> settingPages(const std::string &group, const std::vecto
             item.kind = SettingItem::Kind::Choice;
         else if (!row.action.empty())
             item.kind = SettingItem::Kind::Action;
-        else if (settingToggleValue(row.value, on)) {
-            item.kind = SettingItem::Kind::Toggle;
-            item.on = on;
-        } else
+        else
             item.kind = row.value.empty() ? SettingItem::Kind::Action : SettingItem::Kind::Choice;
         item.choices = row.choices;
         item.reverse = row.reverse.empty() ? flipped(row.command) : row.reverse;

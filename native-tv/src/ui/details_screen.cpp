@@ -98,7 +98,7 @@ void DetailsScreen::leave(ScreenHost &host) {
 }
 void DetailsScreen::rebuildActions(Title &title) {
     const Json &item = title.item;
-    std::string keep = title.action < title.actions.size() ? title.actions[title.action].label : "";
+    Action::Kind keep = title.action < title.actions.size() ? title.actions[title.action].kind : Action::Kind::Retry;
     title.actions.clear();
     if (!item["netflixId"].string().empty())
         title.actions.push_back({Action::Kind::Netflix, msg("tv.details.netflix", "Open on Netflix")});
@@ -115,7 +115,7 @@ void DetailsScreen::rebuildActions(Title &title) {
         title.action = 0;
     else
         for (size_t i = 0; i < title.actions.size(); ++i)
-            if (title.actions[i].label == keep)
+            if (title.actions[i].kind == keep)
                 title.action = i;
 }
 void DetailsScreen::push(ScreenHost &host, const Json &item) {
@@ -557,7 +557,7 @@ void DetailsScreen::build(ScreenHost &host, kit::Paint paint) {
         }
         endGroup();
     }
-    kit::keyHint(paint, kit::canvas::safeX, 1002, "Back", msg("tv.details.return", "Return"),
+    kit::keyHint(paint, kit::canvas::safeX, 1002, say::msg("launcher.key.back", "Back"), msg("tv.details.return", "Return"),
                  "details:back");
     float open = static_cast<float>(motion.value("details:ov"));
     if (open > .002f)

@@ -34,6 +34,8 @@ struct FakeTransport final : Services {
     std::vector<Request> requests;
     std::map<std::string, unsigned> revisions;
     bool refuse = false; // a full queue: the request is not taken
+    std::string requestLanguage = "en";
+    void language(const std::string &value) override { requestLanguage = value; }
     unsigned read(const std::string &channel, Operation operation, const Json &arguments = Json()) override {
         if (refuse)
             return 0;

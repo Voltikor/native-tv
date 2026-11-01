@@ -1,5 +1,6 @@
 #include "domain/say.hpp"
 #include "domain/say_translation.hpp"
+#include "domain/locale.hpp"
 #include <atomic>
 #include <dirent.h>
 #include <fstream>
@@ -224,12 +225,15 @@ bool readFile(const std::string &path, std::string &contents) {
 }
 
 bool languageCode(const std::string &value) {
-    return value.size() == 2 && value[0] >= 'a' && value[0] <= 'z' && value[1] >= 'a' &&
-           value[1] <= 'z';
+    return value == "pt-BR" ||
+           (value.size() == 2 && value[0] >= 'a' && value[0] <= 'z' && value[1] >= 'a' &&
+            value[1] <= 'z');
 }
 } // namespace
 
 std::string msg(const std::string &key, const std::string &english, const Json &variables) {
+    if (const Locale *locale = currentLocale())
+        return locale->message(key, english, variables);
     const std::string text = fill(english, variables);
     if (translating.load(std::memory_order_acquire))
         remember(text, key, english, variables);
@@ -253,25 +257,27 @@ std::string list(const std::vector<std::string> &items) {
 
 size_t loadTranslations(const std::string &directory) {
     std::map<std::string, Dictionary> loaded;
-    if (DIR *folder = opendir(directory.c_str())) {
-        while (const dirent *item = readdir(folder)) {
-            const std::string name = item->d_name;
-            std::string contents;
-            if (name.size() != 7 || name.compare(2, 5, ".json") != 0 ||
-                !languageCode(name.substr(0, 2)) || !readFile(directory + "/" + name, contents))
-                continue;
-            const Json document = Json::parse(contents);
-            Dictionary dictionary;
-            for (const std::string &key : document.keys()) {
-                const Json entry = document[key];
-                if (entry["text"].isString() && entry["from"].isString() &&
-                    !entry["text"].string().empty())
-                    dictionary[key] = {entry["text"].string(), entry["from"].string()};
+    for (const std::string &folderPath : {directory, directory + "/launcher"}) {
+        if (DIR *folder = opendir(folderPath.c_str())) {
+            while (const dirent *item = readdir(folder)) {
+                const std::string name = item->d_name;
+                std::string contents;
+                if (name.size() < 7 || name.compare(name.size() - 5, 5, ".json") != 0 ||
+                    !languageCode(name.substr(0, name.size() - 5)) || !readFile(folderPath + "/" + name, contents))
+                    continue;
+                const Json document = Json::parse(contents);
+                Dictionary dictionary;
+                for (const std::string &key : document.keys()) {
+                    const Json entry = document[key];
+                    if (entry["text"].isString() && entry["from"].isString() &&
+                        !entry["text"].string().empty())
+                        dictionary[key] = {entry["text"].string(), entry["from"].string()};
+                }
+                if (!dictionary.empty())
+                    loaded[name.substr(0, name.size() - 5)] = std::move(dictionary);
             }
-            if (!dictionary.empty())
-                loaded[name.substr(0, 2)] = std::move(dictionary);
+            closedir(folder);
         }
-        closedir(folder);
     }
     translating.store(false, std::memory_order_release);
     dictionaries.swap(loaded);
@@ -285,6 +291,8 @@ size_t loadTranslations(const std::string &directory) {
 }
 
 std::string requestedLanguage(const std::string &headerValue) {
+    if (headerValue == "pt-BR" && translating.load(std::memory_order_acquire) && dictionaries.count("pt-BR"))
+        return "pt-BR";
     std::string code = headerValue.substr(0, 2);
     for (char &letter : code)
         if (letter >= 'A' && letter <= 'Z')

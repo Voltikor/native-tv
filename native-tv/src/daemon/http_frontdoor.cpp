@@ -1760,6 +1760,7 @@ HttpFrontDoor::HttpFrontDoor(ServerConfig config, std::string version, std::stri
       adminPin_(dataFilePath(dataRoot_, "admin-pin.json")),
       homeContent_(dataRoot_),
       homeDiscover_(dataRoot_),
+      homeDiscoverPt_(dataRoot_, service::HomeDiscover::Fetcher(), service::HomeDiscover::Clock(), "pt-BR"),
       homeImageProxy_(dataRoot_),
       configPath_(std::move(configPath)), hdmiSeenPath_(dataFilePath(dataRoot_, "hdmi_seen")),
       lastAppPath_(dataFilePath(dataRoot_, "last_app.json")),
@@ -1787,24 +1788,27 @@ HttpFrontDoor::HttpFrontDoor(ServerConfig config, std::string version, std::stri
         appPackageFetcher_ = service::AppPackageFetcher::download;
     // The feed lists only titles that open somewhere: as a YouTube trailer, or on Netflix. Asking is
     // the details lookup the screen uses later, so it is kept for then.
-    homeDiscover_.setLinkCheck([this](const std::string &type, const std::string &id) {
-        const Json document = currentConfigDocument();
-        const std::string key = document["tmdbKey"].string();
-        const bool netflixOn = document["netflixDeepLinks"].boolean();
-        const Json details = homeContent_.details(key, netflixOn, type, id);
-        if (!details["ok"].boolean(true)) return false;
-        if (!details["item"]["trailer"].string().empty()) return true;
-        if (!details["netflixEnabled"].boolean()) return false;
-        const Json lookup = homeContent_.netflix(key, netflixOn, type, id);
-        return lookup["ok"].boolean(true) && !lookup["netflixId"].string().empty();
-    });
-    // The Available on Netflix row is the feed's titles that have a Netflix link (the lookup is kept for then, too).
-    homeDiscover_.setNetflixCheck([this](const std::string &type, const std::string &id) {
-        const Json document = currentConfigDocument();
-        if (!document["netflixDeepLinks"].boolean()) return false;
-        const Json lookup = homeContent_.netflix(document["tmdbKey"].string(), true, type, id);
-        return lookup["ok"].boolean(true) && !lookup["netflixId"].string().empty();
-    });
+    for (service::HomeDiscover *discover : {&homeDiscover_, &homeDiscoverPt_}) {
+        const std::string language = discover == &homeDiscoverPt_ ? "pt-BR" : "en-US";
+        discover->setLinkCheck([this, language](const std::string &type, const std::string &id) {
+            const Json document = currentConfigDocument();
+            const std::string key = document["tmdbKey"].string();
+            const bool netflixOn = document["netflixDeepLinks"].boolean();
+            const Json details = homeContent_.details(key, netflixOn, type, id, language);
+            if (!details["ok"].boolean(true)) return false;
+            if (!details["item"]["trailer"].string().empty()) return true;
+            if (!details["netflixEnabled"].boolean()) return false;
+            const Json lookup = homeContent_.netflix(key, netflixOn, type, id);
+            return lookup["ok"].boolean(true) && !lookup["netflixId"].string().empty();
+        });
+        // The Available on Netflix row is the feed's titles that have a Netflix link (the lookup is kept for then, too).
+        discover->setNetflixCheck([this](const std::string &type, const std::string &id) {
+            const Json document = currentConfigDocument();
+            if (!document["netflixDeepLinks"].boolean()) return false;
+            const Json lookup = homeContent_.netflix(document["tmdbKey"].string(), true, type, id);
+            return lookup["ok"].boolean(true) && !lookup["netflixId"].string().empty();
+        });
+    }
     lgSettingsCacheSettings_ = Json::object();
     lgSettingsCacheDescriptions_ = Json::object();
     lgSettingsCacheDescriptionCoverage_ = Json::object();
@@ -16375,9 +16379,10 @@ void HttpFrontDoor::sendHomeContent(HttpExchange &exchange,
     const std::string key = currentConfigDocument()["tmdbKey"].string();
     const bool netflixEnabled =
         config_.document["netflixDeepLinks"].boolean();
+    const std::string language = request.header("X-Native-Tv-Lang") == "pt-BR" ? "pt-BR" : "en-US";
     if (kind == "search") {
         const bool hasQuery = uniqueQueryParameter(request.query, "q", query);
-        result = homeContent_.search(key, query, hasQuery);
+        result = homeContent_.search(key, query, hasQuery, language);
     } else if (kind == "netflix") {
         result = homeContent_.netflix(key, netflixEnabled,
                                       hasType ? tmdbType : "",
@@ -16385,7 +16390,7 @@ void HttpFrontDoor::sendHomeContent(HttpExchange &exchange,
     } else {
         result = homeContent_.details(key, netflixEnabled,
                                       hasType ? tmdbType : "",
-                                      hasId ? id : "");
+                                      hasId ? id : "", language);
     }
     (void)exchange.respond(200,
                            {{"Content-Type", "application/json; charset=utf-8"},
@@ -16396,7 +16401,9 @@ void HttpFrontDoor::sendHomeContent(HttpExchange &exchange,
 
 void HttpFrontDoor::sendHomeDiscover(HttpExchange &exchange) const {
     const Json document = currentConfigDocument();
-    const Json result = homeDiscover_.feed(document["tmdbKey"].string(),
+    service::HomeDiscover &discover = exchange.request().header("X-Native-Tv-Lang") == "pt-BR"
+                                         ? homeDiscoverPt_ : homeDiscover_;
+    const Json result = discover.feed(document["tmdbKey"].string(),
                                            document["youtubeKey"].string());
     if (result["enabled"].boolean() && result["rows"].isArray() &&
         result["rows"].size())

@@ -1,3 +1,4 @@
+#include "domain/say.hpp"
 // Home's choreography: what moves when focus, tab, hero or data change. The view (home_view.cpp)
 // only reads the values set here.
 #include "ui/application.hpp"
@@ -86,18 +87,18 @@ HeroText linesOf(const ViewState &state, const Card &card) {
     if (isTitle(card)) {
         text.source = rowTitleOf(state, card);
         if (text.source.empty())
-            text.source = card.kind == "youtube" ? "YouTube" : "Top picks for you";
+            text.source = card.kind == "youtube" ? "YouTube" : say::msg("launcher.home.topPicks", "Top picks for you");
         text.facts = card.subtitle.empty() && card.kind == "youtube" ? "YouTube" : card.subtitle;
         text.description = card.data["overview"].string();
     } else if (card.kind == "dev" || card.kind == "ch") {
-        text.source = card.kind == "dev" ? "Input" : "Channel";
+        text.source = card.kind == "dev" ? say::msg("tv.live.input", "Input" ): say::msg("launcher.homemotion.channel", "Channel");
         text.facts = card.subtitle;
-        text.hint = card.kind == "dev" ? "Switch" : "Watch";
+        text.hint = card.kind == "dev" ? say::msg("launcher.homemotion.switch", "Switch" ): say::msg("launcher.homemotion.watch", "Watch");
     } else {
-        text.source = card.id == "lg-home" ? "LG Home" : "Your apps";
+        text.source = card.id == "lg-home" ? say::msg("launcher.home.lgHome", "LG Home" ): say::msg("launcher.home.yourApps", "Your apps");
         text.facts = card.data["description"].string();
         text.image = card.image;
-        text.hint = "Open";
+        text.hint = say::msg("tv.settings.open", "Open");
     }
     return text;
 }

@@ -1,3 +1,4 @@
+#include "domain/say.hpp"
 // The recent apps, drawn over the page they were opened from: a veil, one row of app cards,
 // Close under the focused one and Close all above the row.
 #include "ui/application.hpp"
@@ -43,23 +44,22 @@ void drawRecents(kit::Paint paint, const Frame &frame) {
                 kit::focus::withAlpha(kit::color::ink, .97f * open));
     scene.pushOpacity(open);
     scene.pushTransform(Transform::translate(0, 24 * (1 - open)));
-    paint.glyphs.text(scene, kit::geometry::pageTitle(1000), "Recent apps", kit::type::headline,
+    paint.glyphs.text(scene, kit::geometry::pageTitle(1000), say::msg("tv.quick.recents", "Recent apps"), kit::type::headline,
                       kit::color::onSurface);
     if (recent.cards.empty()) {
-        std::string line = recent.status.find("Loading") == 0     ? recent.status
-                           : recent.status.find("Could not") == 0 ? "Recent apps are unavailable"
-                                                                  : "Nothing is open";
+        std::string line = recent.load == RecentState::Load::Loading ? recent.status
+                           : recent.load == RecentState::Load::Failed ? say::msg("launcher.recentsview.recentAppsAreUnavailable", "Recent apps are unavailable"
+                                                                  ): say::msg("launcher.recentsview.nothingIsOpen", "Nothing is open");
         paint.glyphs.text(scene, kit::geometry::pageSubtitle(1400), line, kit::type::body,
                           kit::color::onSurface2);
-        if (recent.status.find("Loading") != 0 && !recent.status.empty() &&
-            recent.status != "Apps stay here while they are open.")
+        if (recent.load == RecentState::Load::Failed && !recent.status.empty())
             paint.glyphs.text(scene, {kit::canvas::safeX, 280, 1400, kit::type::body.line},
                               recent.status, kit::type::body, kit::color::onSurface3);
     } else {
         paint.glyphs.text(scene, kit::geometry::pageSubtitle(1000),
-                          std::to_string(recent.cards.size()) + " open", kit::type::body,
+                          localizedPlural("launcher.recents.openCount", "{count} app open", "{count} apps open", recent.cards.size()), kit::type::body,
                           kit::color::onSurface2);
-        pill(paint, {kit::canvas::width - kit::canvas::safeX - 200, 176, 200, 56}, "Close all",
+        pill(paint, {kit::canvas::width - kit::canvas::safeX - 200, 176, 200, 56}, say::msg("launcher.recentsview.closeAll", "Close all"),
              "recents-all", static_cast<float>(motion.value("rfa")));
     }
     const float scroll = static_cast<float>(motion.value("rcx"));
@@ -94,13 +94,13 @@ void drawRecents(kit::Paint paint, const Frame &frame) {
                           app.title, kit::type::labelL,
                           kit::focus::withAlpha(kit::color::onSurface, .6f + .4f * focus));
         if (focus > .004f)
-            pill(paint, {rest.x + (rest.w - 140) / 2, rest.y + rest.h + 72, 140, 48}, "Close",
+            pill(paint, {rest.x + (rest.w - 140) / 2, rest.y + rest.h + 72, 140, 48}, say::msg("tv.details.close", "Close"),
                  "recent-close:" + std::to_string(i), static_cast<float>(motion.value("rfx")));
     }
     scene.popTransform();
     scene.popOpacity();
     paint.glyphs.text(scene, {kit::canvas::safeX, 980, 1400, kit::type::labelM.line},
-                      "Back to return  ·  Red closes the focused app", kit::type::labelM,
+                      say::msg("launcher.recentsview.backToReturnRedClosesTheFocused", "Back to return  ·  Red closes the focused app"), kit::type::labelM,
                       kit::color::onSurface3);
 }
 } // namespace nativetv

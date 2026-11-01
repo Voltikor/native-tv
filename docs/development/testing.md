@@ -14,6 +14,7 @@ something is wrong, and Home Assistant and the TV's own browser fail quietly.
 | `check-es5.py` | ES6 syntax, or a call or CSS the TV browser lacks, in the pages the TV shows (`native-tv/assets/google-tv/`, the Home app). The phone dashboard is not restricted. |
 | `check-ui-ids.py` | An element the dashboard's script reaches for that the page no longer has. |
 | `check-strings.py` | Dashboard text or a `say::msg` message without a key, one key used for two different texts, and a dictionary in `native-tv/assets/i18n/` that does not parse, holds a key nothing uses, or has placeholders or markup that differ from its English. Translations made from English that has since changed are reported, not failed. [Strings](strings.md) has the rules. |
+| `check-launcher-strings.py` | Missing or outdated native Portuguese messages, mismatched placeholders/plural forms, and text outside the bundled font subset. |
 | `check-screensavers.py` | Screen saver QML that the TV's QtQuick version cannot load. |
 | `check-drift.py` | The [entity reference](../integrations/home-assistant-entities.md) out of step with the entities the daemon publishes, a file missing from `native-tv/lifecycle/deploy.sh`'s list, which would never be installed, and an asset the TV client names (`local:...`, the Google Sans Flex and Roboto fonts) that `tools/runtime_payload.py` does not stage for it. |
 | `check-entity-stability.py` | A Home Assistant entity from the last release that has gone, been renamed or changed domain, which leaves it unavailable and stops every automation that used it. A deliberate removal is listed in `scripts/retired-entities.txt` with its reason. |
@@ -844,3 +845,5 @@ recent snapshot revisions, card/Close/Close-all navigation and failed-close
 retry. `tests/smoke/home-extras.json` uses `tests/tv-fixture.js`, a bounded
 loopback fixture on the TV. Fixture close actions change only fake app records;
 the fixture never calls TV services or writes preferences.
+
+Native localization tests `native-locale` and `native-locale-ui` cover fallback, integer plurals, persisted language, thread isolation, live switching and unchanged control states and command values. The HTTP and home-content tests also check language headers and separate English/Portuguese caches. [Launcher translations](launcher-translations.md) describes the catalog.

@@ -208,5 +208,25 @@ int main() {
         assert(cache["version"].number() == 1);
         assert(cache["entries"].size() == 40);
     }
+    {
+        TemporaryDirectory languages;
+        int calls = 0;
+        const auto localized = [&calls](const std::string &url, Json &document, std::string &) {
+            ++calls;
+            document = responseFor(url);
+            document.set("title", Json::text(url.find("language=pt-BR") != std::string::npos ? "Título" : "Title"));
+            return true;
+        };
+        HomeContent content(languages.path(), localized, [] { return int64_t(1000000); });
+        assert(content.details("key", false, "movie", "7", "pt-BR")["item"]["title"].string() == "Título");
+        assert(content.details("key", false, "movie", "7", "en-US")["item"]["title"].string() == "Title");
+        assert(calls == 2);
+        assert(content.details("key", false, "movie", "7", "pt-BR")["item"]["title"].string() == "Título");
+        assert(content.details("key", false, "movie", "7", "invalid\r\n")["item"]["title"].string() == "Title");
+        assert(calls == 2); // Separate language caches; malformed tags resolve to English.
+        HomeContent reloaded(languages.path(), localized, [] { return int64_t(1000000); });
+        assert(reloaded.details("key", false, "movie", "7", "pt-BR")["item"]["title"].string() == "Título");
+        assert(calls == 2); // The persisted cache also preserves the locale.
+    }
     return 0;
 }

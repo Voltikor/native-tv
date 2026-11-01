@@ -21,9 +21,9 @@ class HomeContent {
     explicit HomeContent(std::string dataRoot, Fetcher fetcher = Fetcher(),
                          Clock clock = Clock());
     Json details(const std::string &tmdbKey, bool netflixEnabled,
-                 const std::string &type, const std::string &id);
+                 const std::string &type, const std::string &id, const std::string &language = "en-US");
     Json search(const std::string &tmdbKey, const std::string &query,
-                bool queryPresent = true);
+                bool queryPresent = true, const std::string &language = "en-US");
     Json netflix(const std::string &tmdbKey, bool netflixEnabled,
                  const std::string &type, const std::string &id);
 
@@ -42,12 +42,12 @@ class HomeContent {
 
     Json request(const std::string &apiKey, const std::string &resource,
                  const std::string &query, int64_t lifetimeMs,
-                 const Converter &convert);
+                 const Converter &convert, const std::string &language = "en-US");
     bool fetch(const std::string &url, Json &document, std::string &error) const;
     void loadCacheLocked();
     void saveCacheLocked();
     std::string urlFor(const std::string &apiKey, const std::string &resource,
-                       const std::string &query) const;
+                       const std::string &query, const std::string &language) const;
 
     std::string cachePath_;
     Fetcher fetcher_;

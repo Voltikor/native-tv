@@ -57,7 +57,7 @@ bool translate(SDL_Keycode code, Key &key) {
 }
 struct Options {
     std::string server, font = "/usr/share/fonts/LG_Smart_UI-Regular.ttf",
-                screen = "home", capture, script, report, perf;
+                screen = "home", capture, script, report, perf, language;
     Uint32 duration = 0;
     long long time = -1; // --time: fixed clock, stop and capture at this many ms; -1 is off
     bool windowed = false, probe = false;
@@ -86,7 +86,7 @@ Options options(int argc, char **argv) {
             std::puts("nativetv-tv [--server http://127.0.0.1:PORT] [--font font.ttf] [--screen "
                       "splash|home|dashboard|setup:welcome|kit:keyboard] [--windowed] [--script "
                       "steps.json] [--capture image.ppm] [--duration-ms N] [--time=MS] "
-                      "[--perf=log.jsonl] [--report report.json] [--probe]");
+                      "[--perf=log.jsonl] [--report report.json] [--lang en|pt-BR] [--probe]");
             std::exit(0);
         } else if (inlineValue || i + 1 < argc) {
             if (!inlineValue)
@@ -97,6 +97,8 @@ Options options(int argc, char **argv) {
                 result.font = value;
             else if (arg == "--screen")
                 result.screen = value;
+            else if (arg == "--lang")
+                result.language = value;
             else if (arg == "--capture")
                 result.capture = value;
             else if (arg == "--script")
@@ -340,9 +342,20 @@ int main(int argc, char **argv) {
                      priorityRaised ? ", priority raised" : "");
         {
             markStartup("windowMs");
-            HttpServices http(opts.server);
-            Application app(http, opts.screen);
             const std::string assets = resourceDirectory(argv[0]) + "/assets";
+            const Json preferences = Json::parse(read("/var/luna/preferences/localeInfo"));
+            const char *environmentLanguage = std::getenv("LANG");
+            const std::string systemLanguage = preferences["localeInfo"]["locales"]["UI"].string(
+                environmentLanguage ? environmentLanguage : "en");
+            Locale locale(assets + "/i18n/launcher",
+                          opts.language.empty() ? clientServerConfigPath() + ".locale.json" : "",
+                          systemLanguage);
+            if (!opts.language.empty() && !locale.choose(opts.language))
+                throw std::runtime_error("Unsupported --lang value");
+            LocaleScope localeScope(&locale);
+            HttpServices http(opts.server);
+            http.language(locale.language());
+            Application app(http, opts.screen, &locale);
             Renderer renderer(width, height, opts.font, assets,
                               [&http](const std::string &path) { return http.image(path) != 0; });
             // The atlases and the loader hold textures in the renderer, so they are declared

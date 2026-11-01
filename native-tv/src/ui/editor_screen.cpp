@@ -294,7 +294,7 @@ class EditorScreen final : public ScreenView {
             drawResults(host, paint);
         scene.popTransform();
         scene.popOpacity();
-        kit::keyHint(paint, kit::canvas::safeX, 1002, "Back", msg("tv.editor.return", "Return"),
+        kit::keyHint(paint, kit::canvas::safeX, 1002, say::msg("launcher.key.back", "Back"), msg("tv.editor.return", "Return"),
                      "editor:back");
     }
     Json snapshot() const override {

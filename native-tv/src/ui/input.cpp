@@ -1,3 +1,4 @@
+#include "domain/say.hpp"
 #include "ui/application.hpp"
 #include "ui/controller_helpers.hpp"
 #include "ui/home_layout.hpp"
@@ -350,7 +351,7 @@ void Application::homeEditDone(bool toggle) {
     const std::string focused = cards[home.column].id;
     const bool focusedHidden = cards[home.column].hidden;
     if (toggle && !focusedHidden && focused == "lg-home") {
-        toast("LG Home is switched off with Show LG Home in the Home settings.");
+        toast(say::msg("launcher.input.lgHomeIsSwitchedOffWithShow", "LG Home is switched off with Show LG Home in the Home settings."));
         toggle = false;
     }
     // The ids on screen in their new order; the app being shown joins them, last.

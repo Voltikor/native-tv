@@ -46,6 +46,8 @@ Native Tv grew out of [Glasshouse](https://github.com/rorygallagher2024/glasshou
 
 ## Features
 
+* **Native launcher in English and Brazilian Portuguese.** A Language picker follows the TV or keeps an explicit choice, including movie metadata. [Translation details](docs/development/launcher-translations.md).
+
 * **[Control without the cloud](https://ihtisham1211.github.io/native-tv/dashboard/control/).** D-pad, volume, playback keys, app launcher, picture presets, sound output routing, power and reboot, from any browser.
 * **[Privacy: see what the TV collects, and switch it off](https://ihtisham1211.github.io/native-tv/dashboard/privacy/).** Whether LG's content-recognition engine is running, the advertising identifier, and every recorded data agreement, most of them switchable. An on-TV blocker for LG's ad and telemetry endpoints, and a switch for the two diagnostics services that upload to LG. [What LG's ACR does](https://ihtisham1211.github.io/native-tv/administration/acr/).
 * **[Debloat and home screen cleanup](https://ihtisham1211.github.io/native-tv/dashboard/apps/).** Install apps from the Homebrew Channel catalogue, uninstall LG apps to reclaim flash storage, disable background services to free RAM and CPU ([the list](https://ihtisham1211.github.io/native-tv/dashboard/apps/#turn-off-lgs-bloatware-background-services): LG's ad service, Live Plus, the diagnostics and telemetry uploaders, the ThinQ cloud services and more), hide built-in apps from the launcher, and on webOS 9 strip LG's Home screen down to apps and inputs.
@@ -215,7 +217,7 @@ Yes. The dashboard, controls and telemetry work on LCD panels; the OLED Care tab
 It is a native OpenGL ES client, not a web page, and it draws at the display's 60 Hz. On an LG B3 with the processor busy (load average about 32) its frames arrive 15 to 18 ms apart, against 16.7 ms ideal. [How it stays smooth](https://ihtisham1211.github.io/native-tv/apps/tv-app/#how-smooth-it-is) lists the reasons and the measurement.
 
 **Is the dashboard available in Spanish?**
-Yes. It follows the browser's language, and the Language setting on the Server tab, or `/?lang=es`, changes it. The TV's messages the dashboard shows are translated too. The TV app and the pages the TV's own browser shows are English only for now. Much of the Spanish is machine-translated, and [corrections are welcome](https://ihtisham1211.github.io/native-tv/development/strings/#spanish).
+Yes. It follows the browser's language, and the Language setting on the Server tab, or `/?lang=es`, changes it. The TV's messages the dashboard shows are translated too. The native TV app has a separate English/Brazilian Portuguese language picker. The older pages the TV's own browser shows remain English. Much of the Spanish is machine-translated, and [corrections are welcome](https://ihtisham1211.github.io/native-tv/development/strings/#spanish).
 
 **What does it change on the TV?**
 [What it changes on the TV](https://ihtisham1211.github.io/native-tv/administration/tv-changes/) lists every change and how each is undone. The read-only system partition is left untouched.

@@ -37,11 +37,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
             query = urllib.parse.parse_qs(url.query).get("q", [""])[0]
             if query in ("slow", "hang"):
                 time.sleep(0.3 if query == "slow" else 5)
-            self.reply(200, json.dumps({"ok": True, "query": query}).encode())
+            self.reply(200, json.dumps({"ok": True, "query": query, "language": self.headers.get("X-Native-Tv-Lang", "")}).encode())
         elif url.path == "/api/home/now":
             self.reply(200, b'{"kind":"input","port":4}')
         elif url.path in ("/api/home/picture", "/api/home/recents/image"):
-            self.reply(200, json.dumps({"query": urllib.parse.parse_qs(url.query)}).encode())
+            self.reply(200, json.dumps({"query": urllib.parse.parse_qs(url.query), "language": self.headers.get("X-Native-Tv-Lang", "")}).encode())
         elif url.path == "/api/home/wallpaper":
             self.reply(200, json.dumps({"query": urllib.parse.parse_qs(url.query)}).encode())
         elif url.path == "/api/privacy":
@@ -60,7 +60,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if size > 65536:
             return self.reply(413, b"{}")
         body = json.loads(self.rfile.read(size))
-        self.reply(200, json.dumps({"ok": True, "path": self.path, "body": body}).encode())
+        self.reply(200, json.dumps({"ok": True, "path": self.path, "body": body, "language": self.headers.get("X-Native-Tv-Lang", "")}).encode())
 
 
 def main():

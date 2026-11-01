@@ -430,6 +430,7 @@ class HttpFrontDoor {
     mutable service::AdminPin adminPin_;
     mutable service::HomeContent homeContent_;
     mutable service::HomeDiscover homeDiscover_;
+    mutable service::HomeDiscover homeDiscoverPt_;
     mutable service::HomeImageProxy homeImageProxy_;
     std::string configPath_;
     std::string hdmiSeenPath_;

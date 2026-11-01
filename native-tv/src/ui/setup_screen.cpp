@@ -1076,14 +1076,14 @@ void SetupScreen::drawFooter(ScreenHost &host, kit::Paint paint) {
     if (usesKeys()) {
         hints.push_back({"OK", say::msg("setup.hint.type", "Type")});
         const bool handoff = step_ == SetupStep::Handoff;
-        hints.push_back({"Back", handoff && field_ > 0 ? say::msg("setup.hint.previous", "Previous field")
+        hints.push_back({say::msg("launcher.key.back", "Back"), handoff && field_ > 0 ? say::msg("setup.hint.previous", "Previous field")
                                  : fromSettings_ ? say::msg("setup.handoff.backToSettings", "Back to Settings")
                                  : handoff ? say::msg("setup.hint.skip", "Skip for now")
                                            : say::msg("setup.hint.back", "Back")});
     } else {
         hints.push_back({"OK", say::msg("setup.hint.choose", "Choose")});
         if (step_ != SetupStep::Welcome && step_ != SetupStep::Restarting)
-            hints.push_back({"Back", say::msg("setup.hint.back", "Back")});
+            hints.push_back({say::msg("launcher.key.back", "Back"), say::msg("setup.hint.back", "Back")});
     }
     kit::hintBar(paint, kHints, hints, enterOf(host, Hints));
 }

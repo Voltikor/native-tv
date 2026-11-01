@@ -1,3 +1,4 @@
+#include "domain/locale.hpp"
 #include "domain/live_cards.hpp"
 #include "domain/say.hpp"
 #include <algorithm>
@@ -19,20 +20,8 @@ Json vars(std::initializer_list<std::pair<const char *, std::string>> values) {
         result.set(value.first, Json::text(value.second));
     return result;
 }
-std::string fixed(double value, int decimals) {
-    char text[48];
-    std::snprintf(text, sizeof(text), "%.*f", decimals, value);
-    return text;
-}
-std::string grouped(long long value) {
-    std::string digits = std::to_string(value < 0 ? -value : value), result;
-    for (size_t i = 0; i < digits.size(); ++i) {
-        if (i && (digits.size() - i) % 3 == 0)
-            result += ',';
-        result += digits[i];
-    }
-    return value < 0 ? "-" + result : result;
-}
+std::string fixed(double value, int decimals) { return localizedDecimal(value, decimals); }
+std::string grouped(long long value) { return localizedInteger(value); }
 float clamp01(double value) {
     return static_cast<float>(value < 0 ? 0 : value > 1 ? 1 : value);
 }

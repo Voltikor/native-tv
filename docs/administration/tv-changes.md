@@ -226,3 +226,5 @@ Wikidata. Mappings, including empty results, share the bounded metadata cache
 for seven days. A Netflix launch passes the resolved numeric ID to the
 installed app in `contentTarget` as
 `m=https://www.netflix.com/title/<id>&source_type=4`.
+
+The native launcher saves its language choice in `/var/lib/tvweb/native/client-config.json.locale.json` beside its port configuration. Portuguese discovery uses `home-discover.pt-BR.json`; title/search cache keys include the requested language. Language selection sends no Home replacement or power-on setting changes.

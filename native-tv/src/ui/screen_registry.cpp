@@ -5,6 +5,7 @@
 #include "ui/setup_screen.hpp"
 
 namespace nativetv {
+std::unique_ptr<ScreenView> makeLanguageScreen(const std::string &route);
 // Each task adds its screens here, with the file that defines them in CMake's
 // nativetv_presentation list:
 //
@@ -21,5 +22,6 @@ void registerScreens(ScreenRegistry &registry) {
     registry.add(makeDetailsScreen);
     registry.add(makeEditorScreen);
     registry.add(makePinScreen);
+    registry.add(makeLanguageScreen);
 }
 } // namespace nativetv

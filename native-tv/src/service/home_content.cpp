@@ -448,15 +448,16 @@ HomeContent::HomeContent(std::string dataRoot, Fetcher fetcher, Clock clock)
 }
 
 Json HomeContent::details(const std::string &tmdbKey, bool netflixEnabled,
-                          const std::string &type, const std::string &id) {
+                          const std::string &type, const std::string &id, const std::string &language) {
     if (tmdbKey.empty()) return disabled();
     if ((type != "movie" && type != "tv") || !validTitleId(id))
         return failed("Invalid title");
     Json result = request(tmdbKey, type + "/" + id,
-                         "&append_to_response=credits,videos,similar,external_ids",
+                         std::string("&append_to_response=credits,videos,similar,external_ids") +
+                             (language == "pt-BR" ? "&include_video_language=pt,en,null" : ""),
                          kDayMs, [type, id](const Json &document) {
                              return detailsValue(document, type, id);
-                         });
+                         }, language);
     Json copy = result.valid() ? Json::parse(result.dump()) : Json::object();
     copy.set("netflixEnabled", Json::flag(
         netflixEnabled && copy["item"].valid() &&
@@ -465,7 +466,7 @@ Json HomeContent::details(const std::string &tmdbKey, bool netflixEnabled,
 }
 
 Json HomeContent::search(const std::string &tmdbKey, const std::string &query,
-                         bool queryPresent) {
+                         bool queryPresent, const std::string &language) {
     if (tmdbKey.empty()) return disabled();
     if (!queryPresent || std::any_of(query.begin(), query.end(), [](unsigned char c) {
             return c < 0x20 || c == 0x7f;
@@ -490,7 +491,7 @@ Json HomeContent::search(const std::string &tmdbKey, const std::string &query,
         result.set("enabled", Json::flag(true));
         result.set("items", trimRows(document["results"], ""));
         return result;
-    });
+    }, language);
 }
 
 Json HomeContent::netflix(const std::string &tmdbKey, bool netflixEnabled,
@@ -531,8 +532,9 @@ Json HomeContent::netflix(const std::string &tmdbKey, bool netflixEnabled,
 
 Json HomeContent::request(const std::string &apiKey, const std::string &resource,
                           const std::string &query, int64_t lifetimeMs,
-                          const Converter &convert) {
-    const std::string key = md5Hex(resource + query);
+                          const Converter &convert, const std::string &language) {
+    const std::string locale = language == "pt-BR" ? "pt-BR" : "en-US";
+    const std::string key = md5Hex(resource + query + (locale == "en-US" ? "" : "|" + locale));
     std::unique_lock<std::mutex> lock(mutex_);
     loadCacheLocked();
     const auto cached = cache_.find(key);
@@ -574,7 +576,7 @@ Json HomeContent::request(const std::string &apiKey, const std::string &resource
     bool fetched = false;
     Json converted;
     try {
-        fetched = fetch(urlFor(apiKey, resource, query), document, error);
+        fetched = fetch(urlFor(apiKey, resource, query, locale), document, error);
         if (fetched) converted = convert(document);
     } catch (...) {
         fetched = false;
@@ -655,12 +657,12 @@ bool HomeContent::fetch(const std::string &url, Json &document,
 
 std::string HomeContent::urlFor(const std::string &apiKey,
                                const std::string &resource,
-                               const std::string &query) const {
+                               const std::string &query, const std::string &language) const {
     if (resource.compare(0, 9, "wikidata/") == 0)
         return "https://www.wikidata.org/wiki/Special:EntityData/" +
                resource.substr(9) + ".json";
     return std::string(kTmdbApi) + resource + "?api_key=" +
-           urlEncode(apiKey) + "&language=en-US" + query;
+           urlEncode(apiKey) + "&language=" + language + query;
 }
 
 void HomeContent::loadCacheLocked() {

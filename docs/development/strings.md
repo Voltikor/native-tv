@@ -7,9 +7,10 @@ apart. A translation is a file that maps the same keys to another language, in
 `native-tv/assets/i18n/<lang>.json`. English needs no file, so reading the markup
 or the script shows the real words. [Spanish](#spanish) is the one language so far.
 
-The pages the TV's own browser shows (`native-tv/assets/google-tv/`) and the native
-TV client are English only. So are Home Assistant entity names, MQTT topics and
-the logs.
+The native TV client supports English and Brazilian Portuguese; see
+[Native launcher](launcher-translations.md). The older pages the TV's own browser shows
+(`native-tv/assets/google-tv/`), Home Assistant entity names, MQTT topics and logs
+remain English.
 
 `scripts/check-strings.py` enforces what follows, and runs in CI.
 
@@ -178,8 +179,7 @@ Glasshouse's: the TV is "la TV", a screen saver a "salvapantallas", Native Tv Ho
 and LG's is "el Inicio de LG". **Those have not been read by a native speaker.** A correction is
 a pull request that edits the `text` of the entry and leaves its `from` alone.
 
-Not translated: the native TV client, whose three Google Sans Flex cuts cover every
-character Spanish needs but whose screens and glyph atlas have not been tried with it;
+Not translated into Spanish: the native TV client. Also untranslated:
 the pages the TV's own browser shows; names the TV reports; the Homebrew Channel
 catalogue's descriptions; and the date formats, which follow the browser's own
 language rather than the dashboard's.

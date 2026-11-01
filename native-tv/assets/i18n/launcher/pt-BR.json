@@ -1,0 +1,5140 @@
+{
+  "adv.alwaysReady": {
+    "from": "Always Ready",
+    "text": "Always Ready"
+  },
+  "adv.deviceDetection": {
+    "from": "Auto device detection",
+    "text": "Detecção automática de dispositivos"
+  },
+  "adv.devices": {
+    "from": "Devices",
+    "text": "Dispositivos"
+  },
+  "adv.display": {
+    "from": "Display",
+    "text": "Tela"
+  },
+  "adv.frontLights": {
+    "from": "Front lights",
+    "text": "Luzes frontais"
+  },
+  "adv.hdmi": {
+    "from": "HDMI inputs",
+    "text": "Entradas HDMI"
+  },
+  "adv.idle": {
+    "from": "Switch off when idle",
+    "text": "Desativar quando ocioso"
+  },
+  "adv.idle.hour": {
+    "from": "1 hour",
+    "text": "1 hora"
+  },
+  "adv.idle.hours": {
+    "from": "{n} hours",
+    "text": "{n} horas"
+  },
+  "adv.idle.minutes": {
+    "from": "{n} minutes",
+    "text": "{n} minutos"
+  },
+  "adv.lgLogo": {
+    "from": "LG logo",
+    "text": "Logo da LG"
+  },
+  "adv.lgLogo.desc": {
+    "from": "Shows the LG logo as the TV switches on and off. LG calls this LG Logo Display.",
+    "text": "Exibe o logo da LG ao ligar e desligar a TV. A LG chama isso de Exibição do Logotipo LG."
+  },
+  "adv.localLookups": {
+    "from": "Answer device scans on the TV",
+    "text": "Responder a buscas de dispositivos na TV"
+  },
+  "adv.logoLight": {
+    "from": "Logo light",
+    "text": "Luz do logo"
+  },
+  "adv.nightlyOff": {
+    "from": "Nightly power-down",
+    "text": "Desligamento noturno"
+  },
+  "adv.offTimer": {
+    "from": "Off Timer",
+    "text": "Temporizador de desligamento"
+  },
+  "adv.offTimer.desc": {
+    "from": "Switches the TV off at this time, once or on the days picked.",
+    "text": "Desliga a TV neste horário, uma vez ou nos dias selecionados."
+  },
+  "adv.onTimer": {
+    "from": "On Timer",
+    "text": "Temporizador para ligar"
+  },
+  "adv.onTimer.desc": {
+    "from": "Switches the TV on at this time, once or on the days picked.",
+    "text": "Liga a TV neste horário, uma vez ou nos dias selecionados."
+  },
+  "adv.power": {
+    "from": "Power",
+    "text": "Energia"
+  },
+  "adv.powerStandby": {
+    "from": "Power & standby",
+    "text": "Energia e espera"
+  },
+  "adv.quickBoot": {
+    "from": "Quick Boot",
+    "text": "Inicialização rápida"
+  },
+  "adv.quickBoot.desc": {
+    "from": "Switching off puts the TV into a light sleep rather than shutting it down, so it comes back on faster. LG calls this Quick Start+.",
+    "text": "Ao desligar, a TV entra em repouso leve em vez de encerrar completamente, para ligar mais rápido. A LG chama isso de Quick Start+."
+  },
+  "adv.sound": {
+    "from": "Sound",
+    "text": "Som"
+  },
+  "adv.standbyLight": {
+    "from": "Standby light",
+    "text": "Luz de espera"
+  },
+  "adv.standbyLight.desc": {
+    "from": "The small light on the front of the TV that shows while it is switched off.",
+    "text": "A pequena luz na frente da TV que fica acesa quando ela está desligada."
+  },
+  "adv.stayConnected": {
+    "from": "Stay connected when off",
+    "text": "Manter conectado quando desligado"
+  },
+  "adv.timer.fri": {
+    "from": "Fri",
+    "text": "Sex"
+  },
+  "adv.timer.mon": {
+    "from": "Mon",
+    "text": "Seg"
+  },
+  "adv.timer.sat": {
+    "from": "Sat",
+    "text": "Sáb"
+  },
+  "adv.timer.sun": {
+    "from": "Sun",
+    "text": "Dom"
+  },
+  "adv.timer.thu": {
+    "from": "Thu",
+    "text": "Qui"
+  },
+  "adv.timer.tue": {
+    "from": "Tue",
+    "text": "Ter"
+  },
+  "adv.timer.wed": {
+    "from": "Wed",
+    "text": "Qua"
+  },
+  "adv.timers": {
+    "from": "Timers",
+    "text": "Temporizadores"
+  },
+  "adv.wol": {
+    "from": "Wake-on-LAN",
+    "text": "Wake-on-LAN"
+  },
+  "apps.home": {
+    "from": "LG launcher layout",
+    "text": "Layout da tela inicial da LG"
+  },
+  "apps.home.exp.title": {
+    "from": "Experimental on this TV",
+    "text": "Experimental nesta TV"
+  },
+  "apps.home.hidden": {
+    "from": "Hidden",
+    "text": "Oculto"
+  },
+  "apps.home.notOnHome": {
+    "from": "Not on Home",
+    "text": "Fora do Início"
+  },
+  "apps.home.onHome": {
+    "from": "On Home",
+    "text": "No Início"
+  },
+  "apps.home.restore": {
+    "from": "Put back LG’s launcher",
+    "text": "Restaurar a tela inicial da LG"
+  },
+  "apps.home.shown": {
+    "from": "Shown",
+    "text": "Exibido"
+  },
+  "apps.install": {
+    "from": "Install homebrew apps",
+    "text": "Instalar apps homebrew"
+  },
+  "apps.install.apps": {
+    "from": "Apps: {list}",
+    "text": "Apps: {list}"
+  },
+  "apps.install.confirm": {
+    "from": "Install",
+    "text": "Instalar"
+  },
+  "apps.install.cpu": {
+    "from": "Its programs are built for a different processor than this TV's and may not run.",
+    "text": "Os programas foram compilados para um processador diferente do desta TV e podem não funcionar."
+  },
+  "apps.install.dir.down": {
+    "from": "downgrade from v{from} to v{version}",
+    "text": "retornar da v{from} para a v{version}"
+  },
+  "apps.install.dir.new": {
+    "from": "new install of v{version}",
+    "text": "nova instalação da v{version}"
+  },
+  "apps.install.dir.same": {
+    "from": "reinstall of v{version}",
+    "text": "reinstalação da v{version}"
+  },
+  "apps.install.dir.store": {
+    "from": "v{version}, in place of the LG store's v{from}",
+    "text": "v{version}, no lugar da v{from} da loja da LG"
+  },
+  "apps.install.dir.up": {
+    "from": "upgrade from v{from} to v{version}",
+    "text": "atualizar da v{from} para a v{version}"
+  },
+  "apps.install.done": {
+    "from": "Installed {name} v{version}.",
+    "text": "{name} v{version} instalado."
+  },
+  "apps.install.downloading": {
+    "from": "Downloading… {done}",
+    "text": "Baixando… {done}"
+  },
+  "apps.install.downloading.of": {
+    "from": "Downloading {done} of {total}",
+    "text": "Baixando {done} de {total}"
+  },
+  "apps.install.elevating": {
+    "from": "Setting up root access…",
+    "text": "Configurando acesso root…"
+  },
+  "apps.install.failed": {
+    "from": "The install could not be started",
+    "text": "Não foi possível iniciar a instalação"
+  },
+  "apps.install.have": {
+    "from": "installed: v{version}",
+    "text": "instalado: v{version}"
+  },
+  "apps.install.installing": {
+    "from": "Installing…",
+    "text": "Instalando…"
+  },
+  "apps.install.kb": {
+    "from": "{n} KB",
+    "text": "{n} KB"
+  },
+  "apps.install.loading": {
+    "from": "Loading the catalog…",
+    "text": "Carregando o catálogo…"
+  },
+  "apps.install.mb": {
+    "from": "{n} MB",
+    "text": "{n} MB"
+  },
+  "apps.install.mbUnder1": {
+    "from": "under 1 MB",
+    "text": "menos de 1 MB"
+  },
+  "apps.install.root.restored": {
+    "from": "Root is given back to {list} after this update, as before.",
+    "text": "O acesso root será devolvido a {list} após esta atualização, como antes."
+  },
+  "apps.install.rootBadge": {
+    "from": "root",
+    "text": "root"
+  },
+  "apps.install.screensaver.warn": {
+    "from": "This app installs a custom screen saver, which will replace Native Tv’s own screen savers.",
+    "text": "Este app instala um protetor de tela personalizado que substituirá os protetores de tela do Native Tv."
+  },
+  "apps.install.services": {
+    "from": "Background services: {list}",
+    "text": "Serviços em segundo plano: {list}"
+  },
+  "apps.install.space": {
+    "from": "Free space: {free}. Needed: about {need}.",
+    "text": "Espaço livre: {free}. Necessário: cerca de {need}."
+  },
+  "apps.install.store.replace": {
+    "from": "Replace the store version",
+    "text": "Substituir a versão da loja"
+  },
+  "apps.install.store.warn": {
+    "from": "This app was installed from the LG store. Replacing it stops store updates for it.",
+    "text": "Este app foi instalado pela loja da LG. Substituí-lo impede atualizações pela loja."
+  },
+  "apps.install.unavailable": {
+    "from": "The catalog could not be loaded. The TV needs internet access to reach it.",
+    "text": "Não foi possível carregar o catálogo. A TV precisa de acesso à internet para acessá-lo."
+  },
+  "apps.install.update": {
+    "from": "Update",
+    "text": "Atualizar"
+  },
+  "apps.install.verifying": {
+    "from": "Checking the package…",
+    "text": "Verificando o pacote…"
+  },
+  "apps.install.viaHbc": {
+    "from": "Updates through Homebrew Channel",
+    "text": "Atualizações pelo Homebrew Channel"
+  },
+  "apps.nativeTvHomeNote": {
+    "from": "Native Tv Home is switched on, so this applies only to LG’s Home, seen from its tile, by holding Home, or while Native Tv starts.",
+    "text": "O Início do Native Tv está ativado, então isto se aplica apenas ao Início da LG, acessado por seu bloco, ao segurar Início ou durante a inicialização do Native Tv."
+  },
+  "apps.preload": {
+    "from": "Apps kept ready in the background",
+    "text": "Apps mantidos prontos em segundo plano"
+  },
+  "apps.preload.desc": {
+    "from": "LG keeps these apps loaded in the background so they open faster, including ones that are never used, and each takes up memory. An app switched off frees its memory once it is next closed or the TV restarts, and takes a few seconds longer to open.",
+    "text": "A LG mantém estes apps carregados em segundo plano para abri-los mais rápido, mesmo os que nunca são usados. Cada um ocupa memória. Ao desativar um app, sua memória é liberada quando ele for fechado ou a TV reiniciar, e ele levará alguns segundos a mais para abrir."
+  },
+  "apps.preload.kept": {
+    "from": "Kept ready",
+    "text": "Mantido pronto"
+  },
+  "apps.preload.off": {
+    "from": "Switched off",
+    "text": "Desativado"
+  },
+  "apps.quickAccess": {
+    "from": "Quick Access",
+    "text": "Acesso rápido"
+  },
+  "apps.quickAccess.desc": {
+    "from": "Holding a number key on the remote opens the app or input set for it. A change here applies on the TV straight away.",
+    "text": "Segurar uma tecla numérica do controle abre o app ou a entrada configurada para ela. As alterações feitas aqui são aplicadas à TV imediatamente."
+  },
+  "apps.quickAccess.none": {
+    "from": "Nothing set",
+    "text": "Nada definido"
+  },
+  "apps.service.active": {
+    "from": "Active",
+    "text": "Ativo"
+  },
+  "apps.service.restarted": {
+    "from": "Switched off, but something on the TV has started it again.",
+    "text": "Foi desativado, mas algo na TV o iniciou novamente."
+  },
+  "apps.service.stillRunning": {
+    "from": "Disabled, still running",
+    "text": "Desativado, mas em execução"
+  },
+  "apps.tile.hidden": {
+    "from": "Hidden",
+    "text": "Oculto"
+  },
+  "apps.tile.visible": {
+    "from": "Visible",
+    "text": "Visível"
+  },
+  "apps.tiles.held": {
+    "from": "Hiding system apps is turned off on this TV for now. On webOS 10 and later it can leave the picture, the sound and HDMI control off until the TV is unplugged. Apps already hidden come back after the TV is next fully restarted.",
+    "text": "A ocultação de apps de sistema está desativada nesta TV por enquanto. No webOS 10 ou posterior, ela pode desativar imagem, som e controle HDMI até que a TV seja desconectada da tomada. Apps já ocultos voltam após o próximo reinício completo da TV."
+  },
+  "apps.uninstall.button": {
+    "from": "Uninstall",
+    "text": "Desinstalar"
+  },
+  "apps.uninstall.done": {
+    "from": "Uninstalled {name}.",
+    "text": "{name} desinstalado."
+  },
+  "common.cancel": {
+    "from": "Cancel",
+    "text": "Cancelar"
+  },
+  "common.heldOverridden": {
+    "from": "Turned back on with allowOnWebos10 in config.json. On webOS 10 and later custom screen savers and tile hiding have left the picture, the sound and HDMI control off until the TV was unplugged.",
+    "text": "Reativado com allowOnWebos10 em config.json. No webOS 10 ou posterior, protetores de tela personalizados e ocultação de blocos já desativaram imagem, som e controle HDMI até que a TV fosse desconectada da tomada."
+  },
+  "common.off": {
+    "from": "Off",
+    "text": "Desligado"
+  },
+  "common.on": {
+    "from": "On",
+    "text": "Ligado"
+  },
+  "common.replaces": {
+    "from": "Replaces ours",
+    "text": "Substitui o nosso"
+  },
+  "common.unknownError": {
+    "from": "unknown error",
+    "text": "erro desconhecido"
+  },
+  "ctl.powerOff": {
+    "from": "Power off",
+    "text": "Desligar"
+  },
+  "ctl.reboot": {
+    "from": "Reboot",
+    "text": "Reiniciar"
+  },
+  "ctl.sleep": {
+    "from": "Sleep timer",
+    "text": "Temporizador de suspensão"
+  },
+  "ctl.sleep.10": {
+    "from": "10 min",
+    "text": "10 min"
+  },
+  "ctl.sleep.120": {
+    "from": "120 min",
+    "text": "120 min"
+  },
+  "ctl.sleep.30": {
+    "from": "30 min",
+    "text": "30 min"
+  },
+  "ctl.sleep.60": {
+    "from": "60 min",
+    "text": "60 min"
+  },
+  "ctl.sleep.90": {
+    "from": "90 min",
+    "text": "90 min"
+  },
+  "home.appNames": {
+    "from": "Show app names",
+    "text": "Mostrar nomes dos apps"
+  },
+  "home.appNamesDesc": {
+    "from": "Show names below app icons. Switching off keeps icons only; input and channel names stay visible.",
+    "text": "Exibe nomes abaixo dos ícones dos apps. Ao desativar, ficam apenas os ícones; nomes de entradas e canais continuam visíveis."
+  },
+  "home.ch.addTitle": {
+    "from": "Add channels",
+    "text": "Adicionar canais"
+  },
+  "home.ch.allAdded": {
+    "from": "Every channel is on Home.",
+    "text": "Todos os canais estão no Início."
+  },
+  "home.clock12": {
+    "from": "12-hour",
+    "text": "12 horas"
+  },
+  "home.clock24": {
+    "from": "24-hour",
+    "text": "24 horas"
+  },
+  "home.clockFormat": {
+    "from": "Clock format",
+    "text": "Formato do relógio"
+  },
+  "home.clockFormatDesc": {
+    "from": "Choose 12-hour time with AM/PM or 24-hour time on Native Tv Home.",
+    "text": "Escolha entre o formato de 12 horas, com AM/PM, e o de 24 horas no Início do Native Tv."
+  },
+  "home.hidden": {
+    "from": "Hidden",
+    "text": "Oculto"
+  },
+  "home.hideLg": {
+    "from": "Hide LG’s Home while the TV starts",
+    "text": "Ocultar o Início da LG durante a inicialização"
+  },
+  "home.hideLgDesc": {
+    "from": "For about 25 seconds after a cold start, until Native Tv Home takes its place, LG’s Home opens as a black screen instead of its own. If Native Tv stops running, for example after a firmware update removes root, LG’s Home stays black until it is put back over SSH.",
+    "text": "Por cerca de 25 segundos após uma inicialização a frio, até o Início do Native Tv assumir, a tela inicial da LG abre como uma tela preta. Se o Native Tv parar de funcionar, por exemplo, se uma atualização de firmware remover o root, a tela inicial da LG continuará preta até ser restaurada por SSH."
+  },
+  "home.isOffDesc": {
+    "from": "Nothing of LG’s is changed: Native Tv Home is laid over LG’s Home while on, and switching off takes it away.",
+    "text": "Nada da LG é alterado: o Início do Native Tv fica sobre o Início da LG enquanto está ativado. Desativá-lo remove essa sobreposição."
+  },
+  "home.isOnDesc": {
+    "from": "It opens in LG’s Home’s place: with the Home and Back buttons, and when the TV wakes on Home.",
+    "text": "Abre no lugar do Início da LG: com os botões Início e Voltar e quando a TV desperta na tela inicial."
+  },
+  "home.kinds": {
+    "from": "Kinds",
+    "text": "Categorias"
+  },
+  "home.kindsDesc": {
+    "from": "The rows of the Apps screen, top to bottom. On the Apps screen itself, holding OK on a row moves it.",
+    "text": "As linhas da tela Apps, de cima para baixo. Na própria tela Apps, segure OK em uma linha para movê-la."
+  },
+  "home.onAppsTab": {
+    "from": "On the Apps tab",
+    "text": "Na aba Apps"
+  },
+  "home.onHome": {
+    "from": "On Native Tv Home",
+    "text": "No Início do Native Tv"
+  },
+  "home.picture": {
+    "from": "Picture details",
+    "text": "Detalhes da imagem"
+  },
+  "home.pictureDesc": {
+    "from": "In the top right of Native Tv Home: the resolution, refresh rate and HDR of what was last on, and the picture mode and brightness it gets.",
+    "text": "No canto superior direito do Início do Native Tv: resolução, taxa de atualização e HDR do último conteúdo exibido, além do modo de imagem e do brilho aplicados."
+  },
+  "home.profile": {
+    "from": "Profile",
+    "text": "Perfil"
+  },
+  "home.profile.tvHint": {
+    "from": "Each profile has its own layout, which the rows and settings here change. Names, colours and removing are on the browser dashboard’s Home tab.",
+    "text": "Cada perfil tem seu próprio layout, alterado pelas linhas e configurações daqui. Nomes, cores e remoção ficam na aba Início do painel no navegador."
+  },
+  "home.reset": {
+    "from": "Reset the layout",
+    "text": "Redefinir o layout"
+  },
+  "home.resetDesc": {
+    "from": "The rows, apps and inputs go back to their first order, with LG’s promotions hidden again. Channels stay as they are.",
+    "text": "As linhas, os apps e as entradas voltam à ordem inicial, e as promoções da LG são ocultadas novamente. Os canais permanecem como estão."
+  },
+  "home.row.apps": {
+    "from": "Apps",
+    "text": "Apps"
+  },
+  "home.row.channels": {
+    "from": "Channels",
+    "text": "Canais"
+  },
+  "home.row.inputs": {
+    "from": "Inputs",
+    "text": "Entradas"
+  },
+  "home.showInputs": {
+    "from": "Show inputs",
+    "text": "Mostrar entradas"
+  },
+  "home.showInputsDesc": {
+    "from": "Show the Inputs row. Switching off leaves the whole row out; the inputs themselves stay on the TV.",
+    "text": "Exibe a linha Entradas. Ao desativar, a linha inteira é removida, mas as entradas continuam na TV."
+  },
+  "home.showLgHome": {
+    "from": "Show the LG Home tile",
+    "text": "Mostrar o bloco do Início da LG"
+  },
+  "home.showLgHomeDesc": {
+    "from": "Show the tile that opens LG’s Home at the end of the Apps row. Holding the Home button still opens LG’s Home.",
+    "text": "Exibe o bloco que abre o Início da LG no fim da linha Apps. Segurar o botão Início continua abrindo o Início da LG."
+  },
+  "home.showLive": {
+    "from": "Show Live",
+    "text": "Mostrar Ao vivo"
+  },
+  "home.showLiveDesc": {
+    "from": "Show the Live tab, with the channels added to Native Tv Home. Off by default. Switching off leaves the whole tab out; the added channels are kept.",
+    "text": "Exibe a aba Ao vivo com os canais adicionados ao Início do Native Tv. Desativado por padrão. Ao desativar, a aba inteira é removida, mas os canais adicionados são mantidos."
+  },
+  "home.shown": {
+    "from": "Shown",
+    "text": "Exibido"
+  },
+  "home.sort": {
+    "from": "Order",
+    "text": "Ordem"
+  },
+  "home.sortCustom": {
+    "from": "Your order",
+    "text": "Sua ordem"
+  },
+  "home.sortKind": {
+    "from": "By kind",
+    "text": "Por categoria"
+  },
+  "home.sortKindDesc": {
+    "from": "Rows by kind on the Apps screen, in the order under Kinds. Tiles keep their order within a kind.",
+    "text": "Linhas por categoria na tela Apps, na ordem definida em Categorias. Os blocos mantêm sua ordem dentro de cada categoria."
+  },
+  "home.sortRecent": {
+    "from": "Last opened",
+    "text": "Última abertura"
+  },
+  "home.sortRecentDesc": {
+    "from": "The tile opened last comes first, whether it was opened from Native Tv Home or not. Tiles not yet opened follow in this row’s own order.",
+    "text": "O último bloco aberto aparece primeiro, mesmo que não tenha sido aberto pelo Início do Native Tv. Blocos ainda não abertos seguem a ordem própria desta linha."
+  },
+  "home.startup": {
+    "from": "Power-on screen",
+    "text": "Tela ao ligar"
+  },
+  "home.startupDesc": {
+    "from": "Choose Native Tv Home to skip LG Home and open it when ready, or follow LG's power-on setting. Full shutdown still needs time to start. Choosing another app or input cancels the automatic opening.",
+    "text": "Escolha o Início do Native Tv para pular a tela inicial da LG e abri-lo quando estiver pronto, ou siga a configuração de inicialização da LG. Após um desligamento completo, a inicialização ainda leva algum tempo. Escolher outro app ou entrada cancela a abertura automática."
+  },
+  "home.startupLg": {
+    "from": "Follow LG setting",
+    "text": "Seguir configuração da LG"
+  },
+  "home.startupNativeTv": {
+    "from": "Native Tv Home",
+    "text": "Início do Native Tv"
+  },
+  "home.title": {
+    "from": "Native Tv Home",
+    "text": "Início do Native Tv"
+  },
+  "home.unavailable": {
+    "from": "Not available on this TV",
+    "text": "Indisponível nesta TV"
+  },
+  "launcher.apps.title": {
+    "from": "Apps",
+    "text": "Apps"
+  },
+  "launcher.content.film": {
+    "from": "Film",
+    "text": "Filme"
+  },
+  "launcher.content.seasons": {
+    "from": {
+      "one": "{count} season",
+      "other": "{count} seasons"
+    },
+    "text": {
+      "one": "{count} temporada",
+      "many": "{count} temporadas",
+      "other": "{count} temporadas"
+    }
+  },
+  "launcher.content.series": {
+    "from": "Series",
+    "text": "Séries"
+  },
+  "launcher.content.signal": {
+    "from": "{size} at {hz} Hz",
+    "text": "{size} a {hz} Hz"
+  },
+  "launcher.datacontroller.couldNotLoadRecentAppsPressOK": {
+    "from": "Could not load recent apps. Press OK to retry.",
+    "text": "Não foi possível carregar os apps recentes. Pressione OK para tentar novamente."
+  },
+  "launcher.home.lgHome": {
+    "from": "LG Home",
+    "text": "Início da LG"
+  },
+  "launcher.home.netflix": {
+    "from": "Available on Netflix",
+    "text": "Disponível na Netflix"
+  },
+  "launcher.home.title": {
+    "from": "Home",
+    "text": "Início"
+  },
+  "launcher.home.topPicks": {
+    "from": "Top picks for you",
+    "text": "Destaques para você"
+  },
+  "launcher.home.trendingMovies": {
+    "from": "Trending films this week",
+    "text": "Filmes em alta nesta semana"
+  },
+  "launcher.home.trendingSeries": {
+    "from": "Trending series this week",
+    "text": "Séries em alta nesta semana"
+  },
+  "launcher.home.yourApps": {
+    "from": "Your apps",
+    "text": "Seus apps"
+  },
+  "launcher.home.youtube": {
+    "from": "Trending on YouTube",
+    "text": "Em alta no YouTube"
+  },
+  "launcher.homemotion.channel": {
+    "from": "Channel",
+    "text": "Canal"
+  },
+  "launcher.homemotion.switch": {
+    "from": "Switch",
+    "text": "Alternar"
+  },
+  "launcher.homemotion.watch": {
+    "from": "Watch",
+    "text": "Assistir"
+  },
+  "launcher.homeview.hideFromApps": {
+    "from": "Hide from Apps",
+    "text": "Ocultar dos Apps"
+  },
+  "launcher.homeview.hideFromHome": {
+    "from": "Hide from Home",
+    "text": "Ocultar do Início"
+  },
+  "launcher.homeview.homeComesBackWhenNativeTvAnswers": {
+    "from": "Home comes back when Native Tv answers again.",
+    "text": "O Início volta quando o Native Tv responder novamente."
+  },
+  "launcher.homeview.loadingHome": {
+    "from": "Loading Home…",
+    "text": "Carregando o Início…"
+  },
+  "launcher.homeview.movingApps": {
+    "from": "Moving apps",
+    "text": "Movendo apps"
+  },
+  "launcher.homeview.nativeTvIsNotAnswering": {
+    "from": "Native Tv is not answering",
+    "text": "O Native Tv não está respondendo"
+  },
+  "launcher.homeview.noItemsToShowOpenSettingsTo": {
+    "from": "No items to show. Open Settings to arrange Home.",
+    "text": "Nenhum item para exibir. Abra Configurações para organizar o Início."
+  },
+  "launcher.homeview.notConnected": {
+    "from": "Not connected",
+    "text": "Não conectado"
+  },
+  "launcher.homeview.showOnApps": {
+    "from": "Show on Apps",
+    "text": "Mostrar nos Apps"
+  },
+  "launcher.homeview.showOnHome": {
+    "from": "Show on Home",
+    "text": "Mostrar no Início"
+  },
+  "launcher.input.lgHomeIsSwitchedOffWithShow": {
+    "from": "LG Home is switched off with Show LG Home in the Home settings.",
+    "text": "O Início da LG está desativado pela opção Mostrar Início da LG nas configurações do Início."
+  },
+  "launcher.inputs.title": {
+    "from": "Inputs",
+    "text": "Entradas"
+  },
+  "launcher.key.back": {
+    "from": "Back",
+    "text": "Voltar"
+  },
+  "launcher.key.red": {
+    "from": "Red",
+    "text": "Vermelho"
+  },
+  "launcher.keyboard.delete": {
+    "from": "Delete",
+    "text": "Excluir"
+  },
+  "launcher.keyboard.shift": {
+    "from": "Shift",
+    "text": "Maiúsculas"
+  },
+  "launcher.keyboard.space": {
+    "from": "Space",
+    "text": "Espaço"
+  },
+  "launcher.kind.games": {
+    "from": "Games",
+    "text": "Jogos"
+  },
+  "launcher.kind.home": {
+    "from": "Smart home",
+    "text": "Casa inteligente"
+  },
+  "launcher.kind.music": {
+    "from": "Music & audio",
+    "text": "Música e áudio"
+  },
+  "launcher.kind.other": {
+    "from": "Other",
+    "text": "Outros"
+  },
+  "launcher.kind.tools": {
+    "from": "Tools",
+    "text": "Ferramentas"
+  },
+  "launcher.kind.tv": {
+    "from": "LG & TV",
+    "text": "LG e TV"
+  },
+  "launcher.kind.video": {
+    "from": "Movies & TV",
+    "text": "Filmes e TV"
+  },
+  "launcher.language.auto": {
+    "from": "Automatic — follow TV",
+    "text": "Automático — seguir a TV"
+  },
+  "launcher.language.description": {
+    "from": "Choose the language of the launcher and movie information.",
+    "text": "Escolha o idioma da tela inicial e das informações de filmes."
+  },
+  "launcher.language.saveFailed": {
+    "from": "Could not save the language preference.",
+    "text": "Não foi possível salvar a preferência de idioma."
+  },
+  "launcher.language.title": {
+    "from": "Language",
+    "text": "Idioma"
+  },
+  "launcher.language.wait": {
+    "from": "Wait for the current change to finish.",
+    "text": "Aguarde a alteração atual terminar."
+  },
+  "launcher.live.title": {
+    "from": "Live",
+    "text": "Ao vivo"
+  },
+  "launcher.menu.returnToSection": {
+    "from": "Back to return  ·  {section}",
+    "text": "Voltar para retornar  ·  {section}"
+  },
+  "launcher.menucontroller.installationFailed": {
+    "from": "Installation failed",
+    "text": "Falha na instalação"
+  },
+  "launcher.menucontroller.installingApplication": {
+    "from": "Installing application",
+    "text": "Instalando aplicativo"
+  },
+  "launcher.menucontroller.installsThePackageUsingTheSelectedPrivileges": {
+    "from": "Installs the package using the selected privileges.",
+    "text": "Instala o pacote com os privilégios selecionados."
+  },
+  "launcher.menucontroller.light": {
+    "from": "Light",
+    "text": "Claro"
+  },
+  "launcher.menucontroller.loadingCatalog": {
+    "from": "Loading catalog…",
+    "text": "Carregando catálogo…"
+  },
+  "launcher.menucontroller.onlyOfferedForVettedCatalogPackages": {
+    "from": "Only offered for vetted catalog packages.",
+    "text": "Disponível apenas para pacotes verificados do catálogo."
+  },
+  "launcher.menucontroller.runWithRootPrivileges": {
+    "from": "Run with root privileges",
+    "text": "Executar com privilégios root"
+  },
+  "launcher.menuview.homebrewApplications": {
+    "from": "Homebrew applications",
+    "text": "Aplicativos homebrew"
+  },
+  "launcher.menuview.openOnAPhone": {
+    "from": "Open on a phone",
+    "text": "Abrir no celular"
+  },
+  "launcher.menuview.pressOKToChoose": {
+    "from": "Press OK to choose",
+    "text": "Pressione OK para escolher"
+  },
+  "launcher.menuview.scanWithAPhoneCamera": {
+    "from": "Scan with a phone camera",
+    "text": "Escaneie com a câmera do celular"
+  },
+  "launcher.menuview.working": {
+    "from": "Working…",
+    "text": "Processando…"
+  },
+  "launcher.navigation.loadingRecentApps": {
+    "from": "Loading recent apps…",
+    "text": "Carregando apps recentes…"
+  },
+  "launcher.recents.openCount": {
+    "from": {
+      "one": "{count} app open",
+      "other": "{count} apps open"
+    },
+    "text": {
+      "one": "{count} app aberto",
+      "many": "{count} apps abertos",
+      "other": "{count} apps abertos"
+    }
+  },
+  "launcher.recentscontroller.appsStayHereWhileTheyAreOpen": {
+    "from": "Apps stay here while they are open.",
+    "text": "Os apps ficam aqui enquanto estão abertos."
+  },
+  "launcher.recentsview.backToReturnRedClosesTheFocused": {
+    "from": "Back to return  ·  Red closes the focused app",
+    "text": "Voltar para retornar  ·  Vermelho fecha o app selecionado"
+  },
+  "launcher.recentsview.closeAll": {
+    "from": "Close all",
+    "text": "Fechar todos"
+  },
+  "launcher.recentsview.nothingIsOpen": {
+    "from": "Nothing is open",
+    "text": "Nenhum app aberto"
+  },
+  "launcher.recentsview.recentAppsAreUnavailable": {
+    "from": "Recent apps are unavailable",
+    "text": "Apps recentes indisponíveis"
+  },
+  "launcher.setup.anyoneOnTheHomeNetworkCanUse": {
+    "from": "Anyone on the home network can use the dashboard.",
+    "text": "Qualquer pessoa na rede doméstica pode usar o painel."
+  },
+  "launcher.setup.connectAnMQTTBrokerForHomeAssistant": {
+    "from": "Connect an MQTT broker for Home Assistant.",
+    "text": "Conecte um broker MQTT ao Home Assistant."
+  },
+  "launcher.setup.continue": {
+    "from": "Continue",
+    "text": "Continuar"
+  },
+  "launcher.setup.createANewLink": {
+    "from": "Create a new link",
+    "text": "Criar um novo link"
+  },
+  "launcher.setup.finishOnAPhone": {
+    "from": "Finish on a phone",
+    "text": "Concluir no celular"
+  },
+  "launcher.setup.homeAssistantCanBeSetUpLater": {
+    "from": "Home Assistant can be set up later in Settings.",
+    "text": "O Home Assistant pode ser configurado depois nas Configurações."
+  },
+  "launcher.setup.keepsTheNetworkAvailableWithTheScreen": {
+    "from": "Keeps the network available with the screen dark. Uses about 12 W on a C2, apart from five hours of full sleep each night.",
+    "text": "Mantém a rede disponível com a tela apagada. Consome cerca de 12 W em uma C2, exceto durante cinco horas de repouso completo a cada noite."
+  },
+  "launcher.setup.nativeTvAndHomeAssistantWaitUntil": {
+    "from": "Native Tv and Home Assistant wait until the TV is on again.",
+    "text": "O Native Tv e o Home Assistant aguardam até a TV ser ligada novamente."
+  },
+  "launcher.setup.readingsControlsAndPrivacySettingsForThis": {
+    "from": "Readings, controls and privacy settings for this TV, with the remote.",
+    "text": "Dados, controles e configurações de privacidade desta TV, pelo controle remoto."
+  },
+  "launcher.setup.scanTheQRCodeWithAPhone": {
+    "from": "Scan the QR code with a phone camera.",
+    "text": "Escaneie o código QR com a câmera do celular."
+  },
+  "launcher.setup.setItUpOnAPhone": {
+    "from": "Set it up on a phone",
+    "text": "Configurar no celular"
+  },
+  "launcher.setup.theDashboardAccessTokenIsRequired": {
+    "from": "The dashboard access token is required.",
+    "text": "É necessário o token de acesso do painel."
+  },
+  "launcher.setup.theDashboardRemainsAvailableOnTheTV": {
+    "from": "The dashboard remains available on the TV.",
+    "text": "O painel continua disponível na TV."
+  },
+  "lgs.inactive": {
+    "from": "Not available with the TV’s current input or sound output.",
+    "text": "Indisponível com a entrada ou saída de som atual da TV."
+  },
+  "metrics.firmware": {
+    "from": "Firmware",
+    "text": "Firmware"
+  },
+  "metrics.hdmi.active": {
+    "from": "Active",
+    "text": "Ativo"
+  },
+  "metrics.temperature": {
+    "from": "Temperature",
+    "text": "Temperatura"
+  },
+  "mqtt.cat.disabled": {
+    "from": "Disabled",
+    "text": "Desativado"
+  },
+  "mqtt.cat.enabled": {
+    "from": "Enabled",
+    "text": "Ativado"
+  },
+  "mqtt.state.connected": {
+    "from": "Connected",
+    "text": "Conectado"
+  },
+  "mqtt.state.connecting": {
+    "from": "Connecting",
+    "text": "Conectando"
+  },
+  "oled.compIn": {
+    "from": "Panel maintenance in",
+    "text": "Manutenção do painel em"
+  },
+  "oled.cycles.comp": {
+    "from": "Short cycles completed",
+    "text": "Ciclos curtos concluídos"
+  },
+  "oled.cycles.gsr": {
+    "from": "GSR stress events",
+    "text": "Eventos de estresse GSR"
+  },
+  "oled.cycles.refresher": {
+    "from": "Pixel refresher cycles",
+    "text": "Ciclos de atualização de pixels"
+  },
+  "oled.panelLife": {
+    "from": "Panel life",
+    "text": "Vida útil do painel"
+  },
+  "oled.protections": {
+    "from": "Protections",
+    "text": "Proteções"
+  },
+  "oled.refresherIn": {
+    "from": "Pixel refresher in",
+    "text": "Atualização de pixels em"
+  },
+  "phone.badPort": {
+    "from": "The port is a number from 1 to 65535.",
+    "text": "A porta deve ser um número de 1 a 65535."
+  },
+  "phone.failed": {
+    "from": "That did not work. Try again.",
+    "text": "Não funcionou. Tente novamente."
+  },
+  "phone.needHost": {
+    "from": "Enter the broker address.",
+    "text": "Digite o endereço do broker."
+  },
+  "pv.acr.idle": {
+    "from": "Running, idle",
+    "text": "Em execução, ocioso"
+  },
+  "pv.acr.recognizing": {
+    "from": "Recognizing",
+    "text": "Reconhecendo"
+  },
+  "pv.acr.service": {
+    "from": "Recognition service",
+    "text": "Serviço de reconhecimento"
+  },
+  "pv.adblock.ads": {
+    "from": "Ads & telemetry",
+    "text": "Anúncios e telemetria"
+  },
+  "pv.adblock.custom": {
+    "from": "Custom ad blocking",
+    "text": "Bloqueio personalizado de anúncios"
+  },
+  "pv.adblock.full": {
+    "from": "Everything",
+    "text": "Tudo"
+  },
+  "pv.adblock.off.detail": {
+    "from": "Nothing is blocked. LG’s advertising and telemetry addresses work as normal.",
+    "text": "Nada está bloqueado. Os endereços de publicidade e telemetria da LG funcionam normalmente."
+  },
+  "pv.adid": {
+    "from": "Advertising identifier",
+    "text": "Identificador de publicidade"
+  },
+  "pv.allOff": {
+    "from": "Tracking and ads are off",
+    "text": "Rastreamento e anúncios desativados"
+  },
+  "pv.allOff.watch": {
+    "from": "If an LG update switches anything back on, it shows here.",
+    "text": "Se uma atualização da LG reativar algo, isso aparecerá aqui."
+  },
+  "pv.allOffShort": {
+    "from": "All off",
+    "text": "Tudo desativado"
+  },
+  "pv.anon": {
+    "from": "{n} unidentified flags",
+    "text": "{n} sinalizadores não identificados"
+  },
+  "pv.anon.one": {
+    "from": "1 unidentified flag",
+    "text": "1 sinalizador não identificado"
+  },
+  "pv.areaOn": {
+    "from": "{n} on",
+    "text": "{n} ativados"
+  },
+  "pv.capturing": {
+    "from": "Capturing",
+    "text": "Capturando"
+  },
+  "pv.lmt": {
+    "from": "Limit ad tracking",
+    "text": "Limitar rastreamento de anúncios"
+  },
+  "pv.notRunning": {
+    "from": "Not running",
+    "text": "Parado"
+  },
+  "pv.promotions": {
+    "from": "LG ads and promotions",
+    "text": "Anúncios e promoções da LG"
+  },
+  "pv.promotions.all": {
+    "from": "All LG ads and promotions",
+    "text": "Todos os anúncios e promoções da LG"
+  },
+  "pv.running": {
+    "from": "Running",
+    "text": "Em execução"
+  },
+  "pv.stillOn": {
+    "from": "{n} things are still on",
+    "text": "{n} opções ainda estão ativadas"
+  },
+  "pv.stillOn.one": {
+    "from": "1 thing is still on",
+    "text": "1 opção ainda está ativada"
+  },
+  "pv.stopped": {
+    "from": "Stopped",
+    "text": "Parado"
+  },
+  "pv.switchAllOff": {
+    "from": "Switch it all off",
+    "text": "Desativar tudo"
+  },
+  "server.tvUpdates.allowed": {
+    "from": "Allowed",
+    "text": "Permitido"
+  },
+  "server.tvUpdates.block": {
+    "from": "Block TV software updates",
+    "text": "Bloquear atualizações de software da TV"
+  },
+  "server.tvUpdates.blocked": {
+    "from": "Blocked",
+    "text": "Bloqueado"
+  },
+  "setup.broker.connect": {
+    "from": "Connect",
+    "text": "Conectar"
+  },
+  "setup.broker.connecting": {
+    "from": "Connecting to the broker…",
+    "text": "Conectando ao broker…"
+  },
+  "setup.broker.host": {
+    "from": "Or enter the broker address here",
+    "text": "Ou digite o endereço do broker aqui"
+  },
+  "setup.broker.next": {
+    "from": "Next",
+    "text": "Próximo"
+  },
+  "setup.broker.optional": {
+    "from": "Optional",
+    "text": "Opcional"
+  },
+  "setup.broker.password": {
+    "from": "Password, if the broker asks for one",
+    "text": "Senha, se o broker exigir"
+  },
+  "setup.broker.port": {
+    "from": "Port",
+    "text": "Porta"
+  },
+  "setup.broker.user": {
+    "from": "Username, if the broker asks for one",
+    "text": "Usuário, se o broker exigir"
+  },
+  "setup.firstTime": {
+    "from": "First-time setup",
+    "text": "Configuração inicial"
+  },
+  "setup.ha.later": {
+    "from": "Not now",
+    "text": "Agora não"
+  },
+  "setup.ha.later.hint": {
+    "from": "The dashboard works without it. Set it up any time from Settings.",
+    "text": "O painel funciona sem isso. Configure quando quiser nas Configurações."
+  },
+  "setup.ha.phone": {
+    "from": "Set it up on my phone",
+    "text": "Configurar no meu celular"
+  },
+  "setup.ha.phone.hint": {
+    "from": "The TV connects through an MQTT broker, such as Home Assistant’s Mosquitto add-on. Scan a code with your phone and enter the broker’s details there.",
+    "text": "A TV se conecta por um broker MQTT, como o complemento Mosquitto do Home Assistant. Escaneie um código com o celular e insira os dados do broker nele."
+  },
+  "setup.ha.title": {
+    "from": "Connect to Home Assistant?",
+    "text": "Conectar ao Home Assistant?"
+  },
+  "setup.handoff.address": {
+    "from": "Open the camera on a phone on the same Wi-Fi and point it at the code.",
+    "text": "Abra a câmera de um celular na mesma rede Wi-Fi e aponte para o código."
+  },
+  "setup.handoff.backToSettings": {
+    "from": "Back to Settings",
+    "text": "Voltar às configurações"
+  },
+  "setup.handoff.expired": {
+    "from": "The code has expired.",
+    "text": "O código expirou."
+  },
+  "setup.handoff.failed": {
+    "from": "The link could not be opened.",
+    "text": "Não foi possível abrir o link."
+  },
+  "setup.handoff.notConnected": {
+    "from": "It did not connect. The broker’s details may be wrong, or it may not be running.",
+    "text": "Não foi possível conectar. Os dados do broker podem estar incorretos, ou ele pode não estar em execução."
+  },
+  "setup.handoff.preparing": {
+    "from": "Setting up the link…",
+    "text": "Configurando o link…"
+  },
+  "setup.handoff.retry": {
+    "from": "Try again",
+    "text": "Tentar novamente"
+  },
+  "setup.handoff.retry.hint": {
+    "from": "A new code to scan with your phone.",
+    "text": "Um novo código para escanear com o celular."
+  },
+  "setup.handoff.scan": {
+    "from": "Scan this with your phone’s camera. This screen moves on by itself once the TV connects.",
+    "text": "Escaneie com a câmera do celular. Esta tela avança automaticamente quando a TV se conectar."
+  },
+  "setup.handoff.skip": {
+    "from": "Skip for now",
+    "text": "Pular por enquanto"
+  },
+  "setup.handoff.step": {
+    "from": "Home Assistant",
+    "text": "Home Assistant"
+  },
+  "setup.handoff.title": {
+    "from": "Finish on your phone",
+    "text": "Conclua no seu celular"
+  },
+  "setup.handoff.waiting": {
+    "from": "Waiting for your phone…",
+    "text": "Aguardando seu celular…"
+  },
+  "setup.hint.back": {
+    "from": "Back",
+    "text": "Voltar"
+  },
+  "setup.hint.choose": {
+    "from": "Choose",
+    "text": "Escolher"
+  },
+  "setup.hint.move": {
+    "from": "Move",
+    "text": "Mover"
+  },
+  "setup.hint.previous": {
+    "from": "Previous field",
+    "text": "Campo anterior"
+  },
+  "setup.hint.skip": {
+    "from": "Skip for now",
+    "text": "Pular por enquanto"
+  },
+  "setup.hint.type": {
+    "from": "Type",
+    "text": "Digitar"
+  },
+  "setup.key.space": {
+    "from": "space",
+    "text": "espaço"
+  },
+  "setup.name.label": {
+    "from": "TV name",
+    "text": "Nome da TV"
+  },
+  "setup.name.lead": {
+    "from": "This is the name of the main profile on Home. OK on Next keeps the name shown; type another to change it.",
+    "text": "Este é o nome do perfil principal no Início. Pressione OK em Próximo para manter o nome exibido ou digite outro para alterá-lo."
+  },
+  "setup.name.next": {
+    "from": "Next",
+    "text": "Próximo"
+  },
+  "setup.name.title": {
+    "from": "Name this TV",
+    "text": "Dê um nome à TV"
+  },
+  "setup.net.closed": {
+    "from": "No, only on this TV",
+    "text": "Não, apenas nesta TV"
+  },
+  "setup.net.closed.hint": {
+    "from": "Nothing else on your network can reach the dashboard. The safest choice, and it can be switched on later in Settings.",
+    "text": "Nenhum outro dispositivo na rede poderá acessar o painel. É a opção mais segura e pode ser alterada depois nas Configurações."
+  },
+  "setup.net.noPassword": {
+    "from": "There is no password, so anyone on that network can use it.",
+    "text": "Não há senha, então qualquer pessoa nessa rede pode usá-lo."
+  },
+  "setup.net.open": {
+    "from": "Yes, on phones and computers at home",
+    "text": "Sim, em celulares e computadores de casa"
+  },
+  "setup.net.open.hint": {
+    "from": "A fuller version of this dashboard, with more controls, that opens in a browser on any phone or computer on your home network.",
+    "text": "Uma versão mais completa deste painel, com mais controles, que abre no navegador de qualquer celular ou computador da sua rede doméstica."
+  },
+  "setup.net.title": {
+    "from": "Turn on the web dashboard?",
+    "text": "Ativar o painel web?"
+  },
+  "setup.net.token": {
+    "from": "Using it needs the dashboard’s access token.",
+    "text": "É necessário o token de acesso do painel para usar."
+  },
+  "setup.pin.default": {
+    "from": "Use 0000",
+    "text": "Usar 0000"
+  },
+  "setup.pin.default.hint": {
+    "from": "0000 is the default. Anyone who knows it can use it, so choose your own now, or change it later in the web dashboard.",
+    "text": "0000 é o PIN padrão. Qualquer pessoa que o conheça pode usá-lo. Escolha outro agora ou altere depois no painel web."
+  },
+  "setup.pin.failed": {
+    "from": "The PIN could not be saved",
+    "text": "Não foi possível salvar o PIN"
+  },
+  "setup.pin.incomplete": {
+    "from": "Enter four digits.",
+    "text": "Digite quatro dígitos."
+  },
+  "setup.pin.label": {
+    "from": "Admin PIN",
+    "text": "PIN de administrador"
+  },
+  "setup.pin.lead": {
+    "from": "These four digits are asked before apps are installed or removed, SSH keys are changed, a backup is restored, or the TV is restarted or powered off, on the TV and in the dashboard.",
+    "text": "Estes quatro dígitos são solicitados antes de instalar ou remover apps, alterar chaves SSH, restaurar um backup, reiniciar ou desligar a TV, tanto na TV quanto no painel."
+  },
+  "setup.pin.next": {
+    "from": "Next",
+    "text": "Próximo"
+  },
+  "setup.pin.own": {
+    "from": "Choose my own",
+    "text": "Escolher meu PIN"
+  },
+  "setup.pin.own.hint": {
+    "from": "Type four digits of your own.",
+    "text": "Digite quatro dígitos de sua escolha."
+  },
+  "setup.pin.own.lead": {
+    "from": "Four digits that only you know.",
+    "text": "Quatro dígitos que só você conhece."
+  },
+  "setup.pin.placeholder": {
+    "from": "4 digits",
+    "text": "4 dígitos"
+  },
+  "setup.pin.title": {
+    "from": "Choose an admin PIN",
+    "text": "Escolha um PIN de administrador"
+  },
+  "setup.restarting.step": {
+    "from": "One moment",
+    "text": "Um momento"
+  },
+  "setup.restarting.title": {
+    "from": "Applying your choice…",
+    "text": "Aplicando sua escolha…"
+  },
+  "setup.saving": {
+    "from": "Saving…",
+    "text": "Salvando…"
+  },
+  "setup.slogan": {
+    "from": "Your TV, your rules.",
+    "text": "Sua TV, suas regras."
+  },
+  "setup.standby.failed": {
+    "from": "Standby could not be changed",
+    "text": "Não foi possível alterar o modo de espera"
+  },
+  "setup.standby.off": {
+    "from": "No, let it sleep",
+    "text": "Não, deixar em repouso"
+  },
+  "setup.standby.off.hint": {
+    "from": "Switched off, the TV sleeps as normal and uses almost no power. The dashboard and Home Assistant wait until it is switched back on.",
+    "text": "Ao desativar, a TV entra em repouso normalmente e quase não consome energia. O painel e o Home Assistant aguardam até ela ser ligada novamente."
+  },
+  "setup.standby.on": {
+    "from": "Yes, keep it connected",
+    "text": "Sim, manter conectado"
+  },
+  "setup.standby.on.hint": {
+    "from": "When the TV is switched off, it stays on your network with the screen dark, so this dashboard and Home Assistant keep working and can switch it back on. It uses about 12 W while off. For five hours each night it sleeps fully and is offline; the dashboard can move those hours.",
+    "text": "Quando desligada, a TV permanece na rede com a tela apagada para que este painel e o Home Assistant continuem funcionando e possam ligá-la novamente. Consome cerca de 12 W desligada. Por cinco horas a cada noite, entra em repouso completo e fica offline; o painel pode alterar esse horário."
+  },
+  "setup.standby.title": {
+    "from": "Stay connected when off?",
+    "text": "Manter conectado quando desligado?"
+  },
+  "setup.start": {
+    "from": "Get started",
+    "text": "Começar"
+  },
+  "setup.step": {
+    "from": "Step {n} of {total}",
+    "text": "Etapa {n} de {total}"
+  },
+  "setup.summary.change": {
+    "from": "Change any of these in Settings.",
+    "text": "Altere qualquer uma destas opções nas Configurações."
+  },
+  "setup.summary.name": {
+    "from": "TV name",
+    "text": "Nome da TV"
+  },
+  "setup.summary.onTv": {
+    "from": "On this TV",
+    "text": "Nesta TV"
+  },
+  "setup.summary.open": {
+    "from": "Open dashboard",
+    "text": "Abrir painel"
+  },
+  "setup.summary.pin": {
+    "from": "Admin PIN",
+    "text": "PIN de administrador"
+  },
+  "setup.summary.pin.default": {
+    "from": "Default (0000)",
+    "text": "Padrão (0000)"
+  },
+  "setup.summary.pin.set": {
+    "from": "Set",
+    "text": "Definido"
+  },
+  "setup.summary.standby": {
+    "from": "Stays connected when off",
+    "text": "Permanece conectado quando desligado"
+  },
+  "setup.summary.step": {
+    "from": "All set",
+    "text": "Tudo pronto"
+  },
+  "setup.summary.title": {
+    "from": "Ready to go",
+    "text": "Pronto para usar"
+  },
+  "setup.trouble": {
+    "from": "The dashboard stopped answering. Press OK to try again.",
+    "text": "O painel parou de responder. Pressione OK para tentar novamente."
+  },
+  "setup.trouble.step": {
+    "from": "Setup",
+    "text": "Configuração"
+  },
+  "setup.welcome": {
+    "from": "Readings, controls and privacy settings for this TV, right here with the remote.",
+    "text": "Dados, controles e configurações de privacidade desta TV, aqui mesmo pelo controle remoto."
+  },
+  "setup.welcome.five": {
+    "from": "Five quick choices first, and you can change any of them later.",
+    "text": "Primeiro, cinco escolhas rápidas. Você pode alterar qualquer uma depois."
+  },
+  "setup.welcome.four": {
+    "from": "Four quick choices first, and you can change any of them later.",
+    "text": "Primeiro, quatro escolhas rápidas. Você pode alterar qualquer uma depois."
+  },
+  "setup.welcome.three": {
+    "from": "Three quick choices first, and you can change any of them later.",
+    "text": "Primeiro, três escolhas rápidas. Você pode alterar qualquer uma depois."
+  },
+  "setup.yes": {
+    "from": "Yes",
+    "text": "Sim"
+  },
+  "srv.adblock.custom.badMode": {
+    "from": "mode must be add or replace",
+    "text": "o modo deve ser add ou replace"
+  },
+  "srv.adblock.custom.empty": {
+    "from": "No host names found in the file. A hosts file has lines such as 0.0.0.0 ads.example.com, and a plain list has one name on each line.",
+    "text": "Nenhum domínio encontrado no arquivo. Um arquivo hosts tem linhas como 0.0.0.0 ads.example.com; uma lista simples tem um domínio por linha."
+  },
+  "srv.adblock.custom.none": {
+    "from": "no hosts list has been uploaded",
+    "text": "nenhuma lista de hosts foi enviada"
+  },
+  "srv.apps.addRefused": {
+    "from": "the TV would not add it",
+    "text": "a TV não permitiu adicionar"
+  },
+  "srv.apps.badAddress": {
+    "from": "enter a web address, such as bbc.co.uk",
+    "text": "digite um endereço web, como bbc.co.uk"
+  },
+  "srv.apps.nameTooLong": {
+    "from": "names are limited to 60 characters",
+    "text": "os nomes são limitados a 60 caracteres"
+  },
+  "srv.apps.pageGone": {
+    "from": "that saved page is no longer on the TV",
+    "text": "essa página salva não está mais na TV"
+  },
+  "srv.apps.pageMissing": {
+    "from": "missing page",
+    "text": "página ausente"
+  },
+  "srv.apps.protectedHide": {
+    "from": "Protected core system app cannot be hidden",
+    "text": "Um app de sistema essencial protegido não pode ser ocultado"
+  },
+  "srv.apps.protectedUninstall": {
+    "from": "Protected core application cannot be uninstalled",
+    "text": "Um aplicativo essencial protegido não pode ser desinstalado"
+  },
+  "srv.apps.removeRefused": {
+    "from": "the TV would not remove it",
+    "text": "a TV não permitiu remover"
+  },
+  "srv.apps.tilesHeld": {
+    "from": "Hiding system apps is turned off on this TV for now. On webOS 10 and later it can leave the picture, the sound and HDMI control off until the TV is unplugged. Apps already hidden come back after the TV is next fully restarted.",
+    "text": "A ocultação de apps de sistema está desativada nesta TV por enquanto. No webOS 10 ou posterior, ela pode desativar imagem, som e controle HDMI até que a TV seja desconectada da tomada. Apps já ocultos voltam após o próximo reinício completo da TV."
+  },
+  "srv.arOff.badHour": {
+    "from": "the start must be an hour from 0 to 23",
+    "text": "o início deve ser uma hora de 0 a 23"
+  },
+  "srv.backup.newer": {
+    "from": "That backup is from a newer Native Tv: update this TV first",
+    "text": "Esse backup é de uma versão mais nova do Native Tv: atualize esta TV primeiro"
+  },
+  "srv.backup.notBackup": {
+    "from": "That file is not a Native Tv backup",
+    "text": "Esse arquivo não é um backup do Native Tv"
+  },
+  "srv.backup.saveFailed": {
+    "from": "Could not save Native Tv’s own settings: {error}",
+    "text": "Não foi possível salvar as configurações do Native Tv: {error}"
+  },
+  "srv.consent.acceptedUnder": {
+    "from": "Accepted under {agreements}.",
+    "text": "Aceito em {agreements}."
+  },
+  "srv.consent.acrAdAllowed": {
+    "from": "Ads based on what you watch",
+    "text": "Anúncios baseados no que você assiste"
+  },
+  "srv.consent.acrAdAllowed.detail": {
+    "from": "Uses recognised screen content to target advertising",
+    "text": "Usa o conteúdo reconhecido na tela para direcionar publicidade"
+  },
+  "srv.consent.acrAllowed": {
+    "from": "Screen content recognition",
+    "text": "Reconhecimento de conteúdo da tela"
+  },
+  "srv.consent.acrAllowed.detail": {
+    "from": "Lets LG identify what is on your screen to profile your viewing",
+    "text": "Permite que a LG identifique o conteúdo da tela para traçar seu perfil de visualização"
+  },
+  "srv.consent.acrGdprAllowed": {
+    "from": "Screen recognition (GDPR consent)",
+    "text": "Reconhecimento de tela (consentimento GDPR)"
+  },
+  "srv.consent.acrGdprAllowed.detail": {
+    "from": "The EU consent record for screen content recognition",
+    "text": "O registro de consentimento da União Europeia para reconhecimento de conteúdo da tela"
+  },
+  "srv.consent.additionalDataAllowed": {
+    "from": "Additional usage data",
+    "text": "Dados adicionais de uso"
+  },
+  "srv.consent.additionalDataAllowed.detail": {
+    "from": "Extra analytics beyond what the TV needs to work",
+    "text": "Análises extras além do necessário para a TV funcionar"
+  },
+  "srv.consent.cookiesAllowed": {
+    "from": "Advertising cookies",
+    "text": "Cookies de publicidade"
+  },
+  "srv.consent.cookiesAllowed.detail": {
+    "from": "Stores cookies used for ad tracking",
+    "text": "Armazena cookies usados para rastreamento de anúncios"
+  },
+  "srv.consent.customAdAllowed": {
+    "from": "Personalised advertising",
+    "text": "Publicidade personalizada"
+  },
+  "srv.consent.customAdAllowed.detail": {
+    "from": "Tailors the ads shown on your TV to you",
+    "text": "Personaliza os anúncios exibidos na TV para você"
+  },
+  "srv.consent.customadsAllowed": {
+    "from": "Personalised advertising (secondary flag)",
+    "text": "Publicidade personalizada (sinalizador secundário)"
+  },
+  "srv.consent.customadsAllowed.detail": {
+    "from": "A second personalised-advertising consent record",
+    "text": "Um segundo registro de consentimento para publicidade personalizada"
+  },
+  "srv.consent.docsFailed": {
+    "from": "could not read the agreement documents",
+    "text": "não foi possível ler os documentos dos acordos"
+  },
+  "srv.consent.dpa": {
+    "from": "Sharing viewing data with data partners",
+    "text": "Compartilhamento de dados de visualização com parceiros de dados"
+  },
+  "srv.consent.dpa.detail": {
+    "from": "Lets LG and Alphonso, its screen recognition partner, pass viewing and device information to other companies for ad measurement and analytics",
+    "text": "Permite que a LG e a Alphonso, sua parceira de reconhecimento de tela, compartilhem dados de visualização e do dispositivo com outras empresas para medição de anúncios e análises"
+  },
+  "srv.consent.group.advertising": {
+    "from": "Advertising",
+    "text": "Publicidade"
+  },
+  "srv.consent.group.analytics": {
+    "from": "Analytics and sharing",
+    "text": "Análise e compartilhamento"
+  },
+  "srv.consent.group.platform": {
+    "from": "Set on the TV itself",
+    "text": "Definido na própria TV"
+  },
+  "srv.consent.group.platform.note": {
+    "from": "Acceptance records rather than collection choices. Changed in the TV's own menus, under Settings › General › About This TV › User Agreements.",
+    "text": "Registros de aceitação, em vez de escolhas de coleta. Alterados nos menus da própria TV, em Configurações > Geral > Sobre Esta TV > Acordos do Usuário."
+  },
+  "srv.consent.group.services": {
+    "from": "LG services",
+    "text": "Serviços da LG"
+  },
+  "srv.consent.group.unknown": {
+    "from": "No published description",
+    "text": "Sem descrição publicada"
+  },
+  "srv.consent.group.unknown.note": {
+    "from": "The TV records these, but LG publishes nothing about them.",
+    "text": "A TV registra estes dados, mas a LG não publica informações sobre eles."
+  },
+  "srv.consent.group.watching": {
+    "from": "What the TV watches and hears",
+    "text": "O que a TV vê e ouve"
+  },
+  "srv.consent.locked.all": {
+    "from": "The Select-All. Read-only because whether writing it cascades to the other flags is untested.",
+    "text": "A opção Selecionar tudo. Somente leitura, pois não foi testado se alterá-la modifica os outros sinalizadores."
+  },
+  "srv.consent.locked.firstUse": {
+    "from": "Part of first-boot setup.",
+    "text": "Parte da configuração inicial."
+  },
+  "srv.consent.locked.generalTerms": {
+    "from": "Acceptance of the terms themselves.",
+    "text": "Aceitação dos próprios termos."
+  },
+  "srv.consent.locked.network": {
+    "from": "Acceptance of network use.",
+    "text": "Aceitação do uso da rede."
+  },
+  "srv.consent.mkt": {
+    "from": "Marketing messages",
+    "text": "Mensagens de marketing"
+  },
+  "srv.consent.mkt.detail": {
+    "from": "Lets LG show marketing pop-ups and notifications on the TV: special offers and news about its content and services",
+    "text": "Permite que a LG exiba pop-ups e notificações de marketing na TV: ofertas e novidades sobre seus conteúdos e serviços"
+  },
+  "srv.consent.name.acrOnAllowed": {
+    "from": "Screen recognition (master consent)",
+    "text": "Reconhecimento de tela (consentimento principal)"
+  },
+  "srv.consent.name.allAllowed": {
+    "from": "Select All",
+    "text": "Selecionar tudo"
+  },
+  "srv.consent.name.generalTermsAllowed": {
+    "from": "Terms of Use and Privacy Policy",
+    "text": "Termos de Uso e Política de Privacidade"
+  },
+  "srv.consent.name.marketingOnAllowed": {
+    "from": "Marketing",
+    "text": "Marketing"
+  },
+  "srv.consent.name.networkAllowed": {
+    "from": "Network use",
+    "text": "Uso da rede"
+  },
+  "srv.consent.name.shoppingOnAllowed": {
+    "from": "Shopping on live TV",
+    "text": "Compras na TV ao vivo"
+  },
+  "srv.consent.readFailed": {
+    "from": "could not read the consent flags",
+    "text": "não foi possível ler os sinalizadores de consentimento"
+  },
+  "srv.consent.remoteDiagAllowed": {
+    "from": "Remote diagnostics upload",
+    "text": "Envio de diagnósticos remotos"
+  },
+  "srv.consent.remoteDiagAllowed.detail": {
+    "from": "Lets LG collect and upload diagnostic reports from your TV",
+    "text": "Permite que a LG colete e envie relatórios de diagnóstico da TV"
+  },
+  "srv.consent.sameAgreement": {
+    "from": "Accepted under the same agreement as {names}.",
+    "text": "Aceito no mesmo acordo que {names}."
+  },
+  "srv.consent.shoppingOn.detail": {
+    "from": "Read by the service that places ads and offers over live TV, alongside personalised advertising",
+    "text": "Consultado pelo serviço que exibe anúncios e ofertas sobre a TV ao vivo, junto à publicidade personalizada"
+  },
+  "srv.consent.tak": {
+    "from": "Who.Where.What?",
+    "text": "Who.Where.What?"
+  },
+  "srv.consent.tak.detail": {
+    "from": "LG's content discovery, run with TheTake: identifies people, places and products in what is on screen, using viewing information that can include captured images of it",
+    "text": "Descoberta de conteúdo da LG, em parceria com a TheTake: identifica pessoas, lugares e produtos na tela usando informações de visualização que podem incluir capturas de imagem"
+  },
+  "srv.consent.thirdPartySharingAllowed": {
+    "from": "Sharing your data with other companies",
+    "text": "Compartilhamento dos seus dados com outras empresas"
+  },
+  "srv.consent.thirdPartySharingAllowed.detail": {
+    "from": "Passes your usage data to third parties",
+    "text": "Compartilha seus dados de uso com terceiros"
+  },
+  "srv.consent.unnamedAgreement": {
+    "from": "Filed under an agreement the TV does not name.",
+    "text": "Registrado em um acordo que a TV não identifica."
+  },
+  "srv.consent.voice2Allowed": {
+    "from": "Voice recordings (secondary flag)",
+    "text": "Gravações de voz (sinalizador secundário)"
+  },
+  "srv.consent.voice2Allowed.detail": {
+    "from": "A second voice-data consent record",
+    "text": "Um segundo registro de consentimento para dados de voz"
+  },
+  "srv.consent.voiceAllowed": {
+    "from": "Voice recordings",
+    "text": "Gravações de voz"
+  },
+  "srv.consent.voiceAllowed.detail": {
+    "from": "Allows voice data to be collected and processed",
+    "text": "Permite a coleta e o processamento de dados de voz"
+  },
+  "srv.controlsOff": {
+    "from": "controls disabled in config",
+    "text": "controles desativados na configuração"
+  },
+  "srv.controlsOff.apps": {
+    "from": "Control is disabled in server configuration",
+    "text": "O controle está desativado na configuração do servidor"
+  },
+  "srv.cpu.stuck": {
+    "from": "the CPU counters did not move",
+    "text": "os contadores da CPU não mudaram"
+  },
+  "srv.daemon.acr2": {
+    "from": "Content recognition service",
+    "text": "Serviço de reconhecimento de conteúdo"
+  },
+  "srv.daemon.acr2.detail": {
+    "from": "Identifies what is on screen",
+    "text": "Identifica o conteúdo da tela"
+  },
+  "srv.daemon.admanager": {
+    "from": "Advertising service",
+    "text": "Serviço de publicidade"
+  },
+  "srv.daemon.admanager.detail": {
+    "from": "Fetches and displays ads on the TV",
+    "text": "Busca e exibe anúncios na TV"
+  },
+  "srv.daemon.rdxd": {
+    "from": "Diagnostics collector",
+    "text": "Coletor de diagnósticos"
+  },
+  "srv.daemon.rdxd.detail": {
+    "from": "Gathers crash and diagnostic reports",
+    "text": "Coleta relatórios de falhas e diagnóstico"
+  },
+  "srv.daemon.uploadd": {
+    "from": "Diagnostics uploader",
+    "text": "Envio de diagnósticos"
+  },
+  "srv.daemon.uploadd.detail": {
+    "from": "Sends diagnostic data to LG",
+    "text": "Envia dados de diagnóstico à LG"
+  },
+  "srv.fetch.badChars": {
+    "from": "the address contains spaces or control characters",
+    "text": "o endereço contém espaços ou caracteres de controle"
+  },
+  "srv.fetch.badScheme": {
+    "from": "the address must start with http:// or https://",
+    "text": "o endereço deve começar com http:// ou https://"
+  },
+  "srv.fetch.github404": {
+    "from": "GitHub returned 404 for {where} - no release published yet, or the repository is not visible",
+    "text": "O GitHub retornou 404 para {where}: ainda não há versão publicada ou o repositório não está visível"
+  },
+  "srv.fetch.githubDown": {
+    "from": "GitHub is not answering at the moment ({status}). Try again later.",
+    "text": "O GitHub não está respondendo no momento ({status}). Tente mais tarde."
+  },
+  "srv.fetch.githubLimit": {
+    "from": "GitHub refused the request ({status}). It allows 60 checks an hour from one address, so try again in an hour; if it keeps happening, something on the network may be blocking it.",
+    "text": "O GitHub recusou a solicitação ({status}). Ele permite 60 verificações por hora por endereço. Tente novamente em uma hora; se persistir, algo na rede pode estar bloqueando o acesso."
+  },
+  "srv.fetch.hostError": {
+    "from": "{host} answered with an error for {where}",
+    "text": "{host} respondeu com um erro para {where}"
+  },
+  "srv.fetch.hostStatus": {
+    "from": "{host} returned {status} for {where}",
+    "text": "{host} retornou {status} para {where}"
+  },
+  "srv.fetch.needHttps": {
+    "from": "the address must start with https://",
+    "text": "o endereço deve começar com https://"
+  },
+  "srv.fetch.offline": {
+    "from": "The TV could not reach {host}. Check it is connected to the internet.",
+    "text": "A TV não conseguiu acessar {host}. Verifique a conexão com a internet."
+  },
+  "srv.fetch.stalled": {
+    "from": "the download from {host} stalled or ran past {minutes} minutes",
+    "text": "o download de {host} parou ou excedeu {minutes} minutos"
+  },
+  "srv.ha.cat.controls": {
+    "from": "Controls & Media",
+    "text": "Controles e mídia"
+  },
+  "srv.ha.cat.controls.desc": {
+    "from": "Power, volume, mute, playback buttons, apps, and input sources.",
+    "text": "Energia, volume, silêncio, botões de reprodução, apps e entradas."
+  },
+  "srv.ha.cat.diagnostics": {
+    "from": "Diagnostics & Settings",
+    "text": "Diagnósticos e configurações"
+  },
+  "srv.ha.cat.diagnostics.desc": {
+    "from": "Remote battery, audio format, standby LED, sleep timer, and ad blocker.",
+    "text": "Pilha do controle, formato de áudio, LED de espera, temporizador de suspensão e bloqueador de anúncios."
+  },
+  "srv.ha.cat.oled": {
+    "from": "OLED Care",
+    "text": "Cuidados OLED"
+  },
+  "srv.ha.cat.oled.desc": {
+    "from": "Panel on-time, pixel refresher countdowns, and burn-in protections.",
+    "text": "Tempo de uso do painel, contagem até a atualização de pixels e proteções contra burn-in."
+  },
+  "srv.ha.cat.system": {
+    "from": "System & Telemetry",
+    "text": "Sistema e telemetria"
+  },
+  "srv.ha.cat.system.desc": {
+    "from": "CPU, RAM, swap, SoC temperature, network rates, and storage health.",
+    "text": "CPU, RAM, swap, temperatura do SoC, taxas de rede e saúde do armazenamento."
+  },
+  "srv.ha.cat.video": {
+    "from": "Video & HDMI Signal",
+    "text": "Vídeo e sinal HDMI"
+  },
+  "srv.ha.cat.video.desc": {
+    "from": "Active picture mode, dynamic range, refresh rate, VRR, ALLM, and link mode.",
+    "text": "Modo de imagem ativo, faixa dinâmica, taxa de atualização, VRR, ALLM e modo de conexão."
+  },
+  "srv.home.apps": {
+    "from": "App tiles",
+    "text": "Blocos de apps"
+  },
+  "srv.home.apps.desc": {
+    "from": "The row of apps and inputs.",
+    "text": "A linha de apps e entradas."
+  },
+  "srv.home.backupFailed": {
+    "from": "Other settings may have been restored, but the Home layout could not be restored: {error}",
+    "text": "Outras configurações podem ter sido restauradas, mas não foi possível restaurar o layout do Início: {error}"
+  },
+  "srv.home.banner": {
+    "from": "Banner",
+    "text": "Banner"
+  },
+  "srv.home.banner.desc": {
+    "from": "The large picture at the top, with LG's adverts or its own message, and the profile, notifications, settings and search buttons beside it.",
+    "text": "A imagem grande no topo, com anúncios ou mensagens da LG e os botões de perfil, notificações, configurações e pesquisa ao lado."
+  },
+  "srv.home.clientRefused": {
+    "from": "The TV would not open the Native Tv app ({error}), so Native Tv Home cannot hold LG's Home's place.",
+    "text": "A TV não abriu o app Native Tv ({error}), então o Início do Native Tv não pode substituir o Início da LG."
+  },
+  "srv.home.closeRefused": {
+    "from": "the TV would not close it",
+    "text": "a TV não permitiu fechar"
+  },
+  "srv.home.crashLoop": {
+    "from": "Native Tv's Home screen stopped {count} times within {seconds} seconds.",
+    "text": "A tela inicial do Native Tv parou {count} vezes em {seconds} segundos."
+  },
+  "srv.home.deviceFunctions": {
+    "from": "Recent Input and Device Functions",
+    "text": "Entrada recente e funções do dispositivo"
+  },
+  "srv.home.deviceFunctions.desc": {
+    "from": "The last input used, and cards for editing the app list, the TV guide, the user guide and Home Hub.",
+    "text": "A última entrada usada e cartões para editar a lista de apps, acessar a programação, o guia do usuário e o Home Hub."
+  },
+  "srv.home.hdmi": {
+    "from": "HDMI {n}",
+    "text": "HDMI {n}"
+  },
+  "srv.home.hdmiDevices": {
+    "from": "{devices} — {port}",
+    "text": "{devices} · {port}"
+  },
+  "srv.home.keepOne": {
+    "from": "At least one part of the Home screen has to stay",
+    "text": "Pelo menos uma seção da tela inicial deve ser mantida"
+  },
+  "srv.home.launchRefused": {
+    "from": "the TV would not open it",
+    "text": "a TV não permitiu abrir"
+  },
+  "srv.home.noLayout": {
+    "from": "Could not read LG's Home screen layout",
+    "text": "Não foi possível ler o layout do Início da LG"
+  },
+  "srv.home.noNetflix": {
+    "from": "Netflix is not installed on this TV",
+    "text": "A Netflix não está instalada nesta TV"
+  },
+  "srv.home.noNetflixLink": {
+    "from": "No Netflix link is available for this title",
+    "text": "Não há link da Netflix disponível para este título"
+  },
+  "srv.home.noProfile": {
+    "from": "no such profile",
+    "text": "esse perfil não existe"
+  },
+  "srv.home.noTiles": {
+    "from": "Could not read the TV's Home screen tiles. Try again in a moment.",
+    "text": "Não foi possível ler os blocos da tela inicial da TV. Tente novamente em instantes."
+  },
+  "srv.home.noYoutube": {
+    "from": "YouTube is not installed on this TV",
+    "text": "O YouTube não está instalado nesta TV"
+  },
+  "srv.home.notAllowed": {
+    "from": "Switch on Home screen layout first. It is experimental on this TV.",
+    "text": "Primeiro ative o layout da tela inicial. Ele é experimental nesta TV."
+  },
+  "srv.home.notRecent": {
+    "from": "that app is not in recent apps",
+    "text": "esse app não está nos apps recentes"
+  },
+  "srv.home.probe.context": {
+    "from": "The Native Tv app could not open a graphics window on this TV (check exit {code}), so Native Tv Home cannot take LG's Home's place.",
+    "text": "O app Native Tv não conseguiu abrir uma janela gráfica nesta TV (código {code}), então o Início do Native Tv não pode substituir o Início da LG."
+  },
+  "srv.home.probe.crashed": {
+    "from": "The Native Tv app crashed in its start-up check (signal {code}), so Native Tv Home cannot take LG's Home's place.",
+    "text": "O app Native Tv falhou na verificação de inicialização (sinal {code}), então o Início do Native Tv não pode substituir o Início da LG."
+  },
+  "srv.home.probe.display": {
+    "from": "The Native Tv app could not reach this TV's display (check exit {code}), so Native Tv Home cannot take LG's Home's place.",
+    "text": "O app Native Tv não conseguiu acessar a tela desta TV (código {code}), então o Início do Native Tv não pode substituir o Início da LG."
+  },
+  "srv.home.probe.failed": {
+    "from": "The Native Tv app's start-up check failed (exit {code}), so Native Tv Home cannot take LG's Home's place.",
+    "text": "A verificação de inicialização do app Native Tv falhou (código {code}), então o Início do Native Tv não pode substituir o Início da LG."
+  },
+  "srv.home.probe.gl": {
+    "from": "This TV's graphics driver cannot run the Native Tv app (check exit {code}), so Native Tv Home cannot take LG's Home's place.",
+    "text": "O driver gráfico desta TV não consegue executar o app Native Tv (código {code}), então o Início do Native Tv não pode substituir o Início da LG."
+  },
+  "srv.home.probe.missing": {
+    "from": "The Native Tv app is not installed on this TV, so Native Tv Home cannot take LG's Home's place.",
+    "text": "O app Native Tv não está instalado nesta TV, então o Início do Native Tv não pode substituir o Início da LG."
+  },
+  "srv.home.probe.readback": {
+    "from": "This TV's graphics driver drew the Native Tv app's check frame wrongly (check exit {code}), so Native Tv Home cannot take LG's Home's place.",
+    "text": "O driver gráfico desta TV desenhou incorretamente a imagem de teste do app Native Tv (código {code}), então o Início do Native Tv não pode substituir o Início da LG."
+  },
+  "srv.home.probe.timeout": {
+    "from": "The Native Tv app's start-up check did not finish in time, so Native Tv Home cannot take LG's Home's place.",
+    "text": "A verificação de inicialização do app Native Tv não terminou a tempo, então o Início do Native Tv não pode substituir o Início da LG."
+  },
+  "srv.home.probe.unasked": {
+    "from": "The TV did not say whether the Native Tv app is on its home screen, so Native Tv Home cannot take LG's Home's place.",
+    "text": "A TV não informou se o app Native Tv está na tela inicial, então o Início do Native Tv não pode substituir o Início da LG."
+  },
+  "srv.home.probe.unregistered": {
+    "from": "The Native Tv app is not on this TV's home screen (it was removed, or never added), so Native Tv Home cannot take LG's Home's place. Switch on App on the TV's home screen, on the Server tab, first.",
+    "text": "O app Native Tv não está na tela inicial desta TV: foi removido ou nunca foi adicionado. Por isso, o Início do Native Tv não pode substituir o Início da LG. Primeiro ative App na tela inicial da TV na aba Servidor."
+  },
+  "srv.home.profileAction": {
+    "from": "a profile action is expected",
+    "text": "é esperada uma ação de perfil"
+  },
+  "srv.home.profileLast": {
+    "from": "the last profile cannot be removed",
+    "text": "o último perfil não pode ser removido"
+  },
+  "srv.home.profileLimit": {
+    "from": "there can be {n} profiles at most",
+    "text": "é permitido ter no máximo {n} perfis"
+  },
+  "srv.home.profileNew": {
+    "from": "Profile {n}",
+    "text": "Perfil {n}"
+  },
+  "srv.home.profileRename": {
+    "from": "a name of up to 20 characters or one of the colours is expected",
+    "text": "é esperado um nome de até 20 caracteres ou uma das cores"
+  },
+  "srv.home.quickCards": {
+    "from": "Quick Cards",
+    "text": "Cartões rápidos"
+  },
+  "srv.home.quickCards.desc": {
+    "from": "The coloured buttons for LG's offers, Sports, Gaming, Music and others.",
+    "text": "Botões coloridos para ofertas da LG, Esportes, Jogos, Música e outros."
+  },
+  "srv.home.recentsUnavailable": {
+    "from": "the TV did not list its recent apps",
+    "text": "a TV não informou seus apps recentes"
+  },
+  "srv.home.recommended": {
+    "from": "Recommended shelf",
+    "text": "Linha de recomendações"
+  },
+  "srv.home.recommended.desc": {
+    "from": "The row of programmes and films LG recommends, below the apps.",
+    "text": "A linha de programas e filmes recomendados pela LG, abaixo dos apps."
+  },
+  "srv.home.restoreFailed": {
+    "from": "the TV would not take its earlier Home settings back",
+    "text": "a TV não permitiu restaurar as configurações anteriores do Início"
+  },
+  "srv.home.restoreFirst": {
+    "from": "LG's Home is not fully back yet; switch Native Tv Home off again first",
+    "text": "O Início da LG ainda não foi totalmente restaurado; primeiro desative novamente o Início do Native Tv"
+  },
+  "srv.home.saveFailed": {
+    "from": "could not save the layout",
+    "text": "não foi possível salvar o layout"
+  },
+  "srv.home.setFailed": {
+    "from": "the TV would not make Native Tv Home its Home",
+    "text": "a TV não permitiu definir o Início do Native Tv como tela inicial"
+  },
+  "srv.home.sideIcons": {
+    "from": "Side buttons",
+    "text": "Botões laterais"
+  },
+  "srv.home.sideIcons.desc": {
+    "from": "The profile, notifications, settings and search buttons beside the banner. Settings and search stay on the remote's own buttons.",
+    "text": "Os botões de perfil, notificações, configurações e pesquisa ao lado do banner. Configurações e pesquisa continuam disponíveis pelos botões do controle."
+  },
+  "srv.home.startLayoutFailed": {
+    "from": "the TV would not change LG's Home's layout",
+    "text": "a TV não permitiu alterar o layout do Início da LG"
+  },
+  "srv.home.startLayoutWebos9": {
+    "from": "LG's Home can be hidden at start on webOS 9 only.",
+    "text": "O Início da LG só pode ser ocultado na inicialização no webOS 9."
+  },
+  "srv.home.startingToast": {
+    "from": "Native Tv Home is starting. It opens in a few seconds.",
+    "text": "O Início do Native Tv está iniciando. Ele abre em alguns segundos."
+  },
+  "srv.home.startupFailed": {
+    "from": "the TV would not change the power-on Home setting",
+    "text": "a TV não permitiu alterar a configuração de tela inicial ao ligar"
+  },
+  "srv.home.unknownInput": {
+    "from": "There is no such input",
+    "text": "Essa entrada não existe"
+  },
+  "srv.home.unknownPart": {
+    "from": "There is no such part of the Home screen",
+    "text": "Essa seção da tela inicial não existe"
+  },
+  "srv.home.unknownTile": {
+    "from": "that is not on Native Tv Home",
+    "text": "isso não está no Início do Native Tv"
+  },
+  "srv.home.unsupported": {
+    "from": "This TV's Home screen cannot be changed from here",
+    "text": "A tela inicial desta TV não pode ser alterada por aqui"
+  },
+  "srv.home.untested": {
+    "from": "Native Tv Home has been tried only on webOS 9 and 10. This TV runs webOS {version}.",
+    "text": "O Início do Native Tv só foi testado no webOS 9 e 10. Esta TV usa o webOS {version}."
+  },
+  "srv.home.wallSlot": {
+    "from": "unknown wallpaper slot",
+    "text": "horário de papel de parede desconhecido"
+  },
+  "srv.home.wallUploadImage": {
+    "from": "Choose a valid JPEG up to 1920 × 1080 pixels.",
+    "text": "Escolha um JPEG válido de até 1920 × 1080 pixels."
+  },
+  "srv.home.wallUploadSize": {
+    "from": "The uploaded JPEG must be at most 5 MB and state its size.",
+    "text": "O JPEG enviado deve ter no máximo 5 MB e informar seu tamanho."
+  },
+  "srv.home.wallUploadSpace": {
+    "from": "Not enough confirmed free space for the wallpaper.",
+    "text": "Não há espaço livre confirmado suficiente para o papel de parede."
+  },
+  "srv.home.wallUploading": {
+    "from": "Wait for the wallpaper upload to finish.",
+    "text": "Aguarde o envio do papel de parede terminar."
+  },
+  "srv.install.badHash": {
+    "from": "the sha256 hash must be 64 hexadecimal digits",
+    "text": "o hash sha256 deve ter 64 dígitos hexadecimais"
+  },
+  "srv.install.badSource": {
+    "from": "unknown install source",
+    "text": "fonte de instalação desconhecida"
+  },
+  "srv.install.busy": {
+    "from": "an install is already in progress",
+    "text": "já há uma instalação em andamento"
+  },
+  "srv.install.busy.restart": {
+    "from": "an install is in progress; restart when it has finished",
+    "text": "há uma instalação em andamento; reinicie quando terminar"
+  },
+  "srv.install.busy.tvApp": {
+    "from": "an install is in progress; try again when it has finished",
+    "text": "há uma instalação em andamento; tente novamente quando terminar"
+  },
+  "srv.install.cannotCancel": {
+    "from": "the install is already running and cannot be cancelled",
+    "text": "a instalação já está em andamento e não pode ser cancelada"
+  },
+  "srv.install.catalogIncomplete": {
+    "from": "the catalog entry is incomplete",
+    "text": "a entrada do catálogo está incompleta"
+  },
+  "srv.install.closed": {
+    "from": "the install service stopped answering",
+    "text": "o serviço de instalação parou de responder"
+  },
+  "srv.install.downloadFailed": {
+    "from": "the download failed: {error}",
+    "text": "o download falhou: {error}"
+  },
+  "srv.install.elevateFailed": {
+    "from": "could not give {service} root access: {error}",
+    "text": "não foi possível dar acesso root a {service}: {error}"
+  },
+  "srv.install.elevationState": {
+    "from": "could not read saved service access for this package",
+    "text": "não foi possível ler as permissões de serviço salvas para este pacote"
+  },
+  "srv.install.expired": {
+    "from": "the preview expired; start the install again",
+    "text": "a prévia expirou; inicie a instalação novamente"
+  },
+  "srv.install.failed": {
+    "from": "the install failed: {error}",
+    "text": "a instalação falhou: {error}"
+  },
+  "srv.install.hashMismatch": {
+    "from": "the download does not match its sha256 hash",
+    "text": "o download não corresponde ao hash sha256"
+  },
+  "srv.install.hostRefused": {
+    "from": "this address is not allowed to install apps; add the name to apps.hosts in config.json, or use the TV's IP address",
+    "text": "este endereço não pode instalar apps; adicione o domínio a apps.hosts em config.json ou use o endereço IP da TV"
+  },
+  "srv.install.id.exists": {
+    "from": "{id} is already part of the TV system",
+    "text": "{id} já faz parte do sistema da TV"
+  },
+  "srv.install.id.prefix": {
+    "from": "{id} does not begin with the package name {package}",
+    "text": "{id} não começa com o nome do pacote {package}"
+  },
+  "srv.install.id.protected": {
+    "from": "{id} belongs to the TV system and cannot be installed",
+    "text": "{id} pertence ao sistema da TV e não pode ser instalado"
+  },
+  "srv.install.id.self": {
+    "from": "{id} must be updated from the Homebrew Channel",
+    "text": "{id} deve ser atualizado pelo Homebrew Channel"
+  },
+  "srv.install.idMismatch": {
+    "from": "the catalog lists it as {expected}, but what it downloads is a different app, {found}. Whoever runs the catalog needs to correct it.",
+    "text": "o catálogo informa {expected}, mas o download contém outro app, {found}. O responsável pelo catálogo precisa corrigir isso."
+  },
+  "srv.install.idRequired": {
+    "from": "an app id is required",
+    "text": "é necessário um ID de app"
+  },
+  "srv.install.interrupted": {
+    "from": "the TV restarted during an install; check the app list",
+    "text": "a TV reiniciou durante uma instalação; verifique a lista de apps"
+  },
+  "srv.install.ipk.badTar": {
+    "from": "the ipk holds a damaged package archive",
+    "text": "o ipk contém um arquivo de pacote danificado"
+  },
+  "srv.install.ipk.empty": {
+    "from": "the ipk contains no app or service",
+    "text": "o ipk não contém nenhum app ou serviço"
+  },
+  "srv.install.ipk.noControl": {
+    "from": "the ipk has no usable control file",
+    "text": "o ipk não contém um arquivo de controle válido"
+  },
+  "srv.install.ipk.notAr": {
+    "from": "the file is not an ipk archive",
+    "text": "o arquivo não é um pacote ipk"
+  },
+  "srv.install.ipk.parts": {
+    "from": "the ipk is missing a part",
+    "text": "falta uma parte do ipk"
+  },
+  "srv.install.ipk.tooBig": {
+    "from": "the ipk unpacks to more than it may",
+    "text": "o conteúdo descompactado do ipk excede o limite permitido"
+  },
+  "srv.install.ipk.tooMany": {
+    "from": "the ipk holds too many files",
+    "text": "o ipk contém arquivos demais"
+  },
+  "srv.install.ipk.truncated": {
+    "from": "the ipk is truncated",
+    "text": "o ipk está incompleto"
+  },
+  "srv.install.ipk.unreadable": {
+    "from": "the ipk could not be read: {error}",
+    "text": "não foi possível ler o ipk: {error}"
+  },
+  "srv.install.ipk.unsupported": {
+    "from": "the ipk uses a file format this installer does not read",
+    "text": "o ipk usa um formato de arquivo que este instalador não lê"
+  },
+  "srv.install.noElevate": {
+    "from": "root access needs the Homebrew Channel, which is not installed",
+    "text": "o acesso root exige o Homebrew Channel, que não está instalado"
+  },
+  "srv.install.noJob": {
+    "from": "there is no install waiting for confirmation",
+    "text": "não há instalação aguardando confirmação"
+  },
+  "srv.install.noSpace": {
+    "from": "not enough free space: {need} needed, {free} free",
+    "text": "espaço livre insuficiente: {need} necessários, {free} livres"
+  },
+  "srv.install.noSpace.download": {
+    "from": "not enough free space for this download: {free} free, and the package needs about three times its size",
+    "text": "não há espaço livre suficiente para este download: {free} livres; o pacote precisa de cerca de três vezes seu tamanho"
+  },
+  "srv.install.notStaged": {
+    "from": "the file is not in the staging directory",
+    "text": "o arquivo não está no diretório de preparação"
+  },
+  "srv.install.rootConfirm": {
+    "from": "root access for a package from outside the catalog must be confirmed for the services listed in its preview",
+    "text": "o acesso root de um pacote externo ao catálogo deve ser confirmado para os serviços listados na prévia"
+  },
+  "srv.install.sideloadOff": {
+    "from": "installing from a URL or a file is off; set \"apps\": {\"sideload\": true} in config.json, set a token, or use the TV's web browser",
+    "text": "a instalação por URL ou arquivo está desativada; defina \"apps\": {\"sideload\": true} em config.json, configure um token ou use o navegador da TV"
+  },
+  "srv.install.storeReplace": {
+    "from": "this app came from the LG store; replacing it stops store updates and needs separate confirmation",
+    "text": "este app veio da loja da LG; substituí-lo impede atualizações pela loja e exige uma confirmação separada"
+  },
+  "srv.install.timeout": {
+    "from": "the install did not finish in time; check the app list",
+    "text": "a instalação não terminou a tempo; verifique a lista de apps"
+  },
+  "srv.install.tooBig": {
+    "from": "the package is larger than the {limit} limit",
+    "text": "o pacote excede o limite de {limit}"
+  },
+  "srv.install.unknownError": {
+    "from": "unknown error",
+    "text": "erro desconhecido"
+  },
+  "srv.install.upload.empty": {
+    "from": "the upload is empty or its size is not valid",
+    "text": "o envio está vazio ou seu tamanho é inválido"
+  },
+  "srv.install.upload.failed": {
+    "from": "the upload could not be saved",
+    "text": "não foi possível salvar o envio"
+  },
+  "srv.install.upload.length": {
+    "from": "the upload must state its size in advance",
+    "text": "o envio deve informar seu tamanho antecipadamente"
+  },
+  "srv.install.upload.size": {
+    "from": "the upload does not match its stated size",
+    "text": "o envio não corresponde ao tamanho informado"
+  },
+  "srv.lgs.aiNudge": {
+    "from": "Smart tips",
+    "text": "Dicas inteligentes"
+  },
+  "srv.lgs.aiNudge.desc": {
+    "from": "Suggestions for TV features that pop up while watching or using an app. LG calls this Smart Tips.",
+    "text": "Sugestões de recursos da TV que aparecem enquanto você assiste ou usa um app. A LG chama isso de Dicas Inteligentes."
+  },
+  "srv.lgs.aiSettingsNudge": {
+    "from": "Smart tips in Settings",
+    "text": "Dicas inteligentes nas Configurações"
+  },
+  "srv.lgs.aiSettingsNudge.desc": {
+    "from": "Suggested settings shown in LG's Settings menu. LG calls this Smart Tips in Settings.",
+    "text": "Configurações sugeridas no menu Configurações da LG. A LG chama isso de Dicas Inteligentes nas Configurações."
+  },
+  "srv.lgs.aigamesound": {
+    "from": "AI Game Sound",
+    "text": "Som de jogo com IA"
+  },
+  "srv.lgs.aigamesound.desc": {
+    "from": "Sets the sound for the game being played: effects, clear voices and surround.",
+    "text": "Ajusta o som para o jogo em execução: efeitos, vozes nítidas e surround."
+  },
+  "srv.lgs.audioBalance": {
+    "from": "Balance",
+    "text": "Balanço"
+  },
+  "srv.lgs.audioBalance.desc": {
+    "from": "Between the left and right TV speakers, and only those. At 0 both play at the same level.",
+    "text": "Entre os alto-falantes esquerdo e direito da TV, apenas. Em 0, os dois têm o mesmo nível."
+  },
+  "srv.lgs.audioFormat.bitstream": {
+    "from": "Bitstream",
+    "text": "Bitstream"
+  },
+  "srv.lgs.audioFormat.pcm": {
+    "from": "PCM",
+    "text": "PCM"
+  },
+  "srv.lgs.audioFormatHdmi.desc": {
+    "from": "What the TV asks the device on this input to send. Bitstream passes Dolby Atmos and DTS on to a soundbar or receiver; PCM asks for plain audio.",
+    "text": "O formato que a TV solicita ao dispositivo desta entrada. Bitstream encaminha Dolby Atmos e DTS a uma soundbar ou receiver; PCM solicita áudio simples."
+  },
+  "srv.lgs.audioFormatHdmi1": {
+    "from": "HDMI 1 audio format",
+    "text": "Formato de áudio da HDMI 1"
+  },
+  "srv.lgs.audioFormatHdmi2": {
+    "from": "HDMI 2 audio format",
+    "text": "Formato de áudio da HDMI 2"
+  },
+  "srv.lgs.audioFormatHdmi3": {
+    "from": "HDMI 3 audio format",
+    "text": "Formato de áudio da HDMI 3"
+  },
+  "srv.lgs.audioFormatHdmi4": {
+    "from": "HDMI 4 audio format",
+    "text": "Formato de áudio da HDMI 4"
+  },
+  "srv.lgs.autoVolume": {
+    "from": "Automatic volume",
+    "text": "Volume automático"
+  },
+  "srv.lgs.autoVolume.desc": {
+    "from": "Keeps the volume level when switching channels. LG calls this Automatic Volume Adjustment.",
+    "text": "Mantém o nível do volume ao mudar de canal. A LG chama isso de Ajuste Automático de Volume."
+  },
+  "srv.lgs.blackStabilizer": {
+    "from": "Black stabilizer",
+    "text": "Estabilizador de preto"
+  },
+  "srv.lgs.blackStabilizer.desc": {
+    "from": "Lifts dark areas so detail in shadows is easier to see.",
+    "text": "Clareia áreas escuras para facilitar a visualização de detalhes nas sombras."
+  },
+  "srv.lgs.btSpeakerMode": {
+    "from": "Bluetooth speaker mode",
+    "text": "Modo alto-falante Bluetooth"
+  },
+  "srv.lgs.btSpeakerMode.desc": {
+    "from": "Lets phones in Bluetooth range connect and play music through the TV, even while it is switched off. LG calls this Bluetooth Speaker Mode.",
+    "text": "Permite que celulares no alcance do Bluetooth se conectem e reproduzam música pela TV, mesmo desligada. A LG chama isso de Modo Alto-falante Bluetooth."
+  },
+  "srv.lgs.contentRecommendation": {
+    "from": "Recommendations on Home",
+    "text": "Recomendações no Início"
+  },
+  "srv.lgs.contentRecommendation.desc": {
+    "from": "Rows of recommended programmes and films on the Home screen. LG calls this Content Recommendation.",
+    "text": "Linhas de programas e filmes recomendados na tela inicial. A LG chama isso de Recomendação de Conteúdo."
+  },
+  "srv.lgs.darkMode": {
+    "from": "Dark room mode",
+    "text": "Modo de ambiente escuro"
+  },
+  "srv.lgs.darkMode.desc": {
+    "from": "Lowers the brightness for playing in a dark room.",
+    "text": "Reduz o brilho para jogar em um ambiente escuro."
+  },
+  "srv.lgs.darkMode.level1": {
+    "from": "Level 1",
+    "text": "Nível 1"
+  },
+  "srv.lgs.darkMode.level2": {
+    "from": "Level 2",
+    "text": "Nível 2"
+  },
+  "srv.lgs.darkMode.off": {
+    "from": "Off",
+    "text": "Desligado"
+  },
+  "srv.lgs.deepColor": {
+    "from": "HDMI Deep Colour",
+    "text": "HDMI Deep Colour"
+  },
+  "srv.lgs.deepColor.auto": {
+    "from": "Auto",
+    "text": "Automático"
+  },
+  "srv.lgs.deepColor.desc": {
+    "from": "For the input on screen. Lets it take 4K HDR and high frame rates. The picture can drop out for a moment while the TV and the device agree the change, and turning it off also turns off Game Optimizer for that input.",
+    "text": "Para a entrada exibida. Permite 4K HDR e taxas de quadros altas. A imagem pode sumir por um instante enquanto a TV e o dispositivo ajustam a conexão. Desativar também desativa o Otimizador de Jogos dessa entrada."
+  },
+  "srv.lgs.deepColor.off": {
+    "from": "Off",
+    "text": "Desligado"
+  },
+  "srv.lgs.deepColor.on": {
+    "from": "On",
+    "text": "Ligado"
+  },
+  "srv.lgs.deepColorHdmi.desc": {
+    "from": "Lets the input take 4K HDR and high frame rates. The picture can drop out for a moment while the TV and the device agree the change.",
+    "text": "Permite 4K HDR e taxas de quadros altas na entrada. A imagem pode sumir por um instante enquanto a TV e o dispositivo ajustam a conexão."
+  },
+  "srv.lgs.deepColorHdmi1": {
+    "from": "HDMI 1 Deep Colour",
+    "text": "Deep Colour da HDMI 1"
+  },
+  "srv.lgs.deepColorHdmi2": {
+    "from": "HDMI 2 Deep Colour",
+    "text": "Deep Colour da HDMI 2"
+  },
+  "srv.lgs.deepColorHdmi3": {
+    "from": "HDMI 3 Deep Colour",
+    "text": "Deep Colour da HDMI 3"
+  },
+  "srv.lgs.deepColorHdmi4": {
+    "from": "HDMI 4 Deep Colour",
+    "text": "Deep Colour da HDMI 4"
+  },
+  "srv.lgs.eArcSupport": {
+    "from": "eARC",
+    "text": "eARC"
+  },
+  "srv.lgs.eArcSupport.desc": {
+    "from": "Sends lossless and Dolby Atmos audio to a soundbar or receiver on the HDMI (eARC) input, where both support it.",
+    "text": "Envia áudio sem perdas e Dolby Atmos a uma soundbar ou receiver pela entrada HDMI (eARC), quando ambos são compatíveis."
+  },
+  "srv.lgs.enableALLM": {
+    "from": "ALLM",
+    "text": "ALLM"
+  },
+  "srv.lgs.enableALLM.desc": {
+    "from": "Switches the TV to its low-latency game mode by itself when a connected device starts a game.",
+    "text": "Muda automaticamente para o modo de jogo de baixa latência quando um dispositivo conectado inicia um jogo."
+  },
+  "srv.lgs.freesync": {
+    "from": "AMD FreeSync Premium",
+    "text": "AMD FreeSync Premium"
+  },
+  "srv.lgs.freesync.desc": {
+    "from": "The same for AMD graphics cards and consoles that use FreeSync.",
+    "text": "O equivalente para placas de vídeo AMD e consoles que usam FreeSync."
+  },
+  "srv.lgs.gameGenre": {
+    "from": "Game genre",
+    "text": "Gênero do jogo"
+  },
+  "srv.lgs.gameGenre.desc": {
+    "from": "Tunes the picture for the kind of game. Each genre keeps its own stabilizer settings.",
+    "text": "Ajusta a imagem para o tipo de jogo. Cada gênero mantém suas próprias configurações de estabilizador."
+  },
+  "srv.lgs.gameGenre.fps": {
+    "from": "First-person shooter",
+    "text": "Tiro em primeira pessoa"
+  },
+  "srv.lgs.gameGenre.rpg": {
+    "from": "Role-playing",
+    "text": "RPG"
+  },
+  "srv.lgs.gameGenre.rts": {
+    "from": "Real-time strategy",
+    "text": "Estratégia em tempo real"
+  },
+  "srv.lgs.gameGenre.sports": {
+    "from": "Sports",
+    "text": "Esportes"
+  },
+  "srv.lgs.gameGenre.standard": {
+    "from": "Standard",
+    "text": "Padrão"
+  },
+  "srv.lgs.gameGenre.user": {
+    "from": "User",
+    "text": "Usuário"
+  },
+  "srv.lgs.gameOptimization": {
+    "from": "VRR & G-Sync",
+    "text": "VRR e G-Sync"
+  },
+  "srv.lgs.gameOptimization.desc": {
+    "from": "Lets the TV follow the frame rate a console or PC sends, so motion stays smooth without tearing.",
+    "text": "Permite que a TV acompanhe a taxa de quadros enviada por um console ou PC, mantendo o movimento suave e sem cortes de imagem."
+  },
+  "srv.lgs.homePromotion": {
+    "from": "Sponsored tiles on Home",
+    "text": "Blocos patrocinados no Início"
+  },
+  "srv.lgs.homePromotion.desc": {
+    "from": "Adverts marked Sponsored on the Home screen. LG calls this Home Promotion.",
+    "text": "Anúncios marcados como Patrocinado na tela inicial. A LG chama isso de Promoção na Página Inicial."
+  },
+  "srv.lgs.inputOptimization": {
+    "from": "Prevent input delay",
+    "text": "Reduzir atraso de entrada"
+  },
+  "srv.lgs.inputOptimization.auto": {
+    "from": "Standard",
+    "text": "Padrão"
+  },
+  "srv.lgs.inputOptimization.desc": {
+    "from": "Standard cuts input lag for the kind of content; Boost cuts it further by matching the console's frame rate.",
+    "text": "Padrão reduz o atraso conforme o conteúdo; Reforçado reduz ainda mais ao acompanhar a taxa de quadros do console."
+  },
+  "srv.lgs.inputOptimization.on": {
+    "from": "Boost",
+    "text": "Reforçado"
+  },
+  "srv.lgs.ipControl": {
+    "from": "IP control",
+    "text": "Controle por IP"
+  },
+  "srv.lgs.ipControl.desc": {
+    "from": "Lets home automation systems control the TV over the network with LG's own protocol. Off unless something needs it.",
+    "text": "Permite que sistemas de automação controlem a TV pela rede com o protocolo da LG. Desativado, a menos que algo precise."
+  },
+  "srv.lgs.livePromotion": {
+    "from": "Ads while watching",
+    "text": "Anúncios durante a exibição"
+  },
+  "srv.lgs.livePromotion.desc": {
+    "from": "Adverts and offers shown over what is on screen, while LG's Live Plus is on. LG calls this Live Promotion.",
+    "text": "Anúncios e ofertas exibidos sobre o conteúdo da tela enquanto o Live Plus da LG está ativado. A LG chama isso de Promoção ao Vivo."
+  },
+  "srv.lgs.screenSaverAd": {
+    "from": "Screen saver ads",
+    "text": "Anúncios no protetor de tela"
+  },
+  "srv.lgs.screenSaverAd.desc": {
+    "from": "Adverts that some apps, such as LG Channels, show in the screen saver. LG calls this Screen Saver Promotion.",
+    "text": "Anúncios que alguns apps, como o LG Channels, exibem no protetor de tela. A LG chama isso de Promoção do Protetor de Tela."
+  },
+  "srv.lgs.screenSaverTimer": {
+    "from": "Start after",
+    "text": "Iniciar após"
+  },
+  "srv.lgs.screenSaverTimer.10": {
+    "from": "10 minutes",
+    "text": "10 minutos"
+  },
+  "srv.lgs.screenSaverTimer.20": {
+    "from": "20 minutes",
+    "text": "20 minutos"
+  },
+  "srv.lgs.screenSaverTimer.3": {
+    "from": "3 minutes",
+    "text": "3 minutos"
+  },
+  "srv.lgs.screenSaverTimer.30": {
+    "from": "30 minutes",
+    "text": "30 minutos"
+  },
+  "srv.lgs.screenSaverTimer.desc": {
+    "from": "How long the TV sits idle before its screen saver starts. Only the four times LG's own menu offers work.",
+    "text": "Tempo de inatividade da TV antes de iniciar o protetor de tela. Apenas as quatro durações do menu da LG funcionam."
+  },
+  "srv.lgs.simplinkAutoPowerOn": {
+    "from": "Auto power sync",
+    "text": "Sincronização automática de energia"
+  },
+  "srv.lgs.simplinkAutoPowerOn.desc": {
+    "from": "Switching the TV off switches connected devices off, and switching a device on switches the TV on.",
+    "text": "Desligar a TV desliga os dispositivos conectados, e ligar um dispositivo liga a TV."
+  },
+  "srv.lgs.simplinkEnable": {
+    "from": "SIMPLINK (HDMI-CEC)",
+    "text": "SIMPLINK (HDMI-CEC)"
+  },
+  "srv.lgs.simplinkEnable.desc": {
+    "from": "Lets the TV remote control devices connected over HDMI, such as a soundbar or console.",
+    "text": "Permite controlar dispositivos HDMI, como uma soundbar ou console, pelo controle da TV."
+  },
+  "srv.lgs.soundMode": {
+    "from": "Sound mode",
+    "text": "Modo de som"
+  },
+  "srv.lgs.soundMode.aiSound": {
+    "from": "AI Sound",
+    "text": "Som com IA"
+  },
+  "srv.lgs.soundMode.aiSoundPlus": {
+    "from": "AI Sound Pro",
+    "text": "Som com IA Pro"
+  },
+  "srv.lgs.soundMode.desc": {
+    "from": "How the TV tunes its sound, through its own speakers only. AI Sound Pro adjusts it to what is on by itself.",
+    "text": "Como a TV ajusta o som, apenas pelos alto-falantes internos. O Som com IA Pro ajusta automaticamente conforme o conteúdo."
+  },
+  "srv.lgs.soundMode.game": {
+    "from": "Game Optimizer",
+    "text": "Otimizador de Jogos"
+  },
+  "srv.lgs.soundMode.movie": {
+    "from": "Cinema",
+    "text": "Cinema"
+  },
+  "srv.lgs.soundMode.music": {
+    "from": "Music",
+    "text": "Música"
+  },
+  "srv.lgs.soundMode.news": {
+    "from": "Clear Voice",
+    "text": "Voz nítida"
+  },
+  "srv.lgs.soundMode.sports": {
+    "from": "Sports",
+    "text": "Esportes"
+  },
+  "srv.lgs.soundMode.standard": {
+    "from": "Standard",
+    "text": "Padrão"
+  },
+  "srv.lgs.soundOutput": {
+    "from": "Sound output",
+    "text": "Saída de som"
+  },
+  "srv.lgs.soundOutput.btSoundbar": {
+    "from": "Bluetooth",
+    "text": "Bluetooth"
+  },
+  "srv.lgs.soundOutput.desc": {
+    "from": "Where the TV plays its sound. Sound mode and balance apply only to the TV speakers.",
+    "text": "Onde a TV reproduz o som. Modo de som e balanço se aplicam apenas aos alto-falantes da TV."
+  },
+  "srv.lgs.soundOutput.externalArc": {
+    "from": "HDMI ARC",
+    "text": "HDMI ARC"
+  },
+  "srv.lgs.soundOutput.externalOptical": {
+    "from": "Optical",
+    "text": "Óptica"
+  },
+  "srv.lgs.soundOutput.headphone": {
+    "from": "Headphone / AUX",
+    "text": "Fone de ouvido / AUX"
+  },
+  "srv.lgs.soundOutput.tvSpeaker": {
+    "from": "TV Speaker",
+    "text": "Alto-falante da TV"
+  },
+  "srv.lgs.soundOutput.tvSpeakerBluetooth": {
+    "from": "TV Speaker + Bluetooth",
+    "text": "Alto-falante da TV + Bluetooth"
+  },
+  "srv.lgs.soundOutput.tvSpeakerExternalArc": {
+    "from": "TV Speaker + HDMI ARC",
+    "text": "Alto-falante da TV + HDMI ARC"
+  },
+  "srv.lgs.soundOutput.tvSpeakerHeadphone": {
+    "from": "TV Speaker + Headphone",
+    "text": "Alto-falante da TV + fone de ouvido"
+  },
+  "srv.lgs.soundOutputDigital": {
+    "from": "Digital sound output",
+    "text": "Saída de som digital"
+  },
+  "srv.lgs.soundOutputDigital.auto": {
+    "from": "Auto",
+    "text": "Automático"
+  },
+  "srv.lgs.soundOutputDigital.desc": {
+    "from": "The audio sent to a soundbar or receiver over HDMI ARC or optical. Pass Through sends Dolby and DTS as they are; PCM turns them into plain stereo.",
+    "text": "Áudio enviado a uma soundbar ou receiver por HDMI ARC ou saída óptica. Pass Through envia Dolby e DTS sem conversão; PCM os converte em estéreo simples."
+  },
+  "srv.lgs.soundOutputDigital.passThrough": {
+    "from": "Pass Through",
+    "text": "Pass Through"
+  },
+  "srv.lgs.soundOutputDigital.pcm": {
+    "from": "PCM",
+    "text": "PCM"
+  },
+  "srv.lgs.whiteStabilizer": {
+    "from": "White stabilizer",
+    "text": "Estabilizador de branco"
+  },
+  "srv.lgs.whiteStabilizer.desc": {
+    "from": "Tames bright areas so detail in highlights is easier to see.",
+    "text": "Reduz áreas claras para facilitar a visualização de detalhes nos realces."
+  },
+  "srv.lgsettings.badValue": {
+    "from": "That value is not one this setting takes",
+    "text": "Esse valor não é aceito por esta configuração"
+  },
+  "srv.lgsettings.unknown": {
+    "from": "Unknown setting",
+    "text": "Configuração desconhecida"
+  },
+  "srv.list": {
+    "from": "{items} and {last}",
+    "text": "{items} e {last}"
+  },
+  "srv.notApplied": {
+    "from": "the TV accepted the change without applying it",
+    "text": "a TV aceitou a alteração sem aplicá-la"
+  },
+  "srv.notTaken": {
+    "from": "the setting did not take",
+    "text": "a configuração não foi aplicada"
+  },
+  "srv.ntp.badPort": {
+    "from": "The port after the colon must be a number from 1 to 65535",
+    "text": "A porta após os dois-pontos deve ser um número de 1 a 65535"
+  },
+  "srv.ntp.badServer": {
+    "from": "That is not a server name or address",
+    "text": "Esse não é um nome ou endereço de servidor"
+  },
+  "srv.oled.notOffered": {
+    "from": "this TV does not offer the control",
+    "text": "esta TV não oferece esse controle"
+  },
+  "srv.piccap.refused": {
+    "from": "PicCap refused the request",
+    "text": "O PicCap recusou a solicitação"
+  },
+  "srv.piccap.unavailable": {
+    "from": "PicCap is not available",
+    "text": "O PicCap não está disponível"
+  },
+  "srv.port.inUse": {
+    "from": "Another service on the TV is already using that port",
+    "text": "Outro serviço da TV já está usando essa porta"
+  },
+  "srv.port.invalid": {
+    "from": "The port must be a number from 1024 to 65533, other than 9996 to 9998",
+    "text": "A porta deve ser um número de 1024 a 65533, exceto de 9996 a 9998"
+  },
+  "srv.power.alwaysReady": {
+    "from": "Always Ready",
+    "text": "Always Ready"
+  },
+  "srv.power.off": {
+    "from": "Off",
+    "text": "Desligado"
+  },
+  "srv.power.on": {
+    "from": "On",
+    "text": "Ligado"
+  },
+  "srv.power.screenOff": {
+    "from": "Screen off",
+    "text": "Apagar tela"
+  },
+  "srv.power.screenSaver": {
+    "from": "Screen Saver",
+    "text": "Protetor de tela"
+  },
+  "srv.power.standby": {
+    "from": "Standby",
+    "text": "Em espera"
+  },
+  "srv.power.starting": {
+    "from": "Starting up",
+    "text": "Inicializando"
+  },
+  "srv.powerOff": {
+    "from": "power actions disabled (set allowPower)",
+    "text": "ações de energia desativadas (configure allowPower)"
+  },
+  "srv.preload.notOffered": {
+    "from": "This app is not offered here",
+    "text": "Este app não está disponível aqui"
+  },
+  "srv.preload.saveFailed": {
+    "from": "The TV did not save the change",
+    "text": "A TV não salvou a alteração"
+  },
+  "srv.preload.unsupported": {
+    "from": "This TV has no list of preloaded apps",
+    "text": "Esta TV não tem lista de apps pré-carregados"
+  },
+  "srv.privacy.acr.detail": {
+    "from": "LG’s ACR captures what is on screen, from apps and HDMI alike, to work out what you watch and target ads at you.",
+    "text": "O ACR da LG captura o conteúdo da tela, tanto de apps quanto de HDMI, para identificar o que você assiste e direcionar anúncios."
+  },
+  "srv.privacy.adStopped": {
+    "from": "LG’s advertising service is not running, and this would start it.",
+    "text": "O serviço de publicidade da LG não está em execução, e esta ação o iniciaria."
+  },
+  "srv.privacy.adid": {
+    "from": "Advertising identifier",
+    "text": "Identificador de publicidade"
+  },
+  "srv.privacy.adid.detail": {
+    "from": "A unique ID your TV hands to advertisers so they can target ads at you. Resetting it breaks the link to your past activity.",
+    "text": "Um ID exclusivo que a TV fornece a anunciantes para direcionar anúncios a você. Redefini-lo rompe o vínculo com sua atividade anterior."
+  },
+  "srv.privacy.area.ads": {
+    "from": "Ad tracking",
+    "text": "Rastreamento de anúncios"
+  },
+  "srv.privacy.area.ads.detail": {
+    "from": "Advertisers tracking the TV across apps, to target ads at you.",
+    "text": "Rastreamento da TV por anunciantes entre apps para direcionar anúncios a você."
+  },
+  "srv.privacy.area.onScreen": {
+    "from": "LG ads on screen",
+    "text": "Anúncios da LG na tela"
+  },
+  "srv.privacy.area.onScreen.detail": {
+    "from": "Adverts, sponsored tiles and tips that LG shows on the TV.",
+    "text": "Anúncios, blocos patrocinados e dicas que a LG exibe na TV."
+  },
+  "srv.privacy.area.reports": {
+    "from": "Usage reports",
+    "text": "Relatórios de uso"
+  },
+  "srv.privacy.area.reports.detail": {
+    "from": "Usage and diagnostic reports sent to LG, and data passed to other companies.",
+    "text": "Relatórios de uso e diagnóstico enviados à LG e dados compartilhados com outras empresas."
+  },
+  "srv.privacy.area.watching": {
+    "from": "Screen recognition",
+    "text": "Reconhecimento de tela"
+  },
+  "srv.privacy.area.watching.detail": {
+    "from": "LG identifying what you watch, to target ads at you.",
+    "text": "Identificação do que você assiste pela LG para direcionar anúncios a você."
+  },
+  "srv.privacy.item.adblock": {
+    "from": "LG’s ad and tracking servers can be reached",
+    "text": "Os servidores de anúncios e rastreamento da LG estão acessíveis"
+  },
+  "srv.privacy.item.lmt": {
+    "from": "Limit ad tracking is off",
+    "text": "A limitação do rastreamento de anúncios está desativada"
+  },
+  "srv.privacy.item.running": {
+    "from": "{name} is running",
+    "text": "{name} está em execução"
+  },
+  "srv.privacy.lmt": {
+    "from": "Limit ad tracking",
+    "text": "Limitar rastreamento de anúncios"
+  },
+  "srv.privacy.lmt.detail": {
+    "from": "When on, apps are asked not to use this ID to profile you.",
+    "text": "Quando ativado, solicita aos apps que não usem este ID para traçar seu perfil."
+  },
+  "srv.privacy.lmt.none": {
+    "from": "This TV has no Limit ad tracking setting.",
+    "text": "Esta TV não tem a opção Limitar rastreamento de anúncios."
+  },
+  "srv.privacy.mic": {
+    "from": "Microphone switch",
+    "text": "Chave do microfone"
+  },
+  "srv.privacy.mic.detail": {
+    "from": "The switch on the TV itself. With it off, the TV’s hands-free voice stops listening.",
+    "text": "A chave na própria TV. Quando desligada, o reconhecimento de voz sem as mãos para de escutar."
+  },
+  "srv.processes.failed": {
+    "from": "could not read process list",
+    "text": "não foi possível ler a lista de processos"
+  },
+  "srv.quickAccess.badKey": {
+    "from": "Quick Access keys are 1 to 9",
+    "text": "As teclas de Acesso rápido vão de 1 a 9"
+  },
+  "srv.quickAccess.channel": {
+    "from": "Live TV, channel {channel}",
+    "text": "TV ao vivo, canal {channel}"
+  },
+  "srv.quickAccess.liveTv": {
+    "from": "Live TV",
+    "text": "TV ao vivo"
+  },
+  "srv.quickAccess.noApps": {
+    "from": "Could not read the TV's apps. Try again in a moment.",
+    "text": "Não foi possível ler os apps da TV. Tente novamente em instantes."
+  },
+  "srv.quickAccess.notInstalled": {
+    "from": "App not installed",
+    "text": "App não instalado"
+  },
+  "srv.quickAccess.unknownApp": {
+    "from": "That app is not on this TV",
+    "text": "Esse app não está nesta TV"
+  },
+  "srv.quickAccess.unsupported": {
+    "from": "This TV's Quick Access cannot be changed from here",
+    "text": "O Acesso rápido desta TV não pode ser alterado por aqui"
+  },
+  "srv.remoteKeys.badKey": {
+    "from": "This TV does not have that key",
+    "text": "Esta TV não tem essa tecla"
+  },
+  "srv.remoteKeys.chainFailed": {
+    "from": "The TV did not take the change",
+    "text": "A TV não aplicou a alteração"
+  },
+  "srv.remoteKeys.fastForward": {
+    "from": "Fast forward",
+    "text": "Avançar"
+  },
+  "srv.remoteKeys.inputSwitcher": {
+    "from": "Input switcher",
+    "text": "Seletor de entradas"
+  },
+  "srv.remoteKeys.liveTv": {
+    "from": "Live TV",
+    "text": "TV ao vivo"
+  },
+  "srv.remoteKeys.mute": {
+    "from": "Mute",
+    "text": "Silenciar"
+  },
+  "srv.remoteKeys.pause": {
+    "from": "Pause",
+    "text": "Pausar"
+  },
+  "srv.remoteKeys.play": {
+    "from": "Play",
+    "text": "Reproduzir"
+  },
+  "srv.remoteKeys.rewind": {
+    "from": "Rewind",
+    "text": "Retroceder"
+  },
+  "srv.remoteKeys.stop": {
+    "from": "Stop",
+    "text": "Parar"
+  },
+  "srv.remoteKeys.volumeDown": {
+    "from": "Volume down",
+    "text": "Diminuir volume"
+  },
+  "srv.remoteKeys.volumeUp": {
+    "from": "Volume up",
+    "text": "Aumentar volume"
+  },
+  "srv.repo.already": {
+    "from": "that catalog is already listed",
+    "text": "esse catálogo já está na lista"
+  },
+  "srv.repo.badAction": {
+    "from": "action must be add or remove",
+    "text": "a ação deve ser add ou remove"
+  },
+  "srv.repo.notAdded": {
+    "from": "that catalog is not one added here",
+    "text": "esse catálogo não foi adicionado aqui"
+  },
+  "srv.repo.tooMany": {
+    "from": "at most {n} catalogs can be added",
+    "text": "é possível adicionar no máximo {n} catálogos"
+  },
+  "srv.repo.unavailable": {
+    "from": "catalog unavailable",
+    "text": "catálogo indisponível"
+  },
+  "srv.saveSettingFailed.plain": {
+    "from": "could not save the setting",
+    "text": "não foi possível salvar a configuração"
+  },
+  "srv.saveSettingsFailed": {
+    "from": "could not save the settings",
+    "text": "não foi possível salvar as configurações"
+  },
+  "srv.saver.black": {
+    "from": "Black screen",
+    "text": "Tela preta"
+  },
+  "srv.saver.black.desc": {
+    "from": "Nothing on screen. On an OLED the pixels are off.",
+    "text": "Nada na tela. Em um painel OLED, os pixels ficam desligados."
+  },
+  "srv.saver.bokeh": {
+    "from": "Bokeh",
+    "text": "Bokeh"
+  },
+  "srv.saver.bokeh.desc": {
+    "from": "Soft circles of light drifting in and out on black.",
+    "text": "Círculos suaves de luz que surgem e desaparecem sobre fundo preto."
+  },
+  "srv.saver.clock": {
+    "from": "Clock",
+    "text": "Relógio"
+  },
+  "srv.saver.clock.desc": {
+    "from": "A digital clock on black, moving to a new position every minute.",
+    "text": "Um relógio digital sobre fundo preto que muda de posição a cada minuto."
+  },
+  "srv.saver.clockDate": {
+    "from": "Clock with date",
+    "text": "Relógio com data"
+  },
+  "srv.saver.clockDate.desc": {
+    "from": "A digital clock with seconds, the weekday and date on black, moving to a new position every minute.",
+    "text": "Um relógio digital com segundos, dia da semana e data sobre fundo preto que muda de posição a cada minuto."
+  },
+  "srv.saver.currents": {
+    "from": "Currents",
+    "text": "Correntes"
+  },
+  "srv.saver.currents.desc": {
+    "from": "Streams of light flowing along a slowly changing wind on black.",
+    "text": "Fluxos de luz seguindo um vento que muda lentamente sobre fundo preto."
+  },
+  "srv.saver.filament": {
+    "from": "Filament",
+    "text": "Filamento"
+  },
+  "srv.saver.filament.desc": {
+    "from": "Swarms of light circling and trailing across black, slowly changing color.",
+    "text": "Enxames de luz que circulam e deixam rastros sobre fundo preto, mudando de cor lentamente."
+  },
+  "srv.saver.fireworks": {
+    "from": "Fireworks",
+    "text": "Fogos de artifício"
+  },
+  "srv.saver.fireworks.desc": {
+    "from": "Bursts of colour on black, a few seconds apart.",
+    "text": "Explosões de cor sobre fundo preto, com alguns segundos de intervalo."
+  },
+  "srv.saver.harmonograph": {
+    "from": "Harmonograph",
+    "text": "Harmonógrafo"
+  },
+  "srv.saver.harmonograph.desc": {
+    "from": "Pendulum ribbons of light weaving and fading on black.",
+    "text": "Fitas de luz pendulares que se entrelaçam e desaparecem sobre fundo preto."
+  },
+  "srv.saver.held": {
+    "from": "Custom screen savers are turned off on this TV for now, as they have not been tried on its webOS version. Before 0.98.1, on webOS 10, they could leave the picture, the sound and HDMI control off until the TV was unplugged. One already in use stays until the TV is next fully restarted.",
+    "text": "Os protetores de tela personalizados estão desativados nesta TV por enquanto, pois não foram testados nesta versão do webOS. Antes da versão 0.98.1, no webOS 10, eles podiam desativar imagem, som e controle HDMI até que a TV fosse desconectada da tomada. Um protetor já em uso permanece até o próximo reinício completo da TV."
+  },
+  "srv.saver.incense": {
+    "from": "Incense",
+    "text": "Incenso"
+  },
+  "srv.saver.incense.desc": {
+    "from": "Thin streams of colored smoke rising and curling on black.",
+    "text": "Finos fluxos de fumaça colorida que sobem e se curvam sobre fundo preto."
+  },
+  "srv.saver.lost": {
+    "from": "The TV has lost track of its screen saver app and did not find it again. Restarting the TV brings it back.",
+    "text": "A TV perdeu a referência ao app de protetor de tela e não o encontrou novamente. Reiniciar a TV o restaura."
+  },
+  "srv.saver.murmuration": {
+    "from": "Murmuration",
+    "text": "Revoada"
+  },
+  "srv.saver.murmuration.desc": {
+    "from": "Flocks of light swooping after their leaders across black.",
+    "text": "Bandos de luz seguem seus líderes em voos sobre fundo preto."
+  },
+  "srv.saver.neo": {
+    "from": "Neo",
+    "text": "Neo"
+  },
+  "srv.saver.neo.desc": {
+    "from": "Columns of falling glyphs, their colors turning round the wheel every minute.",
+    "text": "Colunas de símbolos em queda, com cores que percorrem o círculo cromático a cada minuto."
+  },
+  "srv.saver.noClose": {
+    "from": "the TV would not close the screen saver: {error}",
+    "text": "a TV não permitiu fechar o protetor de tela: {error}"
+  },
+  "srv.saver.noRemote": {
+    "from": "could not reach the remote input device",
+    "text": "não foi possível acessar o dispositivo de entrada remota"
+  },
+  "srv.saver.notTaken": {
+    "from": "The TV did not take the new screen saver without restarting its app manager, which has left the picture or sound off on some TVs, so LG's screen saver is kept.",
+    "text": "A TV não aplicou o novo protetor de tela sem reiniciar o gerenciador de apps, o que já desativou imagem ou som em algumas TVs. Por isso, o protetor de tela da LG foi mantido."
+  },
+  "srv.saver.onlyInApps": {
+    "from": "the screen saver is only available from an app, not from {source}",
+    "text": "o protetor de tela só está disponível por um app, não por {source}"
+  },
+  "srv.saver.playing": {
+    "from": "the TV does not start a screen saver while something is playing",
+    "text": "a TV não inicia o protetor de tela enquanto há algo em reprodução"
+  },
+  "srv.saver.refused": {
+    "from": "the TV would not start a screen saver here: {error}",
+    "text": "a TV não permitiu iniciar um protetor de tela aqui: {error}"
+  },
+  "srv.saver.refusedFrom": {
+    "from": "the TV would not start a screen saver from {source}",
+    "text": "a TV não permitiu iniciar um protetor de tela de {source}"
+  },
+  "srv.saver.refusedHere": {
+    "from": "the TV would not start a screen saver from this source",
+    "text": "a TV não permitiu iniciar um protetor de tela desta fonte"
+  },
+  "srv.saver.starfield": {
+    "from": "Starfield",
+    "text": "Campo de estrelas"
+  },
+  "srv.saver.starfield.desc": {
+    "from": "A drifting cosmic starscape with occasional shooting stars.",
+    "text": "Um céu cósmico em movimento com estrelas cadentes ocasionais."
+  },
+  "srv.saver.stock": {
+    "from": "LG default",
+    "text": "Padrão da LG"
+  },
+  "srv.saver.stock.desc": {
+    "from": "The screen saver the TV shipped with.",
+    "text": "O protetor de tela original da TV."
+  },
+  "srv.saver.stockLater": {
+    "from": "LG's screen saver is set, and the TV uses it from its next restart: it did not take the change without restarting its app manager, which has left the picture or sound off on some TVs.",
+    "text": "O protetor de tela da LG foi definido e será usado após o próximo reinício da TV. A mudança não foi aplicada sem reiniciar o gerenciador de apps, o que já desativou imagem ou som em algumas TVs."
+  },
+  "srv.saver.tesseract": {
+    "from": "Tesseract",
+    "text": "Tesserato"
+  },
+  "srv.saver.tesseract.desc": {
+    "from": "A four-dimensional cube turning through the fourth dimension, in fine lines of light.",
+    "text": "Um cubo de quatro dimensões girando pela quarta dimensão em linhas finas de luz."
+  },
+  "srv.saver.unknownPlayback": {
+    "from": "the TV could not check whether anything is playing",
+    "text": "a TV não conseguiu verificar se há algo em reprodução"
+  },
+  "srv.saver.veils": {
+    "from": "Veils",
+    "text": "Véus"
+  },
+  "srv.saver.veils.desc": {
+    "from": "Translucent ribbons of light rippling slowly across black.",
+    "text": "Fitas translúcidas de luz ondulando lentamente sobre fundo preto."
+  },
+  "srv.saver.vitals": {
+    "from": "Panel vitals",
+    "text": "Estado do painel"
+  },
+  "srv.saver.vitals.desc": {
+    "from": "The TV's own readings - panel hours, pixel refresher countdown, temperature.",
+    "text": "Dados da própria TV: horas do painel, contagem até a atualização de pixels e temperatura."
+  },
+  "srv.saver.vortex": {
+    "from": "Vortex",
+    "text": "Vórtice"
+  },
+  "srv.saver.vortex.desc": {
+    "from": "Whirlwinds of light spiraling up swaying funnels on black.",
+    "text": "Redemoinhos de luz que sobem em espirais oscilantes sobre fundo preto."
+  },
+  "srv.service.admanager": {
+    "from": "LG Advertising Service",
+    "text": "Serviço de publicidade da LG"
+  },
+  "srv.service.admanager.desc": {
+    "from": "Fetches the ads shown on the TV and keeps its advertising ID.",
+    "text": "Busca os anúncios exibidos na TV e mantém seu ID de publicidade."
+  },
+  "srv.service.badge.flashWrites": {
+    "from": "Flash writes",
+    "text": "Gravações na memória flash"
+  },
+  "srv.service.badge.telemetry": {
+    "from": "Telemetry",
+    "text": "Telemetria"
+  },
+  "srv.service.buddyconnector": {
+    "from": "ThinQ Device Pairing",
+    "text": "Emparelhamento de dispositivos ThinQ"
+  },
+  "srv.service.buddyconnector.desc": {
+    "from": "Pairs the TV with other LG ThinQ devices.",
+    "text": "Emparelha a TV com outros dispositivos LG ThinQ."
+  },
+  "srv.service.camera": {
+    "from": "USB Camera Listener",
+    "text": "Monitor de câmera USB"
+  },
+  "srv.service.camera.desc": {
+    "from": "Background USB webcam detection daemon. Unnecessary unless a USB webcam is physically attached.",
+    "text": "Serviço de detecção de webcam USB em segundo plano. Desnecessário se nenhuma webcam USB estiver conectada."
+  },
+  "srv.service.contentminer": {
+    "from": "ACR Content Miner",
+    "text": "ACR Content Miner"
+  },
+  "srv.service.contentminer.desc": {
+    "from": "Scans and indexes on-screen audio/video content for advertising and viewing habit telemetry.",
+    "text": "Analisa e indexa o conteúdo de áudio e vídeo da tela para publicidade e telemetria de hábitos de visualização."
+  },
+  "srv.service.crashreportd": {
+    "from": "Jira Crash Reporter",
+    "text": "Relator de falhas Jira"
+  },
+  "srv.service.crashreportd.desc": {
+    "from": "Background daemon on older webOS versions that generates automated crash reports.",
+    "text": "Serviço em segundo plano de versões antigas do webOS que gera relatórios automáticos de falhas."
+  },
+  "srv.service.familycare": {
+    "from": "Family Care",
+    "text": "Family Care"
+  },
+  "srv.service.familycare.desc": {
+    "from": "Tracks screen time for LG's Family Care limits. Unnecessary unless Family Care is set up.",
+    "text": "Monitora o tempo de tela para os limites do Family Care da LG. Desnecessário se o Family Care não estiver configurado."
+  },
+  "srv.service.iotclient": {
+    "from": "ThinQ Smart Home",
+    "text": "Casa inteligente ThinQ"
+  },
+  "srv.service.iotclient.desc": {
+    "from": "Controls LG ThinQ appliances from the TV's Home Hub. Unnecessary without ThinQ appliances.",
+    "text": "Controla eletrodomésticos LG ThinQ pelo Home Hub da TV. Desnecessário sem dispositivos ThinQ."
+  },
+  "srv.service.livepick": {
+    "from": "Live Plus",
+    "text": "Live Plus"
+  },
+  "srv.service.livepick.desc": {
+    "from": "Works with screen recognition (ACR) to show interactive offers about what is on screen.",
+    "text": "Trabalha com o reconhecimento de tela (ACR) para exibir ofertas interativas sobre o conteúdo exibido."
+  },
+  "srv.service.mycar": {
+    "from": "Car-to-Home Telematics",
+    "text": "Telemática Car-to-Home"
+  },
+  "srv.service.mycar.desc": {
+    "from": "Hyundai/Kia Bluelink vehicle status listener in Home Dashboard. Unnecessary unless linking a connected vehicle.",
+    "text": "Monitor de estado de veículos Hyundai/Kia Bluelink no Painel Inicial. Desnecessário se nenhum veículo conectado estiver vinculado."
+  },
+  "srv.service.nudge": {
+    "from": "LG Promotions & Tips Popups",
+    "text": "Pop-ups de promoções e dicas da LG"
+  },
+  "srv.service.nudge.desc": {
+    "from": "Pushes marketing notifications, promotional popups, and feature tips to the TV interface.",
+    "text": "Envia notificações de marketing, pop-ups promocionais e dicas de recursos para a interface da TV."
+  },
+  "srv.service.ocp": {
+    "from": "LG Cloud Link",
+    "text": "Conexão com a nuvem LG"
+  },
+  "srv.service.ocp.desc": {
+    "from": "Keeps the TV linked to LG's ThinQ cloud. Unnecessary unless the TV is controlled from the LG ThinQ app.",
+    "text": "Mantém a TV vinculada à nuvem ThinQ da LG. Desnecessário se a TV não for controlada pelo app LG ThinQ."
+  },
+  "srv.service.pushclient": {
+    "from": "LG Push Messages",
+    "text": "Notificações push da LG"
+  },
+  "srv.service.pushclient.desc": {
+    "from": "Receives messages LG sends to the TV, such as promotions and sports alerts.",
+    "text": "Recebe mensagens da LG para a TV, como promoções e alertas esportivos."
+  },
+  "srv.service.rdxd": {
+    "from": "Remote Diagnostics Daemon",
+    "text": "Serviço de diagnóstico remoto"
+  },
+  "srv.service.rdxd.desc": {
+    "from": "Continuously logs diagnostic traces, core dumps, and event data to internal flash memory.",
+    "text": "Grava continuamente rastros de diagnóstico, despejos de memória e dados de eventos na memória flash interna."
+  },
+  "srv.service.remotelogger": {
+    "from": "Remote Logging Daemon",
+    "text": "Serviço de registros remotos"
+  },
+  "srv.service.remotelogger.desc": {
+    "from": "Ships system log messages to remote servers.",
+    "text": "Envia mensagens de registro do sistema para servidores remotos."
+  },
+  "srv.service.sportsalarm": {
+    "from": "Sports Alerts",
+    "text": "Alertas esportivos"
+  },
+  "srv.service.sportsalarm.desc": {
+    "from": "Pops up scores for the teams followed on the TV.",
+    "text": "Exibe placares dos times seguidos na TV."
+  },
+  "srv.service.thinqai": {
+    "from": "ThinQ AI",
+    "text": "ThinQ AI"
+  },
+  "srv.service.thinqai.desc": {
+    "from": "Connects the TV to LG's ThinQ AI cloud service.",
+    "text": "Conecta a TV ao serviço de nuvem ThinQ AI da LG."
+  },
+  "srv.service.unsupported": {
+    "from": "Service management is not supported on this platform",
+    "text": "O gerenciamento de serviços não é suportado nesta plataforma"
+  },
+  "srv.service.uploadd": {
+    "from": "Telemetry & Diagnostics Uploader",
+    "text": "Envio de telemetria e diagnósticos"
+  },
+  "srv.service.uploadd.desc": {
+    "from": "Uploads crash logs, diagnostic traces, and usage telemetry to LG servers.",
+    "text": "Envia registros de falhas, rastros de diagnóstico e telemetria de uso aos servidores da LG."
+  },
+  "srv.service.voiceconductor": {
+    "from": "LG Voice Assistant",
+    "text": "Assistente de voz da LG"
+  },
+  "srv.service.voiceconductor.desc": {
+    "from": "LG's voice assistant: the AI button, voice search and the microphone.",
+    "text": "Assistente de voz da LG: botão de IA, pesquisa por voz e microfone."
+  },
+  "srv.ssh.already": {
+    "from": "That key is already there.",
+    "text": "Essa chave já está adicionada."
+  },
+  "srv.ssh.needsToken": {
+    "from": "Changing SSH keys needs a token in config.json.",
+    "text": "Alterar chaves SSH exige um token em config.json."
+  },
+  "srv.ssh.noSuchKey": {
+    "from": "That key is not there.",
+    "text": "Essa chave não está adicionada."
+  },
+  "srv.ssh.notKey": {
+    "from": "That is not an SSH public key.",
+    "text": "Essa não é uma chave pública SSH."
+  },
+  "srv.ssh.oneKey": {
+    "from": "Paste one public key, on one line.",
+    "text": "Cole uma chave pública em uma única linha."
+  },
+  "srv.ssh.private": {
+    "from": "That is a private key. Paste the public key, from the .pub file.",
+    "text": "Essa é uma chave privada. Cole a chave pública do arquivo .pub."
+  },
+  "srv.ssh.tooMany": {
+    "from": "There are already 50 keys.",
+    "text": "Já existem 50 chaves."
+  },
+  "srv.tmdb.badKey": {
+    "from": "A TMDB API key is 32 letters and digits, 0 to 9 and a to f",
+    "text": "Uma chave de API do TMDB tem 32 letras e dígitos, de 0 a 9 e de a a f"
+  },
+  "srv.tvRefused": {
+    "from": "the TV would not change it",
+    "text": "a TV não permitiu alterar"
+  },
+  "srv.youtube.badKey": {
+    "from": "A YouTube API key is 20 to 100 letters, digits, - and _",
+    "text": "Uma chave de API do YouTube tem de 20 a 100 letras, dígitos, - e _"
+  },
+  "ss.bright": {
+    "from": "Bright",
+    "text": "Claro"
+  },
+  "ss.brightness": {
+    "from": "Brightness",
+    "text": "Brilho"
+  },
+  "ss.dim": {
+    "from": "Dim",
+    "text": "Suave"
+  },
+  "ss.exp.desc": {
+    "from": "They have not been tried on this webOS version. Before Native Tv 0.98.1, on webOS 10, using one sometimes left the picture, the sound and HDMI control off until the TV was unplugged.",
+    "text": "Eles não foram testados nesta versão do webOS. Antes do Native Tv 0.98.1, no webOS 10, usá-los às vezes desativava imagem, som e controle HDMI até que a TV fosse desconectada da tomada."
+  },
+  "ss.external.active": {
+    "from": "A third-party homebrew screen saver is currently active on the TV. Selecting a Native Tv screen saver will replace it.",
+    "text": "Um protetor de tela homebrew de terceiros está ativo na TV. Selecionar um protetor de tela do Native Tv irá substituí-lo."
+  },
+  "ss.inUse": {
+    "from": "In use",
+    "text": "Em uso"
+  },
+  "ss.showNow": {
+    "from": "Show it now",
+    "text": "Exibir agora"
+  },
+  "ss.start": {
+    "from": "Start screen saver",
+    "text": "Iniciar protetor de tela"
+  },
+  "svc.locked": {
+    "from": "Locked",
+    "text": "Bloqueado"
+  },
+  "svc.unlocked": {
+    "from": "Unlocked",
+    "text": "Desbloqueado"
+  },
+  "tab.serviceMenu": {
+    "from": "Service menu",
+    "text": "Menu de serviço"
+  },
+  "theme": {
+    "from": "Theme",
+    "text": "Tema"
+  },
+  "theme.dark": {
+    "from": "Dark",
+    "text": "Escuro"
+  },
+  "tv.appearance.head.appearance": {
+    "from": "Appearance",
+    "text": "Aparência"
+  },
+  "tv.appearance.theme.hint": {
+    "from": "Switches the dashboard interface between Dark (true black for OLED) and Light theme.",
+    "text": "Alterna a interface do painel entre os temas Escuro, com preto verdadeiro para OLED, e Claro."
+  },
+  "tv.apps.head.hideHomeScreenSystem": {
+    "from": "Hide Home Screen System Apps",
+    "text": "Ocultar apps de sistema da tela inicial"
+  },
+  "tv.apps.head.installHomebrewApps": {
+    "from": "Install Homebrew Applications",
+    "text": "Instalar aplicativos homebrew"
+  },
+  "tv.apps.head.turnOffBackgroundServices": {
+    "from": "Turn off LG’s bloatware services",
+    "text": "Desativar serviços dispensáveis da LG"
+  },
+  "tv.apps.head.uninstallApplications": {
+    "from": "Uninstall Applications",
+    "text": "Desinstalar aplicativos"
+  },
+  "tv.apps.home.exp.hint": {
+    "from": "Switch it on from the dashboard in a browser, under Apps, where its warning is.",
+    "text": "Ative pelo painel em um navegador, na seção Apps, onde está o aviso."
+  },
+  "tv.apps.home.input.hint": {
+    "from": "A tile among the apps on LG’s launcher that switches to this input.",
+    "text": "Um bloco entre os apps na tela inicial da LG que muda para esta entrada."
+  },
+  "tv.apps.home.restart": {
+    "from": "LG’s launcher starts again, which takes a few seconds.",
+    "text": "A tela inicial da LG será reiniciada. Isso leva alguns segundos."
+  },
+  "tv.apps.home.restore.hint": {
+    "from": "Every part shown again, and the input tiles added here taken off.",
+    "text": "Todas as seções serão exibidas novamente, e os blocos de entradas adicionados aqui serão removidos."
+  },
+  "tv.apps.home.restore.value": {
+    "from": "Put back",
+    "text": "Restaurar"
+  },
+  "tv.apps.install.browse": {
+    "from": "Browse",
+    "text": "Explorar"
+  },
+  "tv.apps.install.busy.hint": {
+    "from": "This can take a minute or two. Back works again when it finishes.",
+    "text": "Isso pode levar um ou dois minutos. Voltar funciona novamente quando terminar."
+  },
+  "tv.apps.install.cancel.hint": {
+    "from": "The downloaded package is deleted.",
+    "text": "O pacote baixado será excluído."
+  },
+  "tv.apps.install.dismiss.done": {
+    "from": "Done",
+    "text": "Concluído"
+  },
+  "tv.apps.install.dismiss.error": {
+    "from": "Dismiss",
+    "text": "Dispensar"
+  },
+  "tv.apps.install.done.hint": {
+    "from": "The app is on the TV now.",
+    "text": "O app já está na TV."
+  },
+  "tv.apps.install.entry.hint": {
+    "from": "Apps from the Homebrew Channel catalog.",
+    "text": "Apps do catálogo do Homebrew Channel."
+  },
+  "tv.apps.install.error": {
+    "from": "The install failed",
+    "text": "A instalação falhou"
+  },
+  "tv.apps.install.go.hint": {
+    "from": "Nothing is installed until OK is pressed here.",
+    "text": "Nada é instalado até você pressionar OK aqui."
+  },
+  "tv.apps.install.loading.hint": {
+    "from": "The TV is fetching the list. This needs internet access.",
+    "text": "A TV está buscando a lista. É necessário acesso à internet."
+  },
+  "tv.apps.install.press.retry": {
+    "from": "Press OK to try again",
+    "text": "Pressione OK para tentar novamente"
+  },
+  "tv.apps.install.pv.apps": {
+    "from": "Apps",
+    "text": "Apps"
+  },
+  "tv.apps.install.pv.change": {
+    "from": "Change",
+    "text": "Alterar"
+  },
+  "tv.apps.install.pv.cpu": {
+    "from": "Processor",
+    "text": "Processador"
+  },
+  "tv.apps.install.pv.mismatch": {
+    "from": "Mismatch",
+    "text": "Divergência"
+  },
+  "tv.apps.install.pv.root": {
+    "from": "Root",
+    "text": "Root"
+  },
+  "tv.apps.install.pv.rootBack": {
+    "from": "Given back",
+    "text": "Restaurado"
+  },
+  "tv.apps.install.pv.screensaver": {
+    "from": "Screen saver",
+    "text": "Protetor de tela"
+  },
+  "tv.apps.install.pv.services": {
+    "from": "Services",
+    "text": "Serviços"
+  },
+  "tv.apps.install.pv.space": {
+    "from": "Free space",
+    "text": "Espaço livre"
+  },
+  "tv.apps.install.root.hint": {
+    "from": "Off unless the app needs it. Root access is set up through the Homebrew Channel.",
+    "text": "Desativado, a menos que o app precise. O acesso root é configurado pelo Homebrew Channel."
+  },
+  "tv.apps.install.root.needed": {
+    "from": "This app asks for its services to run as root, and may not work without it.",
+    "text": "Este app solicita que seus serviços sejam executados como root e pode não funcionar sem isso."
+  },
+  "tv.apps.install.store.needOn": {
+    "from": "Switch on Replace the store version first.",
+    "text": "Primeiro ative Substituir a versão da loja."
+  },
+  "tv.apps.install.unavailable": {
+    "from": "Catalog unavailable",
+    "text": "Catálogo indisponível"
+  },
+  "tv.apps.install.wait": {
+    "from": "An install is running. Please wait.",
+    "text": "Há uma instalação em andamento. Aguarde."
+  },
+  "tv.apps.nativeTvHome": {
+    "from": "Native Tv Home is on",
+    "text": "O Início do Native Tv está ativado"
+  },
+  "tv.apps.nativeTvHomeTilesNote": {
+    "from": "Native Tv Home is switched on. Apps hidden here are hidden on it too; its Home section hides others on Native Tv Home only.",
+    "text": "O Início do Native Tv está ativado. Apps ocultos aqui também ficam ocultos nele; sua seção Início permite ocultar outros apps apenas no Início do Native Tv."
+  },
+  "tv.apps.nativeTvHomeWhere": {
+    "from": "Native Tv Home is arranged in its own Home section.",
+    "text": "O Início do Native Tv é organizado em sua própria seção Início."
+  },
+  "tv.apps.preload.loadedNow": {
+    "from": "It is loaded now.",
+    "text": "Está carregado agora."
+  },
+  "tv.apps.preload.memory": {
+    "from": "This one takes about {mb} MB when loaded.",
+    "text": "Este app ocupa cerca de {mb} MB quando carregado."
+  },
+  "tv.apps.quickAccess.browser": {
+    "from": "Change them from the dashboard in a browser.",
+    "text": "Altere pelo painel em um navegador."
+  },
+  "tv.apps.systemAppHiding": {
+    "from": "System App Hiding",
+    "text": "Ocultação de apps de sistema"
+  },
+  "tv.apps.tile.hidden.hint": {
+    "from": "Currently hidden from the TV home ribbon. Press OK to make this tile visible again.",
+    "text": "Atualmente oculto na faixa de apps da tela inicial da TV. Pressione OK para exibir este bloco novamente."
+  },
+  "tv.apps.tile.visible.hint": {
+    "from": "Currently visible on the TV home ribbon. Press OK to hide this tile.",
+    "text": "Atualmente visível na faixa de apps da tela inicial da TV. Pressione OK para ocultar este bloco."
+  },
+  "tv.apps.tiles.off.hint": {
+    "from": "Stock behavior active. Press OK to enable system app hiding.",
+    "text": "Comportamento original ativo. Pressione OK para ativar a ocultação de apps de sistema."
+  },
+  "tv.apps.tiles.on.hint": {
+    "from": "When enabled: On each cold boot of your TV, this can cause a brief 1-second blank screen or input refresh before returning to your active HDMI source.",
+    "text": "Quando ativado, a cada inicialização a frio da TV pode haver uma tela preta ou atualização da entrada por cerca de 1 segundo antes de voltar à fonte HDMI ativa."
+  },
+  "tv.apps.uninstall.again": {
+    "from": "Press OK again to uninstall {name}",
+    "text": "Pressione OK novamente para desinstalar {name}"
+  },
+  "tv.apps.uninstall.hint": {
+    "from": "Store or user-installed application ({id}). Press OK to uninstall from the TV.",
+    "text": "Aplicativo da loja ou instalado pelo usuário ({id}). Pressione OK para desinstalar da TV."
+  },
+  "tv.apps.uninstall.hintVersion": {
+    "from": "Store or user-installed application (v{version}, {id}). Press OK to uninstall from the TV.",
+    "text": "Aplicativo da loja ou instalado pelo usuário (v{version}, {id}). Pressione OK para desinstalar da TV."
+  },
+  "tv.catalog.busy": {
+    "from": "Installing…",
+    "text": "Instalando…"
+  },
+  "tv.catalog.discard": {
+    "from": "Discard the download",
+    "text": "Descartar o download"
+  },
+  "tv.catalog.install": {
+    "from": "Install {name}",
+    "text": "Instalar {name}"
+  },
+  "tv.catalog.installNow": {
+    "from": "Install now",
+    "text": "Instalar agora"
+  },
+  "tv.catalog.installed": {
+    "from": "Installed",
+    "text": "Instalado"
+  },
+  "tv.catalog.none": {
+    "from": "No applications available",
+    "text": "Nenhum aplicativo disponível"
+  },
+  "tv.catalog.removing": {
+    "from": "Removing…",
+    "text": "Removendo…"
+  },
+  "tv.catalog.returnToCatalog": {
+    "from": "Return to the catalog",
+    "text": "Voltar ao catálogo"
+  },
+  "tv.catalog.reviewInstall": {
+    "from": "Review and install",
+    "text": "Revisar e instalar"
+  },
+  "tv.catalog.reviewUpdate": {
+    "from": "Review and update",
+    "text": "Revisar e atualizar"
+  },
+  "tv.catalog.root": {
+    "from": "Run services as root",
+    "text": "Executar serviços como root"
+  },
+  "tv.catalog.starting": {
+    "from": "Starting…",
+    "text": "Iniciando…"
+  },
+  "tv.catalog.subtitle": {
+    "from": "From the Homebrew Channel catalog.",
+    "text": "Do catálogo do Homebrew Channel."
+  },
+  "tv.catalog.title": {
+    "from": "Homebrew apps",
+    "text": "Apps homebrew"
+  },
+  "tv.confirm": {
+    "from": "Confirm?",
+    "text": "Confirmar?"
+  },
+  "tv.details.cached": {
+    "from": "Saved details · offline",
+    "text": "Detalhes salvos · offline"
+  },
+  "tv.details.cast": {
+    "from": "Cast: {names}",
+    "text": "Elenco: {names}"
+  },
+  "tv.details.close": {
+    "from": "Close",
+    "text": "Fechar"
+  },
+  "tv.details.film": {
+    "from": "Film",
+    "text": "Filme"
+  },
+  "tv.details.goBack": {
+    "from": "Go back before opening another title",
+    "text": "Volte antes de abrir outro título"
+  },
+  "tv.details.loading": {
+    "from": "Loading details…",
+    "text": "Carregando detalhes…"
+  },
+  "tv.details.more": {
+    "from": "More like this",
+    "text": "Títulos semelhantes"
+  },
+  "tv.details.netflix": {
+    "from": "Open on Netflix",
+    "text": "Abrir na Netflix"
+  },
+  "tv.details.noOverview": {
+    "from": "No overview available",
+    "text": "Sinopse indisponível"
+  },
+  "tv.details.openFailed": {
+    "from": "That did not open",
+    "text": "Não foi possível abrir"
+  },
+  "tv.details.overview": {
+    "from": "Full overview",
+    "text": "Sinopse completa"
+  },
+  "tv.details.page": {
+    "from": "{page} of {pages}",
+    "text": "{page} de {pages}"
+  },
+  "tv.details.retry": {
+    "from": "Retry",
+    "text": "Tentar novamente"
+  },
+  "tv.details.return": {
+    "from": "Return",
+    "text": "Retornar"
+  },
+  "tv.details.series": {
+    "from": "Series",
+    "text": "Séries"
+  },
+  "tv.details.trailer": {
+    "from": "Trailer",
+    "text": "Trailer"
+  },
+  "tv.details.unavailable": {
+    "from": "Details are unavailable. Retry.",
+    "text": "Os detalhes estão indisponíveis. Tente novamente."
+  },
+  "tv.editor.clear": {
+    "from": "Clear",
+    "text": "Limpar"
+  },
+  "tv.editor.enterName": {
+    "from": "Enter a name",
+    "text": "Digite um nome"
+  },
+  "tv.editor.idleBody": {
+    "from": "Enter at least 2 characters to see matching titles.",
+    "text": "Digite pelo menos 2 caracteres para ver títulos correspondentes."
+  },
+  "tv.editor.limit": {
+    "from": "Up to 20 characters",
+    "text": "Até 20 caracteres"
+  },
+  "tv.editor.minimum": {
+    "from": "Enter at least 2 characters",
+    "text": "Digite pelo menos 2 caracteres"
+  },
+  "tv.editor.namePlaceholder": {
+    "from": "Name",
+    "text": "Nome"
+  },
+  "tv.editor.noName": {
+    "from": "No name yet",
+    "text": "Ainda sem nome"
+  },
+  "tv.editor.noResults": {
+    "from": "No films or series found. Try another search.",
+    "text": "Nenhum filme ou série encontrado. Tente outra pesquisa."
+  },
+  "tv.editor.none": {
+    "from": "No films or series found",
+    "text": "Nenhum filme ou série encontrado"
+  },
+  "tv.editor.noneBody": {
+    "from": "Try another title or spelling.",
+    "text": "Tente outro título ou outra grafia."
+  },
+  "tv.editor.preview": {
+    "from": "This is how the profile appears.",
+    "text": "É assim que o perfil aparece."
+  },
+  "tv.editor.renameTitle": {
+    "from": "Rename profile",
+    "text": "Renomear perfil"
+  },
+  "tv.editor.results": {
+    "from": "{n} results",
+    "text": "{n} resultados"
+  },
+  "tv.editor.resultsKey": {
+    "from": "Results",
+    "text": "Resultados"
+  },
+  "tv.editor.retrySearch": {
+    "from": "Retry search",
+    "text": "Repetir pesquisa"
+  },
+  "tv.editor.return": {
+    "from": "Return",
+    "text": "Retornar"
+  },
+  "tv.editor.save": {
+    "from": "Save",
+    "text": "Salvar"
+  },
+  "tv.editor.saveFailed": {
+    "from": "The name could not be saved. Try again.",
+    "text": "Não foi possível salvar o nome. Tente novamente."
+  },
+  "tv.editor.search": {
+    "from": "Search",
+    "text": "Pesquisar"
+  },
+  "tv.editor.searchErrorBody": {
+    "from": "Try again in a moment.",
+    "text": "Tente novamente em instantes."
+  },
+  "tv.editor.searchFailed": {
+    "from": "Search is unavailable. Try again.",
+    "text": "A pesquisa está indisponível. Tente novamente."
+  },
+  "tv.editor.searchOff": {
+    "from": "Search is unavailable",
+    "text": "Pesquisa indisponível"
+  },
+  "tv.editor.searchPlaceholder": {
+    "from": "Title",
+    "text": "Título"
+  },
+  "tv.editor.searchTitle": {
+    "from": "Search films and series",
+    "text": "Pesquisar filmes e séries"
+  },
+  "tv.editor.searching": {
+    "from": "Searching…",
+    "text": "Pesquisando…"
+  },
+  "tv.editor.searchingBody": {
+    "from": "Looking for films and series that match your query.",
+    "text": "Buscando filmes e séries que correspondam à sua pesquisa."
+  },
+  "tv.failed": {
+    "from": "That did not work",
+    "text": "Não funcionou"
+  },
+  "tv.flash.startingSaver": {
+    "from": "Starting the screen saver…",
+    "text": "Iniciando o protetor de tela…"
+  },
+  "tv.game.none": {
+    "from": "This TV has no Game Optimizer",
+    "text": "Esta TV não tem Otimizador de Jogos"
+  },
+  "tv.home.app.hint": {
+    "from": "Hold OK on an app on Native Tv Home to move or hide it.",
+    "text": "Segure OK em um app no Início do Native Tv para movê-lo ou ocultá-lo."
+  },
+  "tv.home.appsTab.hint": {
+    "from": "Hold OK on an app on the Apps tab to move or hide it there.",
+    "text": "Segure OK em um app na aba Apps para movê-lo ou ocultá-lo ali."
+  },
+  "tv.home.ch.add": {
+    "from": "Press OK to add it",
+    "text": "Pressione OK para adicionar"
+  },
+  "tv.home.ch.hint": {
+    "from": "From the TV’s own channel list. Each one added goes on the end of the Channels row.",
+    "text": "Da lista de canais da própria TV. Cada canal adicionado vai para o fim da linha Canais."
+  },
+  "tv.home.kind.up": {
+    "from": "Press OK to move it up one",
+    "text": "Pressione OK para mover uma posição acima"
+  },
+  "tv.home.reset.press": {
+    "from": "Press OK, then again, to reset",
+    "text": "Pressione OK duas vezes para redefinir"
+  },
+  "tv.home.sort.hint": {
+    "from": "As arranged on the browser dashboard’s Home tab.",
+    "text": "Conforme organizado na aba Início do painel no navegador."
+  },
+  "tv.home.tile.hint": {
+    "from": "Tiles are moved on the browser dashboard’s Home tab.",
+    "text": "Os blocos são movidos na aba Início do painel no navegador."
+  },
+  "tv.live.bootedDays": {
+    "from": "Booted {n} days ago",
+    "text": "Inicializada há {n} dias"
+  },
+  "tv.live.cores": {
+    "from": "{n} cores",
+    "text": "{n} núcleos"
+  },
+  "tv.live.day.fri": {
+    "from": "Friday",
+    "text": "Sexta-feira"
+  },
+  "tv.live.day.mon": {
+    "from": "Monday",
+    "text": "Segunda-feira"
+  },
+  "tv.live.day.sat": {
+    "from": "Saturday",
+    "text": "Sábado"
+  },
+  "tv.live.day.sun": {
+    "from": "Sunday",
+    "text": "Domingo"
+  },
+  "tv.live.day.thu": {
+    "from": "Thursday",
+    "text": "Quinta-feira"
+  },
+  "tv.live.day.tue": {
+    "from": "Tuesday",
+    "text": "Terça-feira"
+  },
+  "tv.live.day.wed": {
+    "from": "Wednesday",
+    "text": "Quarta-feira"
+  },
+  "tv.live.dbm": {
+    "from": "{level} dBm",
+    "text": "{level} dBm"
+  },
+  "tv.live.ethernet": {
+    "from": "Ethernet",
+    "text": "Ethernet"
+  },
+  "tv.live.ghz": {
+    "from": "{ghz} GHz",
+    "text": "{ghz} GHz"
+  },
+  "tv.live.hot": {
+    "from": "Hot",
+    "text": "Quente"
+  },
+  "tv.live.hours": {
+    "from": "hours",
+    "text": "horas"
+  },
+  "tv.live.hz": {
+    "from": "{n} Hz",
+    "text": "{n} Hz"
+  },
+  "tv.live.input": {
+    "from": "Input",
+    "text": "Entrada"
+  },
+  "tv.live.link": {
+    "from": "% link",
+    "text": "% de conexão"
+  },
+  "tv.live.memory": {
+    "from": "Memory",
+    "text": "Memória"
+  },
+  "tv.live.network": {
+    "from": "Network",
+    "text": "Rede"
+  },
+  "tv.live.noAnswer": {
+    "from": "Waiting for the TV",
+    "text": "Aguardando a TV"
+  },
+  "tv.live.noReading": {
+    "from": "No reading yet",
+    "text": "Ainda sem leitura"
+  },
+  "tv.live.noSensor": {
+    "from": "No sensor on this TV",
+    "text": "Esta TV não tem sensor"
+  },
+  "tv.live.normal": {
+    "from": "Normal",
+    "text": "Normal"
+  },
+  "tv.live.ofTotal": {
+    "from": "of {total} GB",
+    "text": "de {total} GB"
+  },
+  "tv.live.panel": {
+    "from": "Panel",
+    "text": "Painel"
+  },
+  "tv.live.processor": {
+    "from": "Processor",
+    "text": "Processador"
+  },
+  "tv.live.rates": {
+    "from": "Down {down} · Up {up}",
+    "text": "Recebimento {down} · Envio {up}"
+  },
+  "tv.live.reading": {
+    "from": "Reading the TV…",
+    "text": "Lendo dados da TV…"
+  },
+  "tv.live.refreshRate": {
+    "from": "Panel refresh rate",
+    "text": "Taxa de atualização do painel"
+  },
+  "tv.live.refresherIn": {
+    "from": "Pixel refresher in {hours} h",
+    "text": "Atualização de pixels em {hours} h"
+  },
+  "tv.live.since": {
+    "from": "Since {day} {time}",
+    "text": "Desde {day} às {time}"
+  },
+  "tv.live.swap": {
+    "from": "Swap {free} free of {total}",
+    "text": "Swap: {free} livres de {total}"
+  },
+  "tv.live.swapOff": {
+    "from": "Swap off",
+    "text": "Swap desativado"
+  },
+  "tv.live.temperature": {
+    "from": "Temperature",
+    "text": "Temperatura"
+  },
+  "tv.live.thisTv": {
+    "from": "This TV",
+    "text": "Esta TV"
+  },
+  "tv.live.title": {
+    "from": "Live",
+    "text": "Ao vivo"
+  },
+  "tv.live.unreachable": {
+    "from": "The TV's server did not answer. Trying again.",
+    "text": "O servidor da TV não respondeu. Tentando novamente."
+  },
+  "tv.live.upDays": {
+    "from": "{d}d {h}h",
+    "text": "{d}d {h}h"
+  },
+  "tv.live.upHours": {
+    "from": "{h}h {m}m",
+    "text": "{h}h {m}m"
+  },
+  "tv.live.updatedAgo": {
+    "from": "updated {n} s ago",
+    "text": "atualizado há {n} s"
+  },
+  "tv.live.updatedNow": {
+    "from": "updated just now",
+    "text": "atualizado agora"
+  },
+  "tv.live.uptime": {
+    "from": "Uptime",
+    "text": "Tempo de atividade"
+  },
+  "tv.live.warm": {
+    "from": "Warm",
+    "text": "Morno"
+  },
+  "tv.live.webos": {
+    "from": "webOS {version}",
+    "text": "webOS {version}"
+  },
+  "tv.live.wifi": {
+    "from": "Wi-Fi",
+    "text": "Wi-Fi"
+  },
+  "tv.live.wired": {
+    "from": "Wired",
+    "text": "Cabeada"
+  },
+  "tv.loading": {
+    "from": "Loading…",
+    "text": "Carregando…"
+  },
+  "tv.msg.nothing": {
+    "from": "Nothing to show here",
+    "text": "Nada para exibir aqui"
+  },
+  "tv.msg.wentWrong": {
+    "from": "Something went wrong",
+    "text": "Algo deu errado"
+  },
+  "tv.native.couldNotLoad": {
+    "from": "Could not load this screen",
+    "text": "Não foi possível carregar esta tela"
+  },
+  "tv.native.pressToRetry": {
+    "from": "Press OK to retry.",
+    "text": "Pressione OK para tentar novamente."
+  },
+  "tv.native.retry": {
+    "from": "Try again",
+    "text": "Tentar novamente"
+  },
+  "tv.net.notBack": {
+    "from": "It did not come back. Try again.",
+    "text": "Não voltou a responder. Tente novamente."
+  },
+  "tv.net.restarting": {
+    "from": "Applying it, the server restarts…",
+    "text": "Aplicando; o servidor será reiniciado…"
+  },
+  "tv.oled.cancelAScheduledRefresher": {
+    "from": "Cancel a scheduled refresher",
+    "text": "Cancelar atualização de pixels agendada"
+  },
+  "tv.oled.cancelAScheduledRefresher.hint": {
+    "from": "Clears a queued calibration so the TV does not spend an hour on it after the next switch-off.",
+    "text": "Cancela uma calibração agendada para que a TV não passe uma hora executando-a após o próximo desligamento."
+  },
+  "tv.oled.cancelAScheduledRefresher.press": {
+    "from": "Press OK to cancel",
+    "text": "Pressione OK para cancelar"
+  },
+  "tv.oled.globalStickyReduction": {
+    "from": "Global sticky reduction",
+    "text": "Redução global de imagens estáticas"
+  },
+  "tv.oled.globalStickyReduction.hint": {
+    "from": "Dims static content - channel logos, scoreboards, menu bars - so it does not burn in. Switching it off makes permanent image retention more likely.",
+    "text": "Escurece conteúdo estático, como logos de canais, placares e barras de menu, para evitar burn-in. Desativar aumenta o risco de retenção permanente de imagem."
+  },
+  "tv.oled.gsrStressEvents.hint": {
+    "from": "How often the panel has detected static image stress conditions. A rising count means static content is being shown for long stretches, even if GSR dimming is switched off.",
+    "text": "Frequência com que o painel detectou estresse por imagem estática. Um número crescente indica exibição prolongada de conteúdo estático, mesmo com o escurecimento GSR desativado."
+  },
+  "tv.oled.head.runNow": {
+    "from": "Run now",
+    "text": "Executar agora"
+  },
+  "tv.oled.logoDimming": {
+    "from": "Logo dimming",
+    "text": "Escurecimento de logos"
+  },
+  "tv.oled.logoDimming.hint": {
+    "from": "Spots a station logo that has not moved and fades it slightly. Higher settings dim more of the picture around it.",
+    "text": "Detecta um logo de emissora parado e o escurece levemente. Níveis mais altos escurecem uma área maior ao redor dele."
+  },
+  "tv.oled.noPanel": {
+    "from": "This TV has no OLED panel",
+    "text": "Esta TV não tem painel OLED"
+  },
+  "tv.oled.panelMaintenanceIn.hint": {
+    "from": "The short compensation pass, run roughly every four hours of use. It happens by itself after the TV is switched off.",
+    "text": "O ciclo curto de compensação, executado aproximadamente a cada quatro horas de uso. Ocorre automaticamente após o desligamento da TV."
+  },
+  "tv.oled.pixelRefresherCycles.hint": {
+    "from": "How many long calibrations the panel has run. These are the ones that matter for wear.",
+    "text": "Quantidade de calibrações longas executadas pelo painel. São elas que importam para o desgaste."
+  },
+  "tv.oled.pixelRefresherIn.hint": {
+    "from": "The long calibration, due about every 2,000 hours. It takes around an hour and runs once the TV is off.",
+    "text": "A calibração longa, necessária aproximadamente a cada 2.000 horas. Leva cerca de uma hora e é executada com a TV desligada."
+  },
+  "tv.oled.scheduleAPixelRefresher": {
+    "from": "Schedule a pixel refresher",
+    "text": "Agendar atualização de pixels"
+  },
+  "tv.oled.scheduleAPixelRefresher.hint": {
+    "from": "Queues the long calibration for the next time the TV is switched off. It cannot run while the screen is on.",
+    "text": "Agenda a calibração longa para o próximo desligamento da TV. Ela não pode ser executada com a tela ligada."
+  },
+  "tv.oled.scheduleAPixelRefresher.press": {
+    "from": "Press OK to schedule",
+    "text": "Pressione OK para agendar"
+  },
+  "tv.oled.screenShift": {
+    "from": "Screen shift",
+    "text": "Deslocamento de tela"
+  },
+  "tv.oled.screenShift.hint": {
+    "from": "Nudges the whole image by a pixel now and then so a fixed edge never sits on the same pixels. Invisible in use.",
+    "text": "Desloca a imagem inteira em um pixel de vez em quando, evitando que uma borda fixa permaneça nos mesmos pixels. É imperceptível durante o uso."
+  },
+  "tv.oled.shortCyclesCompleted.hint": {
+    "from": "How many short compensation passes the panel has run.",
+    "text": "Quantidade de ciclos curtos de compensação executados pelo painel."
+  },
+  "tv.oled.temporalPeakControl": {
+    "from": "Temporal peak control",
+    "text": "Controle de pico temporal"
+  },
+  "tv.oled.temporalPeakControl.hint": {
+    "from": "Limits how long the panel holds peak brightness, which protects it and keeps heat down. Switching it off makes burn-in more likely.",
+    "text": "Limita por quanto tempo o painel mantém o brilho máximo, protegendo-o e reduzindo o calor. Desativar aumenta o risco de burn-in."
+  },
+  "tv.oled.totalPowerOnHours": {
+    "from": "Total power-on hours",
+    "text": "Total de horas ligado"
+  },
+  "tv.oled.totalPowerOnHours.hint": {
+    "from": "Hours the panel has been lit since new. The figure the maintenance cycles below are scheduled against.",
+    "text": "Horas em que o painel ficou aceso desde novo. Os ciclos de manutenção abaixo são agendados com base neste valor."
+  },
+  "tv.options.alwaysReady.hint": {
+    "from": "Switched off with the remote, the TV shows LG's Always Ready screen, such as a clock or artwork, instead of going dark, from the next time it is switched off. Uses about 30 W on an LG C2, close to what it uses when on. Home turns the TV back on from the clock; the power button switches it fully off.",
+    "text": "Ao desligar pelo controle, a partir da próxima vez a TV exibe a tela Always Ready da LG, como um relógio ou uma imagem, em vez de apagar. Consome cerca de 30 W em uma LG C2, próximo do consumo com a TV ligada. Início volta à TV a partir do relógio; o botão de energia a desliga completamente."
+  },
+  "tv.options.deviceDetection.hint": {
+    "from": "Finds devices to show on the Home Dashboard and control: a set-top box, and smart lights, plugs and switches. Newer TVs look up every address on your home network each time they switch on to do it. Switched off, the scans stop and the TV no longer finds devices by itself.",
+    "text": "Encontra dispositivos para exibir e controlar no Painel Inicial: decodificadores e lâmpadas, tomadas e interruptores inteligentes. TVs mais novas consultam cada endereço da rede doméstica ao ligar. Ao desativar, as buscas param, e a TV deixa de encontrar dispositivos automaticamente."
+  },
+  "tv.options.idle.hint": {
+    "from": "Switches the TV off when no key has been pressed and no app, input or volume has changed for this long, and nothing is playing. A warning shows a minute before; any key keeps it on. An HDMI input is never switched off.",
+    "text": "Desliga a TV após este período sem teclas pressionadas, alterações de app, entrada ou volume e sem reprodução. Um aviso aparece um minuto antes; qualquer tecla mantém a TV ligada. Uma entrada HDMI nunca é desligada."
+  },
+  "tv.options.lgLogo.shown": {
+    "from": "Shown",
+    "text": "Exibido"
+  },
+  "tv.options.localLookups.hint": {
+    "from": "LG's device detection asks your router for the name of every address on your home network, on some TVs every 5 minutes. Switched on, the TV answers them itself, so they stay off your network.",
+    "text": "A detecção de dispositivos da LG consulta o roteador sobre o nome de cada endereço da rede doméstica, a cada 5 minutos em algumas TVs. Ao ativar, a própria TV responde, evitando essas consultas na rede."
+  },
+  "tv.options.logoLight.hint": {
+    "from": "The lit LG logo on the front of the TV.",
+    "text": "O logo iluminado da LG na frente da TV."
+  },
+  "tv.options.nightlyPowerDown.hint": {
+    "from": "For five hours every night, LG lets a switched-off TV sleep fully. It is offline then, so Native Tv and Home Assistant cannot reach it. LG fixes the length; choose hours when the TV is not used.",
+    "text": "Por cinco horas a cada noite, a LG permite que a TV desligada entre em repouso completo. Ela fica offline nesse período, e o Native Tv e o Home Assistant não conseguem acessá-la. A duração é fixa; escolha um horário em que a TV não seja usada."
+  },
+  "tv.options.nightlyPowerDown.press": {
+    "from": "Press OK to move it an hour later",
+    "text": "Pressione OK para adiar em uma hora"
+  },
+  "tv.options.nothingToSetOn": {
+    "from": "Nothing to set on this TV",
+    "text": "Nada para configurar nesta TV"
+  },
+  "tv.options.powerOff.hint": {
+    "from": "The same as the power button on the remote.",
+    "text": "Equivale ao botão de energia do controle."
+  },
+  "tv.options.reboot.hint": {
+    "from": "A full restart of the TV, which LG’s menus do not offer. It is unavailable for about a minute.",
+    "text": "Reinicia completamente a TV, uma opção que os menus da LG não oferecem. A TV fica indisponível por cerca de um minuto."
+  },
+  "tv.options.sleep.hint": {
+    "from": "Switches the TV off once this time has passed.",
+    "text": "Desliga a TV após este período."
+  },
+  "tv.options.stayConnected.hint": {
+    "from": "Keeps the TV on the network while it is switched off, apart from five hours each night, so Native Tv and Home Assistant keep working. The screen stays dark. Uses about 12 W on an LG C2.",
+    "text": "Mantém a TV na rede quando desligada, exceto por cinco horas a cada noite, para que o Native Tv e o Home Assistant continuem funcionando. A tela permanece apagada. Consome cerca de 12 W em uma LG C2."
+  },
+  "tv.options.timer.hint": {
+    "from": "The time and days are set from Native Tv in a browser, under Advanced.",
+    "text": "O horário e os dias são definidos pelo Native Tv em um navegador, na seção Avançado."
+  },
+  "tv.options.timer.off": {
+    "from": "Off ({when})",
+    "text": "Desligado ({when})"
+  },
+  "tv.options.timer.once": {
+    "from": "{time}, once",
+    "text": "{time}, uma vez"
+  },
+  "tv.options.timer.repeats": {
+    "from": "{time}, repeats {days}",
+    "text": "{time}, repete {days}"
+  },
+  "tv.options.wol.hint": {
+    "from": "Lets Home Assistant, a phone or another device on the network switch the TV on from standby. Requires Quick Boot (Quick Start+) to keep the network connection responsive while off. LG calls this Mobile TV On.",
+    "text": "Permite que o Home Assistant, um celular ou outro dispositivo na rede ligue a TV em espera. Exige Inicialização Rápida (Quick Start+) para manter a conexão de rede responsiva quando desligada. A LG chama isso de Ligar TV com Dispositivo Móvel."
+  },
+  "tv.pin.busy": {
+    "from": "Too many pending requests. Try again.",
+    "text": "Há muitas solicitações pendentes. Tente novamente."
+  },
+  "tv.pin.cancel": {
+    "from": "Cancel",
+    "text": "Cancelar"
+  },
+  "tv.pin.failed": {
+    "from": "The TV did not answer. Try again.",
+    "text": "A TV não respondeu. Tente novamente."
+  },
+  "tv.pin.field": {
+    "from": "Four digits",
+    "text": "Quatro dígitos"
+  },
+  "tv.pin.lead": {
+    "from": "That needs the four-digit admin PIN. Once entered, it stays unlocked until ten minutes pass without use.",
+    "text": "Esta ação exige o PIN de administrador de quatro dígitos. Após inseri-lo, o acesso fica liberado até passarem dez minutos sem uso."
+  },
+  "tv.pin.locked": {
+    "from": "Try again in {n} s",
+    "text": "Tente novamente em {n} s"
+  },
+  "tv.pin.none": {
+    "from": "No admin PIN is set. Do that again.",
+    "text": "Nenhum PIN de administrador foi definido. Tente novamente."
+  },
+  "tv.pin.title": {
+    "from": "Enter the admin PIN",
+    "text": "Digite o PIN de administrador"
+  },
+  "tv.pin.unlock": {
+    "from": "Unlock",
+    "text": "Desbloquear"
+  },
+  "tv.pin.unlocked": {
+    "from": "Unlocked. Do that again.",
+    "text": "Desbloqueado. Repita a ação."
+  },
+  "tv.pin.wrong": {
+    "from": "Wrong PIN. Try again.",
+    "text": "PIN incorreto. Tente novamente."
+  },
+  "tv.privacy.acr": {
+    "from": "Screen content recognition",
+    "text": "Reconhecimento de conteúdo da tela"
+  },
+  "tv.privacy.acr.hint": {
+    "from": "LG’s ACR captures what is on screen, from apps and HDMI alike, to work out what you watch and target ads at you.",
+    "text": "O ACR da LG captura o conteúdo da tela, tanto de apps quanto de HDMI, para identificar o que você assiste e direcionar anúncios."
+  },
+  "tv.privacy.acrService.hint": {
+    "from": "acr2, LG’s recognition program. The TV starts it at boot, and anything that asks it a question starts it again.",
+    "text": "acr2, o programa de reconhecimento da LG. A TV o inicia ao ligar, e qualquer consulta a ele o inicia novamente."
+  },
+  "tv.privacy.adsTelemetry.hint": {
+    "from": "Blocks advertising, tracking and diagnostics addresses. LG’s app store and software updates still work.",
+    "text": "Bloqueia endereços de publicidade, rastreamento e diagnóstico. A loja de apps e as atualizações de software da LG continuam funcionando."
+  },
+  "tv.privacy.allAds.hint": {
+    "from": "Switches every ad and promotion below on or off together. Each can still be set by itself.",
+    "text": "Ativa ou desativa todos os anúncios e promoções abaixo. Cada um ainda pode ser configurado individualmente."
+  },
+  "tv.privacy.allOff.hint": {
+    "from": "Includes blocking LG’s ad and tracking servers. If an app stops working afterwards, switch blocking off further down.",
+    "text": "Inclui o bloqueio de servidores de anúncios e rastreamento da LG. Se um app parar de funcionar depois, desative o bloqueio mais abaixo."
+  },
+  "tv.privacy.allOff.press": {
+    "from": "Press OK to switch it all off",
+    "text": "Pressione OK para desativar tudo"
+  },
+  "tv.privacy.anon.hint": {
+    "from": "Recorded by the TV, tied to no agreement on this firmware, and not writable.",
+    "text": "Registrado pela TV, sem vínculo com qualquer acordo neste firmware e sem permissão de alteração."
+  },
+  "tv.privacy.area.nothingOn": {
+    "from": "Nothing on",
+    "text": "Nada ativado"
+  },
+  "tv.privacy.area.stillOn": {
+    "from": "{n} still on",
+    "text": "{n} ainda ativados"
+  },
+  "tv.privacy.area.stillOnNames": {
+    "from": "Still on: {names}.",
+    "text": "Ainda ativado: {names}."
+  },
+  "tv.privacy.blockTvUpdates.hint": {
+    "from": "Stops LG installing its firmware updates, which may remove root access. Native Tv releases are installed through server deployment or the Homebrew Channel.",
+    "text": "Impede que a LG instale atualizações de firmware, que podem remover o acesso root. Versões do Native Tv são instaladas pela implantação do servidor ou pelo Homebrew Channel."
+  },
+  "tv.privacy.blocking": {
+    "from": "Blocking",
+    "text": "Bloqueio"
+  },
+  "tv.privacy.blocking.streaming": {
+    "from": "Streaming apps are untouched.",
+    "text": "Os apps de streaming não são alterados."
+  },
+  "tv.privacy.blocking.troubleshoot": {
+    "from": "If an app stops working, switch blocking off to check whether it is the cause.",
+    "text": "Se um app parar de funcionar, desative o bloqueio para verificar se ele é a causa."
+  },
+  "tv.privacy.capture": {
+    "from": "Capture",
+    "text": "Capturar"
+  },
+  "tv.privacy.capture.hint": {
+    "from": "Whether it is sampling the screen right now, as opposed to merely being switched on.",
+    "text": "Indica se está capturando amostras da tela agora, em vez de apenas estar ativado."
+  },
+  "tv.privacy.consentsSwitchedOn": {
+    "from": "Consents switched on",
+    "text": "Permissões ativadas"
+  },
+  "tv.privacy.consentsSwitchedOn.hint": {
+    "from": "The agreements the TV records against this account, each with what it lets LG do.",
+    "text": "Os acordos registrados pela TV nesta conta, com o que cada um permite à LG fazer."
+  },
+  "tv.privacy.controlsOff": {
+    "from": "Controls are switched off in this dashboard’s config.",
+    "text": "Os controles estão desativados na configuração deste painel."
+  },
+  "tv.privacy.custom.add": {
+    "from": "{n} names, with Native Tv’s",
+    "text": "{n} domínios, junto aos do Native Tv"
+  },
+  "tv.privacy.custom.hint": {
+    "from": "Your own list of names to block, sent from the browser dashboard (Privacy, under the blocker) and changed or removed there.",
+    "text": "Sua própria lista de domínios a bloquear, enviada pelo painel no navegador, em Privacidade, na seção de bloqueio. Altere ou remova a lista por lá."
+  },
+  "tv.privacy.custom.none": {
+    "from": "No list",
+    "text": "Sem lista"
+  },
+  "tv.privacy.custom.off": {
+    "from": "Off, {n} names kept",
+    "text": "Desativado, {n} nomes mantidos"
+  },
+  "tv.privacy.custom.replace": {
+    "from": "{n} names, instead of Native Tv’s",
+    "text": "{n} domínios, no lugar dos do Native Tv"
+  },
+  "tv.privacy.everything.hint": {
+    "from": "Also blocks LG’s platform services. The LG ThinQ app can no longer control the TV, and the app store, software updates and LG Channels may stop working.",
+    "text": "Também bloqueia os serviços da plataforma LG. O app LG ThinQ deixa de controlar a TV, e a loja de apps, as atualizações de software e o LG Channels podem parar de funcionar."
+  },
+  "tv.privacy.head.adAndTrackerBlocking": {
+    "from": "Ad and tracker blocking",
+    "text": "Bloqueio de anúncios e rastreadores"
+  },
+  "tv.privacy.head.dataConsents": {
+    "from": "Data consents",
+    "text": "Permissões de dados"
+  },
+  "tv.privacy.head.screenContentRecognition": {
+    "from": "Screen content recognition",
+    "text": "Reconhecimento de conteúdo da tela"
+  },
+  "tv.privacy.head.systemUpdates": {
+    "from": "System updates",
+    "text": "Atualizações do sistema"
+  },
+  "tv.privacy.head.trackingAndAdsOverview": {
+    "from": "Tracking and ads overview",
+    "text": "Visão geral de rastreamento e anúncios"
+  },
+  "tv.privacy.leftOn": {
+    "from": "Left on",
+    "text": "Permaneceu ativado"
+  },
+  "tv.privacy.leftOn.count": {
+    "from": "{n} kept",
+    "text": "{n} mantidos"
+  },
+  "tv.privacy.leftOn.hint": {
+    "from": "These run features, so switching it all off leaves them: {names}. They can be switched off further down.",
+    "text": "Estes serviços são necessários para recursos, então Desativar tudo os preserva: {names}. Eles podem ser desativados mais abaixo."
+  },
+  "tv.privacy.lgDataServicesRunning": {
+    "from": "LG data services running",
+    "text": "Serviços de dados da LG em execução"
+  },
+  "tv.privacy.lgDataServicesRunning.hint": {
+    "from": "Background services that collect and send usage data. They are switched off in the Apps tab.",
+    "text": "Serviços em segundo plano que coletam e enviam dados de uso. Eles são desativados na aba Apps."
+  },
+  "tv.privacy.lmt.hint": {
+    "from": "When on, apps are asked not to use the TV’s advertising ID to profile the viewer. It is a request, not an enforcement.",
+    "text": "Quando ativado, solicita aos apps que não usem o ID de publicidade da TV para traçar o perfil de quem assiste. É uma solicitação, não uma imposição."
+  },
+  "tv.privacy.nOfTotal": {
+    "from": "{n} of {total}",
+    "text": "{n} de {total}"
+  },
+  "tv.privacy.otherGroup": {
+    "from": "Other",
+    "text": "Outros"
+  },
+  "tv.privacy.partOf": {
+    "from": "Part of: {names}.",
+    "text": "Parte de: {names}."
+  },
+  "tv.privacy.resetTheAdvertisingId": {
+    "from": "Reset the advertising ID",
+    "text": "Redefinir o ID de publicidade"
+  },
+  "tv.privacy.resetTheAdvertisingId.hint": {
+    "from": "Issues a fresh identifier, which breaks the link to whatever has been collected against the old one. Harmless to repeat.",
+    "text": "Gera um novo identificador, rompendo o vínculo com os dados coletados pelo antigo. Pode ser repetido sem problemas."
+  },
+  "tv.privacy.resetTheAdvertisingId.press": {
+    "from": "Press OK to reset",
+    "text": "Pressione OK para redefinir"
+  },
+  "tv.privacy.sharesWith": {
+    "from": "Switching this off also switches off {names}.",
+    "text": "Desativar esta opção também desativa {names}."
+  },
+  "tv.profiles.add": {
+    "from": "Add profile",
+    "text": "Adicionar perfil"
+  },
+  "tv.profiles.added": {
+    "from": "Profile added",
+    "text": "Perfil adicionado"
+  },
+  "tv.profiles.colourFailed": {
+    "from": "The colour could not be saved",
+    "text": "Não foi possível salvar a cor"
+  },
+  "tv.profiles.current": {
+    "from": "Watching now",
+    "text": "Assistindo agora"
+  },
+  "tv.profiles.lead": {
+    "from": "Each profile has its own Home.",
+    "text": "Cada perfil tem seu próprio Início."
+  },
+  "tv.profiles.rename": {
+    "from": "Rename profile",
+    "text": "Renomear perfil"
+  },
+  "tv.profiles.return": {
+    "from": "Return",
+    "text": "Retornar"
+  },
+  "tv.profiles.title": {
+    "from": "Who’s watching?",
+    "text": "Quem está assistindo?"
+  },
+  "tv.quick.appNames": {
+    "from": "App names",
+    "text": "Nomes dos apps"
+  },
+  "tv.quick.backlight": {
+    "from": "Backlight",
+    "text": "Luz de fundo"
+  },
+  "tv.quick.clock24": {
+    "from": "24-hour clock",
+    "text": "Relógio de 24 horas"
+  },
+  "tv.quick.input": {
+    "from": "Input",
+    "text": "Entrada"
+  },
+  "tv.quick.levelHint": {
+    "from": "OK chooses. Left or Back returns.",
+    "text": "OK seleciona. Esquerda ou Voltar retorna."
+  },
+  "tv.quick.lightHint": {
+    "from": "Left and Right adjust.",
+    "text": "Esquerda e Direita ajustam."
+  },
+  "tv.quick.minutes": {
+    "from": "{n} min",
+    "text": "{n} min"
+  },
+  "tv.quick.muted": {
+    "from": "Muted",
+    "text": "Sem som"
+  },
+  "tv.quick.noAnswer": {
+    "from": "The TV did not answer. Trying again…",
+    "text": "A TV não respondeu. Tentando novamente…"
+  },
+  "tv.quick.nothing": {
+    "from": "Nothing to choose from",
+    "text": "Nenhuma opção disponível"
+  },
+  "tv.quick.nothingConnected": {
+    "from": "Nothing connected",
+    "text": "Nada conectado"
+  },
+  "tv.quick.off": {
+    "from": "Off",
+    "text": "Desligado"
+  },
+  "tv.quick.oledLight": {
+    "from": "OLED light",
+    "text": "Luz OLED"
+  },
+  "tv.quick.picture": {
+    "from": "Picture details",
+    "text": "Detalhes da imagem"
+  },
+  "tv.quick.pictureMode": {
+    "from": "Picture mode",
+    "text": "Modo de imagem"
+  },
+  "tv.quick.port": {
+    "from": "HDMI {port}",
+    "text": "HDMI {port}"
+  },
+  "tv.quick.profile": {
+    "from": "Profile",
+    "text": "Perfil"
+  },
+  "tv.quick.recents": {
+    "from": "Recent apps",
+    "text": "Apps recentes"
+  },
+  "tv.quick.screenOff": {
+    "from": "Screen off",
+    "text": "Apagar tela"
+  },
+  "tv.quick.screensaver": {
+    "from": "Screensaver",
+    "text": "Protetor de tela"
+  },
+  "tv.quick.settings": {
+    "from": "Home settings",
+    "text": "Configurações do Início"
+  },
+  "tv.quick.showInputs": {
+    "from": "Inputs tab",
+    "text": "Aba Entradas"
+  },
+  "tv.quick.showLgHome": {
+    "from": "LG Home tile",
+    "text": "Bloco do Início da LG"
+  },
+  "tv.quick.showLive": {
+    "from": "Live tab",
+    "text": "Aba Ao vivo"
+  },
+  "tv.quick.sleep": {
+    "from": "Sleep timer",
+    "text": "Temporizador de suspensão"
+  },
+  "tv.quick.sound": {
+    "from": "Sound output",
+    "text": "Saída de som"
+  },
+  "tv.quick.switchHint": {
+    "from": "OK switches. Left or Back returns.",
+    "text": "OK altera. Esquerda ou Voltar retorna."
+  },
+  "tv.quick.title": {
+    "from": "Quick settings",
+    "text": "Configurações rápidas"
+  },
+  "tv.quick.volume": {
+    "from": "Volume",
+    "text": "Volume"
+  },
+  "tv.quick.volumeHint": {
+    "from": "Left and Right adjust. OK mutes.",
+    "text": "Esquerda e Direita ajustam. OK silencia."
+  },
+  "tv.saver.brightness.hint": {
+    "from": "Dim suits a dark room and is kinder to the panel; bright suits a lit one.",
+    "text": "Suave é adequado para ambientes escuros e preserva o painel; Claro é adequado para ambientes iluminados."
+  },
+  "tv.saver.external": {
+    "from": "Homebrew screen saver",
+    "text": "Protetor de tela homebrew"
+  },
+  "tv.saver.head.howItLooks": {
+    "from": "How it looks",
+    "text": "Aparência"
+  },
+  "tv.saver.head.screenSaver": {
+    "from": "Screen saver",
+    "text": "Protetor de tela"
+  },
+  "tv.saver.head.whenItStarts": {
+    "from": "When it starts",
+    "text": "Ao iniciar"
+  },
+  "tv.saver.held": {
+    "from": "Custom screen savers",
+    "text": "Protetores de tela personalizados"
+  },
+  "tv.saver.ours.hint": {
+    "from": "Replaces LG’s screen saver. Everything on it drifts slowly so no pixel holds the same image.",
+    "text": "Substitui o protetor de tela da LG. Todos os elementos se movem lentamente para que nenhum pixel mantenha a mesma imagem."
+  },
+  "tv.saver.slowSwitch": {
+    "from": "Switching to or from LG's screen saver may leave the screen dark for about a minute.",
+    "text": "Alternar para o protetor de tela da LG ou sair dele pode deixar a tela apagada por cerca de um minuto."
+  },
+  "tv.saver.startScreenSaver.hint": {
+    "from": "Shows the screen saver in use straight away, to see how it looks. Any button on the remote ends it.",
+    "text": "Exibe imediatamente o protetor de tela em uso para você ver como fica. Qualquer botão do controle encerra a exibição."
+  },
+  "tv.saver.startScreenSaver.press": {
+    "from": "Press OK to start it",
+    "text": "Pressione OK para iniciar"
+  },
+  "tv.saver.stock.hint": {
+    "from": "LG’s own screen saver.",
+    "text": "O protetor de tela da própria LG."
+  },
+  "tv.saver.switchingScreenSavers": {
+    "from": "Switching screen savers",
+    "text": "Trocando protetores de tela"
+  },
+  "tv.saver.switchingScreenSavers.hint": {
+    "from": "The screen may stay dark for up to a minute, then it comes back on its own.",
+    "text": "A tela pode ficar apagada por até um minuto e depois volta sozinha."
+  },
+  "tv.saver.use": {
+    "from": "Press OK to use this one",
+    "text": "Pressione OK para usar este"
+  },
+  "tv.service.head.lgDataServices": {
+    "from": "LG data services",
+    "text": "Serviços de dados da LG"
+  },
+  "tv.service.noneOnThisTv": {
+    "from": "None on this TV",
+    "text": "Nenhum nesta TV"
+  },
+  "tv.service.whereOff": {
+    "from": "Switched off in the Apps tab, under Turn off LG’s bloatware services.",
+    "text": "Desativado na aba Apps, em Desativar serviços dispensáveis da LG."
+  },
+  "tv.settings.address": {
+    "from": "Address",
+    "text": "Endereço"
+  },
+  "tv.settings.address.hint": {
+    "from": "Where the web dashboard is, for a browser on a phone or computer on your home network.",
+    "text": "O endereço do painel web, para acessar pelo navegador de um celular ou computador na rede doméstica."
+  },
+  "tv.settings.address.scan": {
+    "from": "Scan to open it on your phone.",
+    "text": "Escaneie para abrir no celular."
+  },
+  "tv.settings.asksFirst": {
+    "from": "Asks to confirm",
+    "text": "Pede confirmação"
+  },
+  "tv.settings.backCancels": {
+    "from": "Back cancels",
+    "text": "Voltar cancela"
+  },
+  "tv.settings.cancelled": {
+    "from": "Cancelled",
+    "text": "Cancelado"
+  },
+  "tv.settings.change": {
+    "from": "Change",
+    "text": "Alterar"
+  },
+  "tv.settings.confirmToast": {
+    "from": "Press OK again to confirm. Back cancels.",
+    "text": "Pressione OK novamente para confirmar. Voltar cancela."
+  },
+  "tv.settings.group.apps": {
+    "from": "Apps",
+    "text": "Apps"
+  },
+  "tv.settings.group.apps.desc": {
+    "from": "Install and remove apps, and choose what LG's Home screen shows.",
+    "text": "Instale e remova apps e escolha o que a tela inicial da LG exibe."
+  },
+  "tv.settings.group.game": {
+    "from": "Game",
+    "text": "Jogo"
+  },
+  "tv.settings.group.game.desc": {
+    "from": "LG's Game Optimizer settings.",
+    "text": "Configurações do Otimizador de Jogos da LG."
+  },
+  "tv.settings.group.home": {
+    "from": "Home",
+    "text": "Início"
+  },
+  "tv.settings.group.home.desc": {
+    "from": "Native Tv Home: whether it replaces LG's, and how it looks.",
+    "text": "Início do Native Tv: substituição do Início da LG e aparência."
+  },
+  "tv.settings.group.metrics": {
+    "from": "Metrics",
+    "text": "Métricas"
+  },
+  "tv.settings.group.metrics.desc": {
+    "from": "Readings from the TV: processor, memory, storage and what it is.",
+    "text": "Dados da TV: processador, memória, armazenamento e identificação."
+  },
+  "tv.settings.group.oled": {
+    "from": "OLED Care",
+    "text": "Cuidados OLED"
+  },
+  "tv.settings.group.oled.desc": {
+    "from": "Panel life, burn-in protections and pixel refreshes.",
+    "text": "Vida útil do painel, proteções contra burn-in e atualizações de pixels."
+  },
+  "tv.settings.group.privacy": {
+    "from": "Privacy",
+    "text": "Privacidade"
+  },
+  "tv.settings.group.privacy.desc": {
+    "from": "Ads, trackers and the data the TV shares.",
+    "text": "Anúncios, rastreadores e os dados que a TV compartilha."
+  },
+  "tv.settings.group.saver": {
+    "from": "Screen Saver",
+    "text": "Protetor de tela"
+  },
+  "tv.settings.group.saver.desc": {
+    "from": "Choose and try the screen saver.",
+    "text": "Escolha e teste o protetor de tela."
+  },
+  "tv.settings.group.service": {
+    "from": "Service Menu",
+    "text": "Menu de serviço"
+  },
+  "tv.settings.group.service.desc": {
+    "from": "LG's engineering menus.",
+    "text": "Menus de engenharia da LG."
+  },
+  "tv.settings.group.settings": {
+    "from": "Settings",
+    "text": "Configurações"
+  },
+  "tv.settings.group.settings.desc": {
+    "from": "The web dashboard and Home Assistant, changed only on the TV.",
+    "text": "O painel web e o Home Assistant, alterados apenas na TV."
+  },
+  "tv.settings.group.system": {
+    "from": "System",
+    "text": "Sistema"
+  },
+  "tv.settings.group.system.desc": {
+    "from": "Power, timers, sound and devices.",
+    "text": "Energia, temporizadores, som e dispositivos."
+  },
+  "tv.settings.ha.connected": {
+    "from": "Connected to Home Assistant through your MQTT broker. The TV reports its state and takes commands, so it can join your automations.",
+    "text": "Conectado ao Home Assistant pelo seu broker MQTT. A TV informa seu estado e recebe comandos para participar das suas automações."
+  },
+  "tv.settings.ha.failing": {
+    "from": "The MQTT broker’s details are saved, but the TV cannot connect to it yet. Set it up again to check them.",
+    "text": "Os dados do broker MQTT estão salvos, mas a TV ainda não consegue se conectar. Configure novamente para conferi-los."
+  },
+  "tv.settings.ha.none": {
+    "from": "Connects this TV to Home Assistant through an MQTT broker, such as Home Assistant’s Mosquitto add-on, so it can join your automations. The broker’s details are entered on your phone.",
+    "text": "Conecta esta TV ao Home Assistant por um broker MQTT, como o complemento Mosquitto do Home Assistant, para participar das suas automações. Os dados do broker são inseridos no celular."
+  },
+  "tv.settings.ha.notConnecting": {
+    "from": "Not connecting",
+    "text": "Sem conexão"
+  },
+  "tv.settings.ha.notSetUp": {
+    "from": "Not set up",
+    "text": "Não configurado"
+  },
+  "tv.settings.head.thisDashboard": {
+    "from": "This dashboard",
+    "text": "Este painel"
+  },
+  "tv.settings.homeAssistant": {
+    "from": "Home Assistant",
+    "text": "Home Assistant"
+  },
+  "tv.settings.liveLink": {
+    "from": "Live",
+    "text": "Ao vivo"
+  },
+  "tv.settings.liveLink.desc": {
+    "from": "The same readings as cards, refreshed every few seconds.",
+    "text": "Os mesmos dados em cartões, atualizados a cada poucos segundos."
+  },
+  "tv.settings.noAnswer": {
+    "from": "The server did not answer. Press OK to retry.",
+    "text": "O servidor não respondeu. Pressione OK para tentar novamente."
+  },
+  "tv.settings.open": {
+    "from": "Open",
+    "text": "Abrir"
+  },
+  "tv.settings.openHome": {
+    "from": "Open Native Tv Home on the TV.",
+    "text": "Abra o Início do Native Tv na TV."
+  },
+  "tv.settings.page.blocking": {
+    "from": "Blocking",
+    "text": "Bloqueio"
+  },
+  "tv.settings.page.data": {
+    "from": "Data",
+    "text": "Dados"
+  },
+  "tv.settings.page.devices": {
+    "from": "Display and devices",
+    "text": "Tela e dispositivos"
+  },
+  "tv.settings.page.gamePicture": {
+    "from": "Picture",
+    "text": "Imagem"
+  },
+  "tv.settings.page.gameSignal": {
+    "from": "Signal",
+    "text": "Sinal"
+  },
+  "tv.settings.page.gameSound": {
+    "from": "Sound",
+    "text": "Som"
+  },
+  "tv.settings.page.homeScreen": {
+    "from": "LG launcher",
+    "text": "Tela inicial da LG"
+  },
+  "tv.settings.page.installed": {
+    "from": "Installed",
+    "text": "Instalado"
+  },
+  "tv.settings.page.keptReady": {
+    "from": "Kept ready",
+    "text": "Mantido pronto"
+  },
+  "tv.settings.page.lgAds": {
+    "from": "LG ads",
+    "text": "Anúncios da LG"
+  },
+  "tv.settings.page.more": {
+    "from": "More",
+    "text": "Mais"
+  },
+  "tv.settings.page.overview": {
+    "from": "Overview",
+    "text": "Sinopse"
+  },
+  "tv.settings.page.saverOptions": {
+    "from": "Options",
+    "text": "Opções"
+  },
+  "tv.settings.page.services": {
+    "from": "LG bloatware",
+    "text": "Apps dispensáveis da LG"
+  },
+  "tv.settings.page.sound": {
+    "from": "Sound and HDMI",
+    "text": "Som e HDMI"
+  },
+  "tv.settings.page.systemApps": {
+    "from": "System apps",
+    "text": "Apps de sistema"
+  },
+  "tv.settings.page.tracking": {
+    "from": "Tracking",
+    "text": "Rastreamento"
+  },
+  "tv.settings.pressAgain": {
+    "from": "Press OK again to confirm",
+    "text": "Pressione OK novamente para confirmar"
+  },
+  "tv.settings.run": {
+    "from": "Run it",
+    "text": "Executar"
+  },
+  "tv.settings.saved": {
+    "from": "Saved",
+    "text": "Salvo"
+  },
+  "tv.settings.status.hours": {
+    "from": "{n} h",
+    "text": "{n} h"
+  },
+  "tv.settings.status.installed": {
+    "from": "{n} installed",
+    "text": "{n} instalados"
+  },
+  "tv.settings.status.notOnTv": {
+    "from": "Not on this TV",
+    "text": "Não disponível nesta TV"
+  },
+  "tv.settings.status.stillOn": {
+    "from": "{n} still on",
+    "text": "{n} ainda ativados"
+  },
+  "tv.settings.subtitle": {
+    "from": "Changes apply as soon as they are made.",
+    "text": "As alterações são aplicadas imediatamente."
+  },
+  "tv.settings.switching": {
+    "from": "Switching…",
+    "text": "Alterando…"
+  },
+  "tv.settings.title": {
+    "from": "Settings",
+    "text": "Configurações"
+  },
+  "tv.settings.turnOff": {
+    "from": "Turn off",
+    "text": "Desativar"
+  },
+  "tv.settings.turnOn": {
+    "from": "Turn on",
+    "text": "Ativar"
+  },
+  "tv.settings.web.hint": {
+    "from": "A fuller version of this dashboard, with more controls, for a browser on a phone or computer.",
+    "text": "Uma versão mais completa deste painel, com mais controles, para acessar pelo navegador do celular ou computador."
+  },
+  "tv.settings.web.off": {
+    "from": "It is off, so only this TV can reach the dashboard.",
+    "text": "Está desativado, então apenas esta TV pode acessar o painel."
+  },
+  "tv.settings.web.open": {
+    "from": "It is on for your home network, with no password, so anyone on that network can use it.",
+    "text": "Está disponível na rede doméstica, sem senha, para qualquer pessoa nessa rede."
+  },
+  "tv.settings.web.token": {
+    "from": "It is on for your home network, and needs the dashboard’s access token, which the code under Address includes.",
+    "text": "Está disponível na rede doméstica e exige o token de acesso do painel, incluído no código em Endereço."
+  },
+  "tv.settings.webDashboard": {
+    "from": "Web dashboard",
+    "text": "Painel web"
+  },
+  "tv.svc.lock": {
+    "from": "Lock",
+    "text": "Bloqueio"
+  },
+  "tv.svc.lock.hint": {
+    "from": "Locked keeps the engineering menus shut even to someone who knows the button sequence.",
+    "text": "O bloqueio mantém os menus de engenharia fechados, mesmo para quem conhece a sequência de botões."
+  },
+  "tv.svc.notAvailableOnThis": {
+    "from": "Not available on this TV",
+    "text": "Indisponível nesta TV"
+  },
+  "tv.svc.openEzAdjust": {
+    "from": "Open EZ Adjust",
+    "text": "Abrir EZ Adjust"
+  },
+  "tv.svc.openEzAdjust.hint": {
+    "from": "LG’s engineering menu for hardware configuration, Tool Options, and white balance calibration. The TV asks for a four-digit PIN — usually 0413, though it varies by model and region.",
+    "text": "Menu de engenharia da LG para configuração de hardware, Tool Options e calibração de balanço de branco. A TV pede um PIN de quatro dígitos, geralmente 0413, mas isso varia por modelo e região."
+  },
+  "tv.svc.openEzAdjust.press": {
+    "from": "Press OK to open",
+    "text": "Pressione OK para abrir"
+  },
+  "tv.svc.openInStart": {
+    "from": "Open In Start",
+    "text": "Abrir In Start"
+  },
+  "tv.svc.openInStart.hint": {
+    "from": "LG’s factory diagnostic menu for system status, total power-on hours (UTT), error logs, and OLED protections (TPC and GSR). The TV asks for a four-digit PIN — usually 0413, though it varies by model and region.",
+    "text": "Menu de diagnóstico de fábrica da LG para estado do sistema, total de horas ligado (UTT), registros de erros e proteções OLED (TPC e GSR). A TV pede um PIN de quatro dígitos, geralmente 0413, mas isso varia por modelo e região."
+  },
+  "tv.svc.openInStart.press": {
+    "from": "Press OK to open",
+    "text": "Pressione OK para abrir"
+  },
+  "tv.system.cpuFrequency": {
+    "from": "CPU frequency",
+    "text": "Frequência da CPU"
+  },
+  "tv.system.cpuFrequency.hint": {
+    "from": "The current clock. It drops when the TV is idle and rises under load.",
+    "text": "A frequência atual. Diminui quando a TV está ociosa e aumenta sob carga."
+  },
+  "tv.system.cpuLoad": {
+    "from": "CPU load",
+    "text": "Uso da CPU"
+  },
+  "tv.system.cpuLoad.hint": {
+    "from": "Across all cores. Brief peaks while an app opens are normal; a sustained high figure with nothing playing is not.",
+    "text": "Considera todos os núcleos. Picos breves ao abrir um app são normais; uso alto constante sem nada em reprodução não é."
+  },
+  "tv.system.emmcHealth": {
+    "from": "eMMC health",
+    "text": "Saúde da eMMC"
+  },
+  "tv.system.emmcHealth.hint": {
+    "from": "Life left in the built-in storage, as the chip itself reports it. It falls very slowly and cannot be reset.",
+    "text": "Vida útil restante do armazenamento interno, conforme informado pelo próprio chip. Diminui muito lentamente e não pode ser zerada."
+  },
+  "tv.system.freeOf": {
+    "from": "{free} of {total}",
+    "text": "{free} de {total}"
+  },
+  "tv.system.gpuClock": {
+    "from": "GPU clock",
+    "text": "Frequência da GPU"
+  },
+  "tv.system.gpuClock.hint": {
+    "from": "Drives the interface and video scaling.",
+    "text": "Responsável pela interface e pelo redimensionamento do vídeo."
+  },
+  "tv.system.head.load": {
+    "from": "Load",
+    "text": "Carga"
+  },
+  "tv.system.head.memoryAndStorage": {
+    "from": "Memory and storage",
+    "text": "Memória e armazenamento"
+  },
+  "tv.system.head.thisTv": {
+    "from": "This TV",
+    "text": "Esta TV"
+  },
+  "tv.system.memoryFree": {
+    "from": "Memory free",
+    "text": "Memória livre"
+  },
+  "tv.system.memoryFree.hint": {
+    "from": "Free memory is expected to be low: webOS keeps apps loaded so they reopen quickly, and releases them under pressure.",
+    "text": "É normal haver pouca memória livre: o webOS mantém apps carregados para abri-los rapidamente e libera memória quando necessário."
+  },
+  "tv.system.model": {
+    "from": "Model",
+    "text": "Modelo"
+  },
+  "tv.system.panelRefresh": {
+    "from": "Panel refresh",
+    "text": "Atualização do painel"
+  },
+  "tv.system.perCoreLoad": {
+    "from": "Per-core load",
+    "text": "Uso por núcleo"
+  },
+  "tv.system.perCoreLoad.hint": {
+    "from": "One figure per core. An even spread is healthy; one core pinned while the rest idle points at a stuck process.",
+    "text": "Um valor por núcleo. Uma distribuição equilibrada é saudável; um núcleo no máximo enquanto os demais estão ociosos indica um processo travado."
+  },
+  "tv.system.remoteBattery": {
+    "from": "Remote battery",
+    "text": "Pilha do controle"
+  },
+  "tv.system.swapFree": {
+    "from": "Swap free",
+    "text": "Swap livre"
+  },
+  "tv.system.swapFree.hint": {
+    "from": "Compressed memory held in RAM rather than on disk, so heavy use costs speed but does not wear the storage.",
+    "text": "Memória comprimida mantida na RAM, em vez do disco. O uso intenso reduz a velocidade, mas não desgasta o armazenamento."
+  },
+  "tv.system.temperature.hint": {
+    "from": "The main processor (SoC) sensor, not the panel. It climbs with video decoding and CPU workload.",
+    "text": "O sensor do processador principal (SoC), não do painel. A temperatura sobe com a decodificação de vídeo e a carga da CPU."
+  },
+  "tv.system.wiFi": {
+    "from": "Wi-Fi",
+    "text": "Wi-Fi"
+  },
+  "tv.write.failed": {
+    "from": "That did not work",
+    "text": "Não funcionou"
+  },
+  "tv.write.timeout": {
+    "from": "the TV did not answer",
+    "text": "a TV não respondeu"
+  }
+}

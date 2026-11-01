@@ -337,5 +337,32 @@ int main() {
     (void)unlink((youtubeDir + "/home-discover.json").c_str());
     (void)unlink((youtubeDir + "/home-discover.json.tmp").c_str());
     (void)rmdir(youtubeDir.c_str());
+    {
+        TemporaryDirectory languages;
+        const auto localized = [](const std::string &url, Json &document, std::string &) {
+            document = titleReply(77);
+            document["results"][static_cast<size_t>(0)].set("title", Json::text(
+                url.find("language=pt-BR") != std::string::npos ? "Título" : "Title"));
+            return true;
+        };
+        {
+            HomeDiscover english(languages.path(), localized);
+            HomeDiscover portuguese(languages.path(), localized, HomeDiscover::Clock(), "pt-BR");
+            Json en, pt;
+            for (int attempt = 0; attempt < 500; ++attempt) {
+                en = english.feed("key", "");
+                pt = portuguese.feed("key", "");
+                if (en["rows"].size() && pt["rows"].size()) break;
+                std::this_thread::sleep_for(std::chrono::milliseconds(2));
+            }
+            assert(en["rows"][static_cast<size_t>(0)]["items"][static_cast<size_t>(0)]["title"].string() == "Title");
+            assert(pt["rows"][static_cast<size_t>(0)]["items"][static_cast<size_t>(0)]["title"].string() == "Título");
+        }
+        {
+            HomeDiscover portuguese(languages.path(), localized, HomeDiscover::Clock(), "pt-BR");
+            assert(portuguese.feed("key", "")["rows"][static_cast<size_t>(0)]["items"][static_cast<size_t>(0)]["title"].string() == "Título");
+        }
+        (void)unlink((languages.path() + "/home-discover.pt-BR.json").c_str());
+    }
     return 0;
 }

@@ -1,4 +1,6 @@
+#include "domain/say.hpp"
 #include "domain/models.hpp"
+#include "domain/locale.hpp"
 #include <algorithm>
 #include <map>
 
@@ -39,17 +41,18 @@ std::string artwork(const Json &item, bool hero) {
 std::string titleFacts(const Json &item, bool withKind) {
     std::vector<std::string> parts;
     if (withKind && item["type"].string() == "movie")
-        parts.push_back("Film");
+        parts.push_back(say::msg("launcher.content.film", "Film"));
     else if (withKind && item["type"].string() == "tv")
-        parts.push_back("Series");
+        parts.push_back(say::msg("launcher.content.series", "Series"));
     if (!item["year"].string().empty())
         parts.push_back(item["year"].string());
     if (item["rating"].number() > 0)
-        parts.push_back("★ " + compactNumber(item["rating"].number(), 1));
+        parts.push_back("★ " + localizedDecimal(item["rating"].number(), 1));
     if (item["runtime"].number() > 0)
         parts.push_back(compactNumber(item["runtime"].number()) + " min");
     if (item["seasons"].number() > 0)
-        parts.push_back(compactNumber(item["seasons"].number()) + " seasons");
+        parts.push_back(localizedPlural("launcher.content.seasons", "{count} season", "{count} seasons",
+                                       static_cast<uint64_t>(item["seasons"].number())));
     for (const auto &genre : item["genres"].items())
         parts.push_back(genre.string());
     std::string text;
@@ -73,7 +76,8 @@ std::string pictureLabel(const Json &picture) {
                 hz.pop_back();
             if (!hz.empty() && hz.back() == '.')
                 hz.pop_back();
-            dimensions += " at " + hz + " Hz";
+            dimensions = say::msg("launcher.content.signal", "{size} at {hz} Hz",
+                                  fields({{"size", Json::text(dimensions)}, {"hz", Json::text(hz)}}));
         }
         parts.push_back(dimensions);
         std::string hdr = signal["hdr"].string();
@@ -95,13 +99,13 @@ std::string pictureLabel(const Json &picture) {
     return text;
 }
 std::vector<Tab> homeTabs(const Json &catalogue) {
-    std::vector<Tab> tabs = {{"home", "Home", Operation::None}};
+    std::vector<Tab> tabs = {{"home", say::msg("launcher.home.title", "Home"), Operation::None}};
     if (catalogue["layout"]["showLive"].boolean() &&
         catalogue["sources"]["channels"].number(-1) != 0)
-        tabs.push_back({"live", "Live", Operation::None});
-    tabs.push_back({"apps", "Apps", Operation::None});
+        tabs.push_back({"live", say::msg("launcher.live.title", "Live"), Operation::None});
+    tabs.push_back({"apps", say::msg("launcher.apps.title", "Apps"), Operation::None});
     if (catalogue["layout"]["showInputs"].boolean(true) && catalogue["devices"].size())
-        tabs.push_back({"inputs", "Inputs", Operation::None});
+        tabs.push_back({"inputs", say::msg("launcher.inputs.title", "Inputs"), Operation::None});
     return tabs;
 }
 // The ids hidden from `list`: "app", "dev" or "ch" are Home's rows, "appsTab" is the Apps tab's own
@@ -125,7 +129,7 @@ CardRow catalogueRow(const std::string &kind, const Json &catalogue, const Json 
     const Json hiddenList = hiddenIds(catalogue, list.empty() ? kind : list);
     CardRow row;
     row.key = kind;
-    row.title = kind == "app" ? "Apps" : kind == "dev" ? "Inputs" : "Channels";
+    row.title = kind == "app" ? say::msg("launcher.apps.title", "Apps" ): kind == "dev" ? say::msg("launcher.inputs.title", "Inputs" ): say::msg("home.row.channels", "Channels");
     std::map<std::string, Json> index;
     for (const auto &item : catalogue[kind == "app"   ? "apps"
                                       : kind == "dev" ? "devices"
@@ -148,12 +152,12 @@ CardRow catalogueRow(const std::string &kind, const Json &catalogue, const Json 
         card.kind = kind;
         card.hidden = hidden;
         card.data = item;
-        card.title = id == "lg-home" ? "LG Home" : item["title"].string(item["name"].string(id));
+        card.title = id == "lg-home" ? say::msg("launcher.home.lgHome", "LG Home" ): item["title"].string(item["name"].string(id));
         if (kind == "app" && id != "lg-home")
             card.image = "app:" + id;
         if (kind == "dev")
             card.subtitle =
-                item["unused"].boolean() ? "Nothing connected" : "HDMI " + item["port"].string();
+                item["unused"].boolean() ? say::msg("tv.quick.nothingConnected", "Nothing connected" ): "HDMI " + item["port"].string();
         if (kind == "ch") {
             card.subtitle = item["number"].string();
             Json programme = guide[id][static_cast<size_t>(0)];
@@ -182,7 +186,7 @@ std::vector<CardRow> appRows(const Json &catalogue, const Json &guide, const std
             CardRow row;
             row.key = "app";
             row.group = kind["key"].string();
-            row.title = kind["label"].string(row.group);
+            row.title = appKindTitle(row.group, kind["label"].string(row.group));
             for (const Card &card : all.cards)
                 if (kindOf(card) == row.group)
                     row.cards.push_back(card);
@@ -197,10 +201,24 @@ std::vector<CardRow> appRows(const Json &catalogue, const Json &guide, const std
 std::string kindOf(const Card &card) {
     return card.id == "lg-home" ? "tv" : card.data["kind"].string("other");
 }
+std::string appKindTitle(const std::string &kind, const std::string &label) {
+    const std::map<std::string, std::string> defaults = {
+        {"video", "Movies & TV"}, {"music", "Music & audio"}, {"games", "Games"},
+        {"home", "Smart home"}, {"tv", "LG & TV"}, {"tools", "Tools"}, {"other", "Other"}};
+    const auto found = defaults.find(kind);
+    if (found == defaults.end() || found->second != label) return label;
+    if (kind == "video") return say::msg("launcher.kind.video", "Movies & TV");
+    if (kind == "music") return say::msg("launcher.kind.music", "Music & audio");
+    if (kind == "games") return say::msg("launcher.kind.games", "Games");
+    if (kind == "home") return say::msg("launcher.kind.home", "Smart home");
+    if (kind == "tv") return say::msg("launcher.kind.tv", "LG & TV");
+    if (kind == "tools") return say::msg("launcher.kind.tools", "Tools");
+    return say::msg("launcher.kind.other", "Other");
+}
 CardRow appsRow(const Json &catalogue, const Json &guide, bool withHidden, const std::string &list) {
     CardRow apps;
     apps.key = "app";
-    apps.title = list == "appsTab" ? "Apps" : "Your apps";
+    apps.title = list == "appsTab" ? say::msg("launcher.apps.title", "Apps" ): say::msg("launcher.home.yourApps", "Your apps");
     for (const CardRow &row : appRows(catalogue, guide, list))
         apps.cards.insert(apps.cards.end(), row.cards.begin(), row.cards.end());
     if (withHidden)
@@ -242,11 +260,11 @@ std::vector<CardRow> homeRows(const std::string &tab, const Json &catalogue, con
             result.push_back(row);
         return result;
     }
-    const std::map<std::string, std::string> names = {{"trending", "Top picks for you"},
-                                                      {"movies", "Trending films this week"},
-                                                      {"series", "Trending series this week"},
-                                                      {"netflix", "Available on Netflix"},
-                                                      {"youtube", "Trending on YouTube"}};
+    const std::map<std::string, std::string> names = {{"trending", say::msg("launcher.home.topPicks", "Top picks for you")},
+                                                      {"movies", say::msg("launcher.home.trendingMovies", "Trending films this week")},
+                                                      {"series", say::msg("launcher.home.trendingSeries", "Trending series this week")},
+                                                      {"netflix", say::msg("launcher.home.netflix", "Available on Netflix")},
+                                                      {"youtube", say::msg("launcher.home.youtube", "Trending on YouTube")}};
     std::map<std::string, Json> feedRows;
     for (const auto &source : discover["rows"].items())
         feedRows[source["key"].string()] = source;

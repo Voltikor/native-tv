@@ -1,3 +1,4 @@
+#include "domain/say.hpp"
 #include "ui/application.hpp"
 #include "ui/controller_helpers.hpp"
 #include <algorithm>
@@ -17,36 +18,36 @@ void Application::rebuildMenu() {
         if (status == "awaiting-confirm") {
             Json preview = install["preview"];
             if (preview["vetted"].boolean())
-                menu.rows.push_back(option("Run with root privileges", navigate("install-root"),
-                                           state_.installRoot ? "On" : "Off",
-                                           "Only offered for vetted catalog packages."));
+                menu.rows.push_back(option(say::msg("launcher.menucontroller.runWithRootPrivileges", "Run with root privileges"), navigate("install-root"),
+                                           state_.installRoot ? say::msg("common.on", "On" ): say::msg("common.off", "Off"),
+                                           say::msg("launcher.menucontroller.onlyOfferedForVettedCatalogPackages", "Only offered for vetted catalog packages.")));
             if (preview["storeInstalled"].boolean())
-                menu.rows.push_back(option("Replace the store version", navigate("install-replace"),
-                                           state_.installReplace ? "On" : "Off"));
+                menu.rows.push_back(option(say::msg("apps.install.store.replace", "Replace the store version"), navigate("install-replace"),
+                                           state_.installReplace ? say::msg("common.on", "On" ): say::msg("common.off", "Off")));
             menu.rows.push_back(option(preview["title"].string(preview["id"].string()), Command(),
                                        preview["version"].string(),
                                        preview["description"].string()));
             menu.rows.push_back(
-                option("Install",
+                option(say::msg("apps.install.confirm", "Install"),
                        post(Operation::ConfirmPackage,
                             fields({{"jobId", install["jobId"]},
                                     {"elevate",
                                      Json::flag(state_.installRoot && preview["vetted"].boolean())},
                                     {"replaceStore", Json::flag(state_.installReplace)}}),
                             true),
-                       "", "Installs the package using the selected privileges."));
+                       "", say::msg("launcher.menucontroller.installsThePackageUsingTheSelectedPrivileges", "Installs the package using the selected privileges.")));
             menu.rows.push_back(option(
-                "Cancel", post(Operation::CancelPackage, fields({{"jobId", install["jobId"]}}))));
+                say::msg("tv.pin.cancel", "Cancel"), post(Operation::CancelPackage, fields({{"jobId", install["jobId"]}}))));
         } else if (!status.empty() && status != "idle" && status != "installed" &&
                    status != "error" && status != "interrupted") {
             menu.rows.push_back(
-                option("Installing application", Command(), status, install["message"].string()));
+                option(say::msg("launcher.menucontroller.installingApplication", "Installing application"), Command(), status, install["message"].string()));
             menu.rows.push_back(option(
-                "Cancel", post(Operation::CancelPackage, fields({{"jobId", install["jobId"]}}))));
+                say::msg("tv.pin.cancel", "Cancel"), post(Operation::CancelPackage, fields({{"jobId", install["jobId"]}}))));
         } else {
             if (status == "error" || status == "interrupted")
                 menu.rows.push_back(
-                    option("Installation failed", Command(), "", install["error"].string()));
+                    option(say::msg("launcher.menucontroller.installationFailed", "Installation failed"), Command(), "", install["error"].string()));
             Json apps = state_.catalog["apps"];
             if (!apps.isArray())
                 apps = state_.catalog["catalog"];
@@ -57,8 +58,8 @@ void Application::rebuildMenu() {
                                 fields({{"id", app["id"]}, {"auto", Json::flag(true)}})),
                            app["version"].string(), app["description"].string()));
             if (menu.rows.empty())
-                menu.rows.push_back(option(state_.catalog.valid() ? "No applications available"
-                                                                  : "Loading catalog…",
+                menu.rows.push_back(option(state_.catalog.valid() ? say::msg("tv.catalog.none", "No applications available"
+                                                                  ): say::msg("launcher.menucontroller.loadingCatalog", "Loading catalog…"),
                                            navigate("refresh")));
         }
     }
@@ -67,7 +68,7 @@ void Application::rebuildMenu() {
         ++menu.selected;
     for (auto &row : menu.rows)
         if (row.command.route == "theme")
-            row.value = state_.light ? "Light" : "Dark";
+            row.value = state_.light ? say::msg("launcher.menucontroller.light", "Light" ): say::msg("theme.dark", "Dark");
     dirty_ = true;
 }
 } // namespace nativetv

@@ -1,3 +1,4 @@
+#include "domain/say.hpp"
 #include "ui/application.hpp"
 #include "ui/controller_helpers.hpp"
 #include "ui/home_layout.hpp"
@@ -6,6 +7,7 @@
 namespace nativetv {
 void Application::recentResponse(const Json &data) {
     auto &recent = state_.recents;
+    recent.load = RecentState::Load::Ready;
     std::string selected =
         recent.selected < recent.cards.size() ? recent.cards[recent.selected].id : "";
     recent.cards.clear();
@@ -26,7 +28,7 @@ void Application::recentResponse(const Json &data) {
             recent.selected = i;
     if (recent.cards.empty())
         recent.focus = RecentState::Focus::Card;
-    recent.status = recent.cards.empty() ? "Apps stay here while they are open." : "";
+    recent.status = recent.cards.empty() ? say::msg("launcher.recentscontroller.appsStayHereWhileTheyAreOpen", "Apps stay here while they are open." ): "";
     recentsFocus(true);
     dirty_ = true;
 }
@@ -55,9 +57,10 @@ void Application::recentsFocus(bool jump) {
 }
 void Application::recentKey(Key key) {
     auto &recent = state_.recents;
-    if (key == Key::Ok && recent.cards.empty() && recent.status.find("Could not") == 0) {
+    if (key == Key::Ok && recent.cards.empty() && recent.load == RecentState::Load::Failed) {
+        recent.load = RecentState::Load::Loading;
         recent.revision = services_.read("recents", Operation::Recents);
-        recent.status = "Loading recent apps…";
+        recent.status = say::msg("launcher.navigation.loadingRecentApps", "Loading recent apps…");
         return;
     }
     if (recent.cards.empty())

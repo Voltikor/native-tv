@@ -512,6 +512,7 @@ class QuickScreen final : public ScreenView {
             add(Row::Kind::Plain, "recents", "apps", msg("tv.quick.recents", "Recent apps"), "", true);
             add(Row::Kind::Plain, "profile", "profile", msg("tv.quick.profile", "Profile"), "", true);
             add(Row::Kind::Plain, "layout", "gear", msg("tv.quick.settings", "Home settings"), "", true);
+            add(Row::Kind::Plain, "language", "globe", msg("launcher.language.title", "Language"), "", true);
         } else if (level_ == Level::Picture) {
             for (const auto &mode : s["picture"]["modes"].items())
                 add(Row::Kind::Choice, mode["value"].string(), "picture", mode["label"].string(),
@@ -529,7 +530,7 @@ class QuickScreen final : public ScreenView {
             for (const char *value : kSleep)
                 add(Row::Kind::Choice, value, "timer", sleepLabel(value), value);
         } else {
-            static const std::vector<std::pair<std::string, std::string>> titles = {
+            const std::vector<std::pair<std::string, std::string>> titles = {
                 {"clockFormat", msg("tv.quick.clock24", "24-hour clock")},
                 {"appNames", msg("tv.quick.appNames", "App names")},
                 {"showLive", msg("tv.quick.showLive", "Live tab")},
@@ -850,6 +851,8 @@ class QuickScreen final : public ScreenView {
             close(host, "recents");
         else if (row.id == "profile")
             close(host, "profiles");
+        else if (row.id == "language")
+            close(host, "language");
     }
     void choose(ScreenHost &host, const Row &row) {
         if (level_ == Level::Layout) {

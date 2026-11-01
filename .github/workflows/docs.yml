@@ -4,6 +4,7 @@ name: Docs
 # A pull request only builds it, in strict mode, so a broken link fails there;
 # docs-publish.yml publishes it once merged.
 on:
+  workflow_dispatch:
   pull_request:
     paths: ['docs/**', 'mkdocs.yml', '.github/workflows/docs.yml']
 

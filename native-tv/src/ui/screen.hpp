@@ -24,6 +24,8 @@ class ScreenHost {
   public:
     virtual ~ScreenHost() = default;
     virtual Services &services() = 0;
+    virtual std::string languageChoice() const { return "auto"; }
+    virtual void changeLanguage(const std::string &) {}
     // One engine for the whole application; prefix every id with the screen's name
     // ("live:card:3") so leave() can drop them with Motion::erasePrefix.
     virtual Motion &motion() = 0;
