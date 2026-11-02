@@ -347,15 +347,13 @@ int main(int argc, char **argv) {
             const char *environmentLanguage = std::getenv("LANG");
             const std::string systemLanguage = preferences["localeInfo"]["locales"]["UI"].string(
                 environmentLanguage ? environmentLanguage : "en");
-            Locale locale(assets + "/i18n/launcher",
-                          opts.language.empty() ? clientServerConfigPath() + ".locale.json" : "",
-                          systemLanguage);
+            Locale locale(assets + "/i18n/launcher", systemLanguage);
             if (!opts.language.empty() && !locale.choose(opts.language))
                 throw std::runtime_error("Unsupported --lang value");
             LocaleScope localeScope(&locale);
             HttpServices http(opts.server);
             http.language(locale.language());
-            Application app(http, opts.screen, &locale);
+            Application app(http, opts.screen, &locale, opts.language.empty());
             Renderer renderer(width, height, opts.font, assets,
                               [&http](const std::string &path) { return http.image(path) != 0; });
             // The atlases and the loader hold textures in the renderer, so they are declared

@@ -227,4 +227,8 @@ for seven days. A Netflix launch passes the resolved numeric ID to the
 installed app in `contentTarget` as
 `m=https://www.netflix.com/title/<id>&source_type=4`.
 
-The native launcher saves its language choice in `/var/lib/tvweb/native/client-config.json.locale.json` beside its port configuration. Portuguese discovery uses `home-discover.pt-BR.json`; title/search cache keys include the requested language. Language selection sends no Home replacement or power-on setting changes.
+The daemon saves the native launcher's language choice in `home.json` as the global
+`language` field (`auto`, `en` or `pt-BR`) through the existing layout API. The jailed
+app reads it from the catalogue and never writes server files directly. Portuguese
+discovery uses `home-discover.pt-BR.json`; title/search cache keys include the
+requested language. Changing language preserves Home takeover and power-on settings.

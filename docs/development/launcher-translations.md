@@ -3,9 +3,10 @@
 The launcher has its own **Language** picker, reached from Quick settings or
 Settings. **Automatic — follow TV** reads `localeInfo.locales.UI` from the TV's
 preferences at launch. English and Português (Brasil) can be selected explicitly.
-The choice is saved atomically beside the client's port config as
-`client-config.json.locale.json`; it does not change the TV's system language or
-the browser dashboard's language. Switching rebuilds the picker, refreshes API
+The daemon saves the choice atomically as `language` in `home.json` through the
+existing layout API; the jailed app never writes server files. The choice is
+global across profiles and does not change the TV's system language or the
+browser dashboard's language. Switching rebuilds the picker, refreshes API
 reads and preserves the Home app selection. It sends no Home takeover command.
 The launcher also accepts `--lang en` or `--lang pt-BR` for a temporary test run.
 
@@ -44,7 +45,7 @@ The current renderer and font subset support Latin text; additional scripts and
 right-to-left layout require separate rendering work.
 
 Tests `native-locale` and `native-locale-ui` cover fallback, plurals, thread
-isolation, persisted choice, live language switching and unchanged TV commands
+isolation, server-backed choice, live language switching and unchanged control commands
 and settings states. Content and HTTP tests cover cache isolation and language
 headers. Test Portuguese layouts on a TV before release: longer labels may need
 wording adjustments even when the font covers every character.

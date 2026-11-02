@@ -68,8 +68,9 @@ void Application::wallClock(int hour, int minute, int weekday, int day, int mont
         dirty_ = true;
     }
 }
-Application::Application(Services &services, const std::string &initial, Locale *locale)
-    : services_(services), locale_(locale), initial_(initial),
+Application::Application(Services &services, const std::string &initial, Locale *locale,
+                         bool followSavedLanguage)
+    : services_(services), locale_(locale), followSavedLanguage_(followSavedLanguage), initial_(initial),
       clock_([this] { return static_cast<double>(now_); }),
       optimistic_(services, [this] { return clock_.nowMs(); },
                   [this](const std::string &message) { toast(message); }) {
@@ -89,13 +90,19 @@ void Application::changeLanguage(const std::string &choice) {
         toast(say::msg("launcher.language.wait", "Wait for the current change to finish."));
         return;
     }
-    std::string error;
-    if (!locale_->choose(choice, &error)) {
-        toast(say::msg("launcher.language.saveFailed", "Could not save the language preference."));
-        return;
-    }
-    services_.language(locale_->language());
-    languageChanged_ = true;
+    // Native apps cannot write /var/lib/tvweb from their webOS jail. The existing
+    // layout API persists this harmless preference through the daemon instead.
+    Write write;
+    write.operation = Operation::SetHomeLayout;
+    write.body = [choice](const Json &) { return fields({{"language", Json::text(choice)}}); };
+    write.failure = say::msg("launcher.language.saveFailed", "Could not save the language preference.");
+    write.done = [this, choice](bool ok, const Json &) {
+        if (!ok || !locale_->choose(choice)) return;
+        localeInitialized_ = true;
+        services_.language(locale_->language());
+        languageChanged_ = true;
+    };
+    optimistic_.run("locale", write);
 }
 void Application::toast(const std::string &value) {
     state_.toast = value;
@@ -136,6 +143,7 @@ bool Application::update(uint32_t now) {
     if (languageChanged_) {
         languageChanged_ = false;
         const std::string origin = cameFrom_;
+        const std::string routeAfter = screen_ ? currentRoute_ : "home:resume";
         // Recreate the picker on the next frame, after its input callback returns.
         // API reads in the previous language were cancelled by Services::language.
         if (screen_) screen_->leave(*this);
@@ -144,7 +152,7 @@ bool Application::update(uint32_t now) {
         state_.discover = Json();
         state_.toast.clear();
         rebuildHome();
-        route("language");
+        route(routeAfter);
         cameFrom_ = origin;
         services_.read("catalogue", Operation::HomeCatalogue);
         services_.read("discover", Operation::HomeDiscover);

@@ -153,6 +153,15 @@ void Application::response(const Response &response) {
             !(screen_ && screen_->name().compare(0, 6, "setup:") == 0))
             route("setup:welcome");
     } else if (response.channel == "catalogue") {
+        if (locale_ && followSavedLanguage_ && !localeInitialized_) {
+            localeInitialized_ = true;
+            const std::string previous = locale_->language();
+            if (locale_->choose(data["layout"]["language"].string("auto")) &&
+                locale_->language() != previous) {
+                services_.language(locale_->language());
+                languageChanged_ = true;
+            }
+        }
         state_.catalogue = data;
         if (state_.serverSilent) {
             state_.serverSilent = false;

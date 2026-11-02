@@ -9,10 +9,9 @@ namespace nativetv {
 // English lives beside its key in the source, matching the web dashboard.
 class Locale {
     std::map<std::string, Json> catalogs_;
-    std::string preferencePath_, choice_ = "auto", system_ = "en";
+    std::string choice_ = "auto", system_ = "en";
   public:
     explicit Locale(const std::string &directory = "",
-                    const std::string &preferencePath = "",
                     const std::string &systemLocale = "en");
     static std::string resolve(const std::string &tag);
     static std::string contentLanguage(const std::string &tag);

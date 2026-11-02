@@ -346,6 +346,8 @@ Json normalizeHomeDocument(const Json &raw) {
     result.set("picture", Json::flag(raw["picture"].boolean()));
     result.set("appNames", Json::flag(!raw["appNames"].valid() || raw["appNames"].boolean(true)));
     result.set("clockFormat", Json::text(raw["clockFormat"].string() == "12h" ? "12h" : "24h"));
+    const std::string language = raw["language"].string();
+    result.set("language", Json::text(language == "en" || language == "pt-BR" ? language : "auto"));
     result.set("showInputs", Json::flag(!raw["showInputs"].valid() || raw["showInputs"].boolean(true)));
     result.set("showLgHome", Json::flag(!raw["showLgHome"].valid() || raw["showLgHome"].boolean(true)));
     result.set("showLive", Json::flag(raw["showLive"].boolean()));
@@ -392,6 +394,7 @@ Json normalizeHomeDocument(const Json &raw) {
 
 Json homeLayout(const Json &document) {
     Json result = Json::object();
+    result.set("language", document["language"]);
     for (size_t i = 0; i < kLayoutKeyCount; ++i)
         result.set(kLayoutKeys[i], document[kLayoutKeys[i]]);
     return result;
@@ -429,7 +432,14 @@ HomeDocumentUpdate updateHomeLayout(const Json &input, const Json &body) {
         update.response = errorResponse("layout expected");
         return update;
     }
+    if (body.has("language") &&
+        (!body["language"].isString() || (body["language"].string() != "auto" &&
+         body["language"].string() != "en" && body["language"].string() != "pt-BR"))) {
+        update.response = errorResponse("unsupported launcher language");
+        return update;
+    }
     Json proposed = Json::object();
+    proposed.set("language", body.has("language") ? body["language"] : current["language"]);
     const char *preserved[] = {"enabled", "restorePending", "snapshot",
         "hideLgHomeAtStart", "openOnPowerOn", "lgAutoLaunch", "lgAutoLaunchCheck",
         "profiles", "profile"};

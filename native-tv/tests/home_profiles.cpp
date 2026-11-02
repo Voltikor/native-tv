@@ -259,6 +259,19 @@ int main() {
     assert(!refused.response["ok"].boolean());
     assert(refused.document.dump() == normalized.dump());
 
+    Json languagePatch = Json::object();
+    languagePatch.set("language", Json::text("pt-BR"));
+    auto localized = updateHomeLayout(document, languagePatch);
+    assert(localized.response["ok"].boolean());
+    assert(localized.document["language"].string() == "pt-BR");
+    assert(homeLayout(normalizeHomeDocument(Json::parse(localized.document.dump())))["language"].string() == "pt-BR");
+    assert(localized.document["enabled"].dump() == document["enabled"].dump());
+    assert(localized.document["openOnPowerOn"].dump() == document["openOnPowerOn"].dump());
+    assert(updateHomeLayout(localized.document, reset).document["language"].string() == "pt-BR");
+    languagePatch.set("language", Json::text("../../unsupported"));
+    auto invalidLanguage = updateHomeLayout(localized.document, languagePatch);
+    assert(!invalidLanguage.response["ok"].boolean());
+    assert(invalidLanguage.document.dump() == localized.document.dump());
     std::cout << "Native Home profiles and layouts passed.\n";
     return 0;
 }

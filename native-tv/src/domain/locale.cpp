@@ -1,14 +1,10 @@
 #include "domain/locale.hpp"
 #include <algorithm>
-#include <cerrno>
 #include <cmath>
-#include <cstring>
-#include <fcntl.h>
 #include <fstream>
 #include <iomanip>
 #include <locale>
 #include <sstream>
-#include <unistd.h>
 
 namespace nativetv {
 namespace {
@@ -40,45 +36,13 @@ std::string fill(const std::string &text, const Json &variables) {
     }
     return result;
 }
-bool saveChoice(const std::string &path, const std::string &choice, std::string *error) {
-    if (path.empty()) return true; // In-memory context, used by tests.
-    std::string pattern = path + ".XXXXXX";
-    std::vector<char> temporary(pattern.begin(), pattern.end());
-    temporary.push_back(0);
-    int fd = mkstemp(temporary.data());
-    if (fd < 0) {
-        if (error) *error = std::strerror(errno);
-        return false;
-    }
-    Json document = Json::object();
-    document.set("language", Json::text(choice));
-    const std::string bytes = document.dump() + "\n";
-    size_t offset = 0;
-    while (offset < bytes.size()) {
-        ssize_t n = write(fd, bytes.data() + offset, bytes.size() - offset);
-        if (n < 0 && errno == EINTR) continue;
-        if (n <= 0) break;
-        offset += static_cast<size_t>(n);
-    }
-    bool ok = offset == bytes.size() && fsync(fd) == 0;
-    if (close(fd) != 0) ok = false;
-    if (ok) ok = rename(temporary.data(), path.c_str()) == 0;
-    if (!ok) {
-        if (error) *error = std::strerror(errno);
-        unlink(temporary.data());
-    }
-    return ok;
-}
 } // namespace
-Locale::Locale(const std::string &directory, const std::string &preferencePath,
-               const std::string &systemLocale)
-    : preferencePath_(preferencePath), system_(resolve(systemLocale)) {
+Locale::Locale(const std::string &directory, const std::string &systemLocale)
+    : system_(resolve(systemLocale)) {
     if (!directory.empty()) {
         Json catalog = readDocument(directory + "/pt-BR.json");
         if (catalog.isObject()) catalogs_["pt-BR"] = catalog;
     }
-    const std::string stored = preferencePath.empty() ? "" : readDocument(preferencePath)["language"].string();
-    if (stored == "en" || stored == "pt-BR" || stored == "auto") choice_ = stored;
 }
 std::string Locale::resolve(const std::string &tag) {
     std::string value = tag;
@@ -109,7 +73,6 @@ bool Locale::choose(const std::string &choice, std::string *error) {
         if (error) *error = "Unsupported language";
         return false;
     }
-    if (!saveChoice(preferencePath_, choice, error)) return false;
     choice_ = choice;
     return true;
 }

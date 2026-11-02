@@ -108,6 +108,7 @@ class Application : private ScreenHost {
     Services &services_;
     Locale *locale_;
     bool languageChanged_ = false;
+    bool followSavedLanguage_, localeInitialized_ = false;
     ViewState state_;
     bool dirty_ = true, active_ = true, running_ = true;
     uint32_t now_ = 0, refreshAt_ = 0, toastUntil_ = 0, confirmUntil_ = 0;
@@ -238,7 +239,7 @@ class Application : private ScreenHost {
         return registry_;
     }
     explicit Application(Services &services, const std::string &initial = "home",
-                         Locale *locale = nullptr);
+                         Locale *locale = nullptr, bool followSavedLanguage = true);
     std::string languageChoice() const override { return locale_ ? locale_->choice() : "auto"; }
     void changeLanguage(const std::string &choice) override;
     // The real client keeps its first frames behind the ink until the server has said whether

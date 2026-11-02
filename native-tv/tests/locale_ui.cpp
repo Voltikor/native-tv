@@ -43,7 +43,7 @@ static void controls(Locale &locale) {
 int main(int argc, char **argv) {
     try {
         check(argc == 2, "catalog directory required");
-        Locale locale(argv[1], "", "pt-BR");
+        Locale locale(argv[1], "pt-BR");
         LocaleScope scope(&locale);
         controls(locale);
         FakeTransport transport;
@@ -57,18 +57,44 @@ int main(int argc, char **argv) {
         check(app.shows("Idioma"), "language picker is translated");
         check(app.activate("language:en"), "language selection is reachable by pointer");
         app.update(1100);
+        const auto enWrite = transport.last("w:locale");
+        check(enWrite.operation == Operation::SetHomeLayout && enWrite.body["language"].string() == "en",
+              "language is saved through the daemon, outside the app jail");
+        check(locale.language() == "pt-BR", "UI waits until saving is confirmed");
+        app.response({"w:locale", "/api/home/layout", R"({"ok":true})", "", enWrite.generation, 200});
+        app.update(1120);
         check(locale.choice() == "en" && transport.requestLanguage == "en", "selection updates UI and request locale");
         check(app.shows("Language"), "picker rebuilds without a restart");
         check(app.activate("language:pt-BR"), "Portuguese choice is reachable");
         app.update(1200);
+        app.response({"w:locale", "/api/home/layout", R"({"ok":true})", "", transport.last("w:locale").generation, 200});
+        app.update(1220);
         check(app.shows("Idioma") && locale.choice() == "pt-BR", "switch back without stale strings");
+        app.activate("language:auto");
+        app.update(1300);
+        app.response({"w:locale", "/api/home/layout", R"({"ok":false})", "", transport.last("w:locale").generation, 200});
+        app.update(1320);
+        check(locale.choice() == "pt-BR", "failed save preserves the previous language");
         app.key(Key::Back);
         run(app, 1200, 500);
         check(app.screenName() == "home", "Back returns to Home after switching");
         for (const auto &request : transport.requests)
-            check(!request.write, "language switching sends no Home takeover or other TV commands");
+            check(!request.write || (request.operation == Operation::SetHomeLayout && request.body.keys().size() == 1 &&
+                  request.body["language"].isString()), "language switching writes only the language preference");
         check(appKindTitle("tools", "Tools") == "Ferramentas", "default app kinds are translated");
         check(appKindTitle("tools", "My custom category") == "My custom category", "custom names remain intact");
+        {
+            Locale reloaded(argv[1], "pt-BR");
+            LocaleScope fresh(&reloaded);
+            FakeTransport reconnected;
+            Application restarted(reconnected, "home", &reloaded);
+            Json saved = Json::parse(catalogueJson);
+            saved["layout"].set("language", Json::text("en"));
+            restarted.response({"catalogue", "/api/home/catalogue", saved.dump(), "", 1, 200});
+            restarted.update(10);
+            check(reloaded.choice() == "en" && reconnected.requestLanguage == "en", "saved language is restored from the server on relaunch");
+            check(restarted.screenName() == "home", "restoring a language does not open the picker");
+        }
         std::printf("%d locale UI checks passed\n", checkCount());
         return 0;
     } catch (const std::exception &e) {
