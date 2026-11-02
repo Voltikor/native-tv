@@ -24,6 +24,7 @@ std::string requestedLanguage(const std::string &headerValue);
 // A JSON body with the messages in its display fields (error, label, title and
 // the like) replaced by their translations. Raw values, the strings of fields
 // a page does not show, and anything that is not JSON come back as they were.
+// Names and titles stay raw except at explicitly listed server-owned paths.
 std::string translateJson(const std::string &body, const std::string &language);
 } // namespace say
 } // namespace nativetv

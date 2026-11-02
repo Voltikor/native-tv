@@ -504,7 +504,8 @@ the tile's app and a missing apps folder are left alone.
 
 `native-retired-files` also holds that the dashboard's dictionary, `assets/i18n/es.json`, is not retired: the daemon deleted
 it at every start while an earlier release listed it. `native-say` (`tests/say.cpp`) holds the translation of the daemon's messages
-for a dashboard in another language: only the display fields change and a raw value that reads like a message does not, values and
+for a dashboard in another language: only the display fields change and a raw value that reads like a message does not.
+Profile and app names stay intact on message-text collisions; explicitly listed server-owned names and titles still translate. Values and
 messages inside values keep their place, English that changed since the entry was made, an empty or malformed entry and a
 missing key show the English, a body with nothing to change is sent as it came, memory stays bounded (the oldest message
 with values is forgotten once the table fills), and four threads making messages while others are translated stay consistent.

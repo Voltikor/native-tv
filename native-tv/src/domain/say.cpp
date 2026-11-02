@@ -160,9 +160,16 @@ bool translateText(const std::string &text, const Dictionary &dictionary, std::s
 
 // The fields a page shows, as opposed to raw values that happen to read the
 // same as a message (a TV state such as "Running").
-bool displayField(const std::string &field) {
+bool displayField(const std::string &field, const std::string &path) {
+    // Names and titles also carry user and app data. Only server-owned paths opt in.
+    if (field == "name")
+        return path == "categories.name" || path == "mqtt.categories.name" ||
+               path == "simple.areas.name";
+    if (field == "title")
+        return path == "services.title" || path == "rows.title" ||
+               path == "lgSettings.title" || path == "homeScreen.parts.title";
     static const char *const names[] = {
-        "error", "note", "label", "name", "detail", "desc", "description", "title", "badge",
+        "error", "note", "label", "detail", "desc", "description", "badge",
         "message", "hint", "reason", "limitTrackingLabel", "limitTrackingDetail",
         // Lists of the names above, which a page joins into a sentence.
         "sharesWith", "agreements", "kept", "cautions",
@@ -177,11 +184,11 @@ bool displayField(const std::string &field) {
 // Translates node in place where it is an object; a string or an array is
 // handed back as `replacement` for its owner to put in. `changed` records any
 // change at all, so a body nothing in is touched is sent as it was.
-bool translateNode(const Json &node, const std::string &field, const Dictionary &dictionary,
-                   bool &changed, Json &replacement) {
+bool translateNode(const Json &node, const std::string &field, const std::string &path,
+                   const Dictionary &dictionary, bool &changed, Json &replacement) {
     if (node.isString()) {
         std::string translated;
-        if (!displayField(field) || !translateText(node.string(), dictionary, translated))
+        if (!displayField(field, path) || !translateText(node.string(), dictionary, translated))
             return false;
         replacement = Json::text(translated);
         return changed = true;
@@ -191,7 +198,7 @@ bool translateNode(const Json &node, const std::string &field, const Dictionary 
         bool any = false;
         for (Json &item : items) {
             Json translated;
-            if (translateNode(item, field, dictionary, changed, translated)) {
+            if (translateNode(item, field, path, dictionary, changed, translated)) {
                 item = translated;
                 any = true;
             }
@@ -207,7 +214,8 @@ bool translateNode(const Json &node, const std::string &field, const Dictionary 
         Json object = node; // the same object: set() below changes it in place
         for (const std::string &name : node.keys()) {
             Json translated;
-            if (translateNode(node[name], name, dictionary, changed, translated))
+            if (translateNode(node[name], name, path.empty() ? name : path + "." + name,
+                              dictionary, changed, translated))
                 object.set(name, translated);
         }
     }
@@ -314,7 +322,7 @@ std::string translateJson(const std::string &body, const std::string &language) 
         return body;
     bool changed = false;
     Json replacement;
-    if (translateNode(document, "", dictionary->second, changed, replacement))
+    if (translateNode(document, "", "", dictionary->second, changed, replacement))
         document = replacement;
     return changed ? document.dump() : body;
 }

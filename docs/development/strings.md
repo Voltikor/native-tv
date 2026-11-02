@@ -101,7 +101,12 @@ the page uses. The daemon reads `assets/i18n/` once, at start.
 Only fields a page shows are changed (`error`, `label`, `title` and the rest of
 `displayField()` in `native-tv/src/domain/say.cpp`), and only strings
 `say::msg()` made, so a raw value that reads the same as a message, such as a TV
-state, is left alone. Anything that is not JSON, `/api/logs` and the answers to
+state, is left alone. `name` and `title` are raw by default: only the explicit
+server-owned paths in `displayField()` can translate them. Profile names, app
+names and titles from external content keep their supplied text even when it
+matches a known server message. New server-owned name or title fields need an
+explicit path and a test before they can be translated.
+Anything that is not JSON, `/api/logs` and the answers to
 requests with no language header go out as they are. A name that is a value in
 a message, such as a service's in "{name} is running", is translated in the
 message too when it is a message itself.

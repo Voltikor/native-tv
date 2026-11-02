@@ -131,7 +131,37 @@ int main() {
                   "{\"rows\":[{\"label\":\"Encendido\",\"id\":\"On\"},{\"label\":\"Apagado\"}],"
                   "\"sharesWith\":[\"Encendido\",\"someone\"],\"n\":3,\"f\":1.5,\"x\":null}",
               "Rows, lists of names and other values come through");
-        check(say::translateJson("[{\"name\":\"Off\"}]", "es") == "[{\"name\":\"Apagado\"}]", "A list at the top");
+        check(say::translateJson("[{\"name\":\"Off\"}]", "es") == "[{\"name\":\"Off\"}]",
+              "A name is a raw value by default, including in a list at the top");
+
+        // These words are already known messages; matching them must not rename user content.
+        const std::string namedContent = R"({"name":"On","title":"Off",
+            "profiles":[{"id":"guest","name":"Off"}],
+            "apps":[{"id":"my.app","name":"On","title":"Off"}],
+            "installed":[{"id":"my.app","title":"Off"}],
+            "systemTiles":[{"id":"system.app","title":"On"}],
+            "install":{"preview":{"title":"Off"},"result":{"title":"On"}},
+            "quickAccess":{"keys":[{"title":"On"}],"choices":[{"title":"Off"}]},
+            "kind":"app","label":"On"})";
+        Json namedExpected = Json::parse(namedContent);
+        namedExpected.set("label", Json::text("Encendido"));
+        check(say::translateJson(namedContent, "es") == namedExpected.dump(),
+              "Profile and app names stay intact while neighbouring UI messages translate");
+        for (const char *path : {"services", "rows", "lgSettings"}) {
+            Json generated = Json::object();
+            generated.set(path, Json::parse(R"([{"title":"On"}])"));
+            check(Json::parse(say::translateJson(generated.dump(), "es"))[path]
+                      [static_cast<size_t>(0)]["title"].string() == "Encendido",
+                  "Server-owned settings and service titles still translate");
+        }
+        const Json generatedNames = Json::parse(say::translateJson(
+            R"({"categories":[{"name":"On"}],"mqtt":{"categories":[{"name":"Off"}]},
+                "simple":{"areas":[{"name":"On"}]},"homeScreen":{"parts":[{"title":"Off"}]}})", "es"));
+        check(generatedNames["categories"][static_cast<size_t>(0)]["name"].string() == "Encendido" &&
+                  generatedNames["mqtt"]["categories"][static_cast<size_t>(0)]["name"].string() == "Apagado" &&
+                  generatedNames["simple"]["areas"][static_cast<size_t>(0)]["name"].string() == "Encendido" &&
+                  generatedNames["homeScreen"]["parts"][static_cast<size_t>(0)]["title"].string() == "Apagado",
+              "Server-owned category names, privacy areas and Home parts still translate");
 
         // English that changed since the translation was made, and entries that are not usable.
         say::msg("srv.old", "The old words, now different");
