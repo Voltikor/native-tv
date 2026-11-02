@@ -268,6 +268,12 @@ int main() {
     assert(localized.document["enabled"].dump() == document["enabled"].dump());
     assert(localized.document["openOnPowerOn"].dump() == document["openOnPowerOn"].dump());
     assert(updateHomeLayout(localized.document, reset).document["language"].string() == "pt-BR");
+    auto localizedProfiles = updateHomeLayout(secondGuestLayout.document, languagePatch);
+    assert(localizedProfiles.document["profiles"].dump() == secondGuestLayout.document["profiles"].dump());
+    auto switchedLanguage = updateHomeProfile(localizedProfiles.document, removeProfile);
+    assert(switchedLanguage.document["language"].string() == "pt-BR");
+    for (const Json &profile : switchedLanguage.document["profiles"].items())
+        assert(!profile["layout"].has("language"));
     languagePatch.set("language", Json::text("../../unsupported"));
     auto invalidLanguage = updateHomeLayout(localized.document, languagePatch);
     assert(!invalidLanguage.response["ok"].boolean());

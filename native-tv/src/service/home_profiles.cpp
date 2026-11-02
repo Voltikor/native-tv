@@ -368,7 +368,7 @@ Json normalizeHomeDocument(const Json &raw) {
             normalizedProfile.set("color", Json::text(color.empty() ? kColors[0] : color));
             if (profile["layout"].isObject()) {
                 const Json normalizedLayout = normalizeHomeDocument(layoutKeys(profile["layout"]));
-                normalizedProfile.set("layout", homeLayout(normalizedLayout));
+                normalizedProfile.set("layout", layoutKeys(normalizedLayout));
             } else {
                 normalizedProfile.set("layout", Json::parse("null"));
             }
@@ -515,7 +515,7 @@ HomeDocumentUpdate updateHomeProfile(const Json &input, const Json &body,
     if (!now.valid()) now = list[0];
     Json target = now;
     Json nowUpdated = copyJson(now);
-    nowUpdated.set("layout", homeLayout(current));
+    nowUpdated.set("layout", layoutKeys(current));
     Json updatedProfiles = Json::array();
     for (const Json &profile : list.items())
         updatedProfiles.add(profile["id"].string() == now["id"].string() ? nowUpdated : profile);
@@ -549,7 +549,7 @@ HomeDocumentUpdate updateHomeProfile(const Json &input, const Json &body,
             added.set("name", Json::text(name.empty()
                 ? "Profile " + std::to_string(list.size() + 1) : name));
             added.set("color", Json::text(color));
-            added.set("layout", homeLayout(defaultDocument()));
+            added.set("layout", layoutKeys(defaultDocument()));
             list.add(added);
             target = body["switch"].isBoolean() && body["switch"].boolean()
                 ? added : now;
@@ -606,7 +606,7 @@ HomeDocumentUpdate updateHomeProfile(const Json &input, const Json &body,
     next.set("profile", target["id"]);
     if (target["id"].string() != now["id"].string()) {
         Json layout = target["layout"].isObject()
-            ? target["layout"] : homeLayout(defaultDocument());
+            ? target["layout"] : layoutKeys(defaultDocument());
         for (size_t i = 0; i < kLayoutKeyCount; ++i)
             next.set(kLayoutKeys[i], layout[kLayoutKeys[i]]);
     }

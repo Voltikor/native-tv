@@ -5,7 +5,7 @@ Settings. **Automatic — follow TV** reads `localeInfo.locales.UI` from the TV'
 preferences at launch. English and Português (Brasil) can be selected explicitly.
 The daemon saves the choice atomically as `language` in `home.json` through the
 existing layout API; the jailed app never writes server files. The choice is
-global across profiles and does not change the TV's system language or the
+global across profiles; saved profile layouts do not carry it. It does not change the TV's system language or the
 browser dashboard's language. Switching rebuilds the picker, refreshes API
 reads and preserves the Home app selection. It sends no Home takeover command.
 The launcher also accepts `--lang en` or `--lang pt-BR` for a temporary test run.
