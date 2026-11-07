@@ -25,7 +25,7 @@ Native Tv is a server that runs directly on a rooted LG webOS TV, with a live da
 
 Native Tv grew out of [Glasshouse](https://github.com/rorygallagher2024/glasshouse) by Rory Gallagher and is now its own project: the server is a C++ daemon with no Node on the TV, and the TV has a native app in Google TV's design. It supports webOS 4 and later; Glasshouse covers webOS 2 and 3.
 
-[Install](getting-started/install.md){ .md-button .md-button--primary } [See the dashboard](dashboard/index.md){ .md-button }
+[Install](getting-started/install.md){ .md-button .md-button--primary } [See the dashboard](dashboard/index.md){ .md-button } [Buy me a coffee](support.md){ .md-button }
 
 <p align="center">
   <a href="screenshots/dashboard.png"><img src="screenshots/dashboard.png" alt="Native Tv dashboard in the dark theme: what the TV is showing, quick controls, processor, temperature, memory and network readings" width="440"></a>
@@ -47,6 +47,7 @@ Native Tv grew out of [Glasshouse](https://github.com/rorygallagher2024/glasshou
 * **[Volume ceiling](dashboard/advanced.md#volume-ceiling).** A maximum volume that holds whoever sets it, a lower limit at night and a start-up volume for when the TV comes on.
 * **[Switch the TV off when idle](dashboard/advanced.md#switch-off-when-idle).** After 15 minutes to eight hours with no key press, no change and nothing playing, with a toast a minute before; an HDMI input is never switched off.
 * **[Protect and monitor an OLED panel](dashboard/oled-care.md).** Panel hours, Pixel Refresher scheduling, and switches for screen shift, logo dimming, ASBL and Global Stress Reduction.
+* **[TV themes](apps/tv-app.md#tv-theme).** Google TV, or OLED Care for OLED panels: true black, dimmed icons, a ring for focus and a layout that moves a few pixels. Home is the apps, the inputs and the panel's hours, with no film picks. An OLED panel is offered it once.
 * **[Check the game's frame rate](dashboard/game.md).** On TVs with LG's Game Optimizer, the frame rate in large type while the source uses VRR, beside the Optimizer's settings.
 * **[Monitor the hardware](dashboard/metrics.md).** SoC temperature, per-core CPU load, memory, swap, Wi-Fi signal and throughput.
 * **[Hear about updates](dashboard/server.md).** The Server tab says when a newer release is out, when asked or once a day if switched on, and opens the Homebrew Channel on the TV to install it. The TV contacts GitHub only on request.

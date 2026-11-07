@@ -10,6 +10,36 @@ Material 3 Expressive is Google's May 2025 update to Material 3. Google's [Andro
 
 A TV screen takes its type, colour, shape, spacing and motion from the tokens, not from literals in a screen's code. A value that departs from the tables below is a decision, and is written here with its reason.
 
+## Themes
+
+`tokens.json` is the theme `n-google-tv`. Each file in `native-tv/design/themes/` is another theme, and names only what differs from it: colours (`color`, `colorFloat`, `colorAlpha`, `focusRingColor`) and `look`, the values that are not colours. `gen_tokens.py` writes one `Palette` per theme into `tokens.hpp` and `palette.cpp`. `kit::useTheme(id)` switches the palette in use, and `color::name`, `alpha::name` and `look::name` read it, so a screen's code does not change with the theme. `nativetv-tv --theme ID` starts the client in a theme; the `oled-*` golden cases use it. Type, shape, spacing, layout and motion are the same in every theme.
+
+### n-oled-care
+
+A theme for OLED panels: the screens should never be what wears the panel. Its departures from `n-google-tv`:
+
+| Token | n-oled-care | n-google-tv | Reason |
+|---|---|---|---|
+| `ink` | #000000 | #0C0B0E | A pixel that is off does not wear. |
+| `surface1` to `surface3` | #0E0E0E, #181818, #232323 | #16151A, #201F26, #2C2B34 | Steps wide enough that a panel's near-black handling does not merge them. |
+| `onSurface` to `onSurface3` | #D9D9D9, #9A9A9A, #777777 | #F1EEF4, #B9B4C2, #8A8495 | No static text above 85% luma (Google TV's is 94%). #777777 is 4.7:1 on black, so it is kept for text of 28 px and up. |
+| `accent` | #27B45E | #A8C7FA | The brand green at its dark end. Its blue channel is 37%, against 98% for the blue accent, and blue is the panel's weakest emitter. |
+| `focusFill` / `onFocus` | #2E2E2E / #D9D9D9 | #F1EEF4 / #131118 | A filled white pill is the largest bright block that sits still. |
+| `focusRingColor` | #CFCFCF | #F1EEF4 | |
+| `alpha::outline` | 0 | 0.12 | A static hairline is the classic burn-in shape. |
+| `wash` and `look.wall` | black, 0 | teal, 1 | The accent glow and the tint wash behind a screen light every pixel. |
+| `look.pictures` | false | true | The Details backdrop and any artwork are not drawn or downloaded: artwork is the largest lit region on a screen. App icons are icons and stay. |
+| `look.discover` | false | true | No feed: Home has no hero text, no pager, no picks and no YouTube row, and the client does not ask for the TMDB or YouTube feed, so there is no title search either. Home is the apps, the inputs and the panel's cards, which come from the stats the Live screen already reads. |
+| `look.homeTop` | 196 | 556 | Where Home's first row starts: under the hero for a theme with a feed, near the top for one without. |
+| `look.ringFocus` | true | false | Focus is a ring over the fill and the selected tab an underline. A dark fill alone is 1.3:1 on black, too faint to find from the sofa. |
+| `look.restFill` | 0 | 1 | Settings rows have no background until focused: spacing groups them, and a static fill is lit all day. |
+| `look.restBrightness` | 0.62 | 1 | App icons rest dimmer than the focused one. Over black, opacity is brightness. |
+| `look.driftX`, `look.driftY` | 8, 6 | 0, 0 | The scene, and the pointer hits with it, move in whole pixels from the minute of the day, on axes with periods of 20 and 13 minutes, so no edge rests on one pixel row. At most 3 px between two minutes; 99 positions in a day. |
+
+The idle dim after 30 seconds and the screen saver's start time are not part of a theme.
+
+`tests/golden/oled_budget.py` keeps the `oled-*` goldens inside a light budget: at most 1.6% light output (the mean linear luminance as a share of full white) and 1.0% of pixels above 80% luma. Google TV's Home is at 4.3% and 2.3%; the OLED Care goldens are at 0.85 to 1.46% and 0.3 to 0.9%.
+
 ## Typography
 
 | | Material 3 Expressive | Native Tv |

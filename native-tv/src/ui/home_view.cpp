@@ -114,6 +114,7 @@ void drawTopBar(kit::Paint paint, const Frame &frame, int pageTab) {
     bar.selected = home.navigation && home.nav < home.tabs.size() ? static_cast<int>(home.nav)
                                                                   : pageTab;
     bar.pillAlpha = bar.selected < 0 ? 0.0f : 1.0f;
+    bar.barFocused = home.navigation && home.nav < home.tabs.size();
     bar.settingsSelected = pageTab < 0 && !home.navigation;
     bar.pillLeft = static_cast<float>(motion.value("pill:0"));
     bar.pillRight = static_cast<float>(motion.value("pill:1"));
@@ -121,7 +122,7 @@ void drawTopBar(kit::Paint paint, const Frame &frame, int pageTab) {
     bar.settingsFocus = static_cast<float>(motion.value("f:gr"));
     bar.clock = clockText(state);
     kit::topBar(paint, bar);
-    if (state.discover["titlesEnabled"].boolean()) {
+    if (state.titleSearch()) {
         kit::RoundButton search;
         Rect gear = kit::geometry::settingsButton();
         search.rest = {gear.x - layout::circle - 24, gear.y, layout::circle, layout::circle};
@@ -237,6 +238,18 @@ void rows(kit::Paint paint, const Frame &frame, float top = 0) {
                 if (home.arranging && ri != home.row) // the rows behind the lifted one
                     circle.enter.alpha *= .55f;
                 kit::appCircle(paint, circle);
+            } else if (home::isPanel(row)) {
+                kit::InfoCard info;
+                info.rest = rest;
+                info.id = id;
+                info.title = card.title;
+                info.value = card.data["value"].string();
+                info.unit = card.data["unit"].string();
+                info.caption = card.subtitle;
+                info.bar = static_cast<float>(card.data["bar"].number(-1));
+                info.focus = focus;
+                info.enter = enter;
+                kit::infoCard(paint, info);
             } else if (row.key == "dev" || row.key == "ch") {
                 kit::InputTile tile;
                 tile.rest = rest;
@@ -295,7 +308,7 @@ void appRows(kit::Paint paint, const Frame &frame) {
     bool clipped = motion.value("sy") < -.5;
     if (clipped)
         paint.scene.pushClip({0, layout::appsTop + lift - 16, kit::canvas::width, kit::canvas::height});
-    rows(paint, frame, layout::appsTop - layout::rowsTop + lift);
+    rows(paint, frame, layout::appsTop - kit::look::homeTop + lift);
     if (clipped)
         paint.scene.popClip();
     if (home.arranging) {
@@ -347,12 +360,19 @@ void drawHome(kit::Paint paint, const Frame &frame) {
     float wall = static_cast<float>(motion.value("wall"));
     // The Apps page, and a page with nothing to show, wash in the neutral colour: the tint is the last
     // hero's, which they would otherwise keep.
-    kit::ambientWall(paint, 1 - wall, apps || home.rows.empty() ? neutralWash : home.art.wallTint);
+    kit::ambientWall(paint, 1 - wall, apps || home.rows.empty() ? neutralWash() : home.art.wallTint);
     if (apps) {
         kit::Hero none = heroOf(frame);
         none.wallAlpha = wall;
         kit::heroWall(paint, none);
         appRows(paint, frame);
+    } else if (!kit::look::discover) {
+        // No feed, so no hero and no dots: the rows start near the top.
+        rows(paint, frame);
+        if (home.rows.empty())
+            paint.glyphs.text(scene, {kit::canvas::safeX, 400, 1600, kit::type::body.line},
+                              !state.catalogue.valid() ? "Loading Home…" : "No items to show. Open Settings to arrange Home.",
+                              kit::type::body, kit::color::onSurface2);
     } else {
         kit::Hero hero = heroOf(frame);
         kit::heroWall(paint, hero);

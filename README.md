@@ -10,6 +10,7 @@
   <a href="https://ihtisham1211.github.io/native-tv/"><img alt="Documentation" src="https://img.shields.io/badge/docs-ihtisham1211.github.io%2Fnative--tv-1fb653"></a>
   <img alt="LG webOS 4 and later" src="https://img.shields.io/badge/LG%20webOS-4%20and%20later-a50034">
   <img alt="Home Assistant over MQTT Discovery" src="https://img.shields.io/badge/Home%20Assistant-MQTT%20Discovery-41bdf5?logo=homeassistant&logoColor=white">
+  <a href="https://buymeacoffee.com/ihtisham12z"><img alt="Buy me a coffee" src="https://img.shields.io/badge/Buy%20me%20a%20coffee-donate-FFDD00?logo=buymeacoffee&logoColor=black"></a>
 </p>
 
 <p align="center">
@@ -17,7 +18,8 @@
   <a href="https://ihtisham1211.github.io/native-tv/getting-started/install/">Install</a> ·
   <a href="https://ihtisham1211.github.io/native-tv/getting-started/tested-tvs/">Tested TVs</a> ·
   <a href="https://ihtisham1211.github.io/native-tv/integrations/home-assistant/">Home Assistant</a> ·
-  <a href="https://github.com/ihtisham1211/native-tv/issues">Issues</a>
+  <a href="https://github.com/ihtisham1211/native-tv/issues">Issues</a> ·
+  <a href="https://buymeacoffee.com/ihtisham12z">Support the project</a>
 </p>
 
 **Native Tv** is a server that runs directly on a rooted LG webOS TV. It gives the TV a live browser dashboard for any phone or computer, a native app on the TV itself, and an MQTT bridge for Home Assistant and other smart-home software.
@@ -56,6 +58,7 @@ Native Tv grew out of [Glasshouse](https://github.com/rorygallagher2024/glasshou
 * **[Power and standby](https://ihtisham1211.github.io/native-tv/dashboard/advanced/#power-and-standby).** Keep the TV on the network while it is off, Quick Boot, Wake-on-LAN, Always Ready and the On and Off timers, and a switch that [blocks LG's firmware updates](https://ihtisham1211.github.io/native-tv/dashboard/advanced/#system-updates), which can take root access away.
 * **[Remote button remapping](https://ihtisham1211.github.io/native-tv/dashboard/apps/#remote-keys).** Point Netflix, Prime Video, Guide, the colour keys and other shortcut buttons at any app, an HDMI input or Live TV. The change survives reboots.
 * **[OLED care](https://ihtisham1211.github.io/native-tv/dashboard/oled-care/).** Panel hours, compensation cycle progress, Pixel Refresher scheduling and failure alerts, and switches for screen shift, logo dimming, ASBL and Global Stress Reduction, which are normally reachable only from the service menu.
+* **[TV themes](https://ihtisham1211.github.io/native-tv/apps/tv-app/#tv-theme).** Google TV, or OLED Care for OLED panels: true black, dimmed icons, a ring for focus and a layout that moves a few pixels. Home is the apps, the inputs and the panel's hours, with no film picks. An OLED panel is offered it once.
 * **[Game mode](https://ihtisham1211.github.io/native-tv/dashboard/game/).** On TVs with LG's Game Optimizer, a game's frame rate in large type while the source uses VRR, beside the Optimizer's settings.
 * **[Home Assistant and MQTT](https://ihtisham1211.github.io/native-tv/integrations/home-assistant/).** The TV appears as one device through MQTT Discovery, with controls, telemetry and [remote button events](https://ihtisham1211.github.io/native-tv/integrations/home-assistant-remote-buttons/) for automations. The same topics work for any MQTT client.
 * **[Monitoring](https://ihtisham1211.github.io/native-tv/dashboard/metrics/).** SoC temperature, per-core CPU load, memory, swap, Wi-Fi signal and throughput; [Prometheus metrics](https://ihtisham1211.github.io/native-tv/integrations/prometheus/) and [syslog forwarding](https://ihtisham1211.github.io/native-tv/integrations/syslog/).
@@ -248,6 +251,10 @@ The pages are built from [docs/](docs/), so they can also be read there.
 ## Contributing
 
 Native Tv is MIT-licensed and open to contributions. [Contributing](CONTRIBUTING.md) explains how to build, test and open a pull request. Bugs and ideas go in the [issues](https://github.com/ihtisham1211/native-tv/issues). Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Support the project
+
+Native Tv is free and MIT-licensed. If it is useful, [buy me a coffee](https://buymeacoffee.com/ihtisham12z) or use the **Sponsor** button at the top of this repository. Starring the repository, reporting a TV that works or does not, and [contributing](CONTRIBUTING.md) also help. More on the [support page](https://ihtisham1211.github.io/native-tv/support/).
 
 ## Disclaimer
 

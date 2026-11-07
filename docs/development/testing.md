@@ -131,7 +131,9 @@ and SIGTERM. `native-frame-loop` covers the statistics and the clock.
 `tests/golden/golden.py check` renders the screens in `tests/golden/cases.json`
 with `--time` and compares each with its PNG, per pixel with a tolerance,
 writing `<name>.actual.png` and `<name>.diff.png` when one fails;
-`golden.py update` rewrites the PNGs after an intended change. A case may name
+`golden.py update` rewrites the PNGs after an intended change. The `oled-*` cases
+repeat Home, Apps by kind and Settings with `--theme n-oled-care`; every other case
+is `n-google-tv`, so a theme change that touches it shows as a changed golden. A case may name
 `"fixture": "home"`, which serves the stand-in daemon in `tests/home_fixture.py`
 (an invented catalogue, feed and generated artwork), and a `"script"` of timed
 keys; the Home and Apps cases catch the page at rest, mid-entrance, with the
@@ -220,12 +222,14 @@ what is shown. `native-optimistic-guard` (`tests/optimistic_guard.py`) fails whe
 `src/ui` calls the raw `services().write` instead of `host.optimistic()`; the pages that
 still do are listed in `tests/optimistic_guard.json`, and the counts only go down.
 
+`native-theme-screen` (`tests/theme_screen.cpp`) drives the TV theme picker as the remote does: a choice shows at once and is saved through `/api/control`, the Keep sheet (kept, refused with Back, timed out after ten seconds), a save the server refuses, the client following the theme the server names in caps and the catalogue, and the one-time offer of OLED Care. `native-oled-budget` (`tests/golden/oled_budget.py`, no GL) reads the `oled-*` goldens and fails when one passes the light budget the [design notes](material-3-expressive.md#n-oled-care) give; the `tvtheme-*` goldens show the Settings row, the picker, the Keep sheet and the offer.
+
 The client's parts have their own tests. `native-motion` checks the springs
 against a reference integrator, velocity kept on retarget, the bezier curves and
 the stagger on a fake clock. `native-kit` holds every component's geometry to the
 numbers in `native-tv/design/metrics.json`, and `native-kit-tokens` fails when
-`src/ui/kit/tokens.hpp` is stale against `native-tv/design/tokens.json`
-(`tools/gen_tokens.py` regenerates it). `native-raster` renders the SDF fill, ring,
+`src/ui/kit/tokens.hpp` or `palette.cpp` is stale against `native-tv/design/tokens.json`
+and `native-tv/design/themes/` (`tools/gen_tokens.py` regenerates them). `native-raster` renders the SDF fill, ring,
 shadow, gradient, clip and a Home-shaped frame on the CPU and compares them with
 the PPMs in `tests/fixtures/raster/` (`NATIVETV_UPDATE_GOLDEN=1` rewrites them
 after an intended change), and checks that a shape drawn as a flat core inside a

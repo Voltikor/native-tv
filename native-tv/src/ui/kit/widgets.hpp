@@ -63,6 +63,7 @@ struct TopBar {
     float pillAlpha = 1; // fades out while Settings or Setup is showing
     float avatarFocus = 0, settingsFocus = 0;
     bool settingsSelected = false;
+    bool barFocused = false; // focus is on a tab: a ring theme draws it around the selected one
     std::string clock;
     Enter enter;
 };
@@ -175,6 +176,17 @@ struct InputTile {
     Enter enter;
 };
 void inputTile(Paint paint, const InputTile &tile);
+
+// A card with a figure, a caption and a bar: the panel's hours, or its Pixel Refresher, on a Home
+// that has no feed (OLED Care's).
+struct InfoCard {
+    Rect rest;
+    std::string id, title, value, unit, caption;
+    float bar = -1; // 0..1, or -1 for no bar
+    float focus = 0;
+    Enter enter;
+};
+void infoCard(Paint paint, const InfoCard &card);
 
 // ---- Apps and Live ------------------------------------------------------------------------------
 

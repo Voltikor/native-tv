@@ -35,15 +35,18 @@ struct HeroText {
 };
 // What a page without art washes in: the Apps page uses it rather than the last hero's tint, which
 // made the same page olive or red depending on the title seen before it.
-constexpr Color neutralWash = {0.07f, 0.19f, 0.24f, 1};
+// It is the theme's: teal for n-google-tv, black for n-oled-care.
+inline Color neutralWash() {
+    return kit::color::wash;
+}
 struct HeroArt {
     std::string image[2];
     float artAlpha[2] = {1, 1}; // a focused app keeps the pick's picture, dimmed, under its tint
-    Color tint[2] = {neutralWash, neutralWash};
+    Color tint[2] = {neutralWash(), neutralWash()};
     int newest = 0;       // the layer that took the latest picture
     std::string shownId;  // card the layers are showing
     HeroText text;        // the lines on screen; changes after the old ones have left
-    Color wallTint = neutralWash; // what pages without art wash in
+    Color wallTint = neutralWash(); // what pages without art wash in
 };
 struct HomeState {
     size_t tab = 0, row = 0, column = 0, nav = 0;
@@ -95,6 +98,11 @@ struct ViewState {
     bool installRoot = false, installReplace = false;
     int hour = 0, minute = 0, weekday = 0, day = 1, month = 0;
     Json catalogue, discover, guide, stats, caps, setup, menuData, catalog, install;
+    // Title search needs a TMDB key and a theme with a feed: a client that read the feed under one
+    // theme keeps it when it switches to a theme without one.
+    bool titleSearch() const {
+        return kit::look::discover && discover["titlesEnabled"].boolean();
+    }
 };
 // What a view reads to draw a frame: the state the controllers keep and the animated values the
 // motion engine owns. Views never change either.
@@ -116,6 +124,9 @@ class Application : private ScreenHost {
     // question is asked again every two seconds, and the client's own first frames stay behind the
     // ink cover for at most 2.5 s so the page that is about to be replaced is not seen.
     bool capsAnswered_ = false, holdForCaps_ = false;
+    // The one-time offer of OLED Care was opened this run; the server stops sending it once answered.
+    bool themeOffered_ = false;
+    const char *shownTheme_ = nullptr; // the theme the Home art's wash was last reset for
     uint32_t capsAt_ = 0;
     std::string initial_;
     unsigned recentSnapshot_ = 0;
@@ -202,6 +213,15 @@ class Application : private ScreenHost {
     void resolvePictures();
     void buildFrame();
     void askCaps();
+    // Shows the theme the server names (caps, then every catalogue answer), unless a change of the
+    // person's is still being saved, and opens the one-time offer of OLED Care when the server sends it.
+    void followTheme(const Json &data);
+    // The theme in use is not the one the Home art and rows were built for: rebuild them, and read what
+    // the theme's Home needs.
+    void themeChanged();
+    // Home's rows for a tab: with a feed, the catalogue's and the feed's; without one (look::discover
+    // off) Home is the apps, the inputs and the panel's cards.
+    std::vector<CardRow> homeRowsFor(const std::string &tab) const;
     bool coveredForCaps() const;
     void rebuildHome();
     void rebuildMenu();

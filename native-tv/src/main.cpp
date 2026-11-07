@@ -57,7 +57,7 @@ bool translate(SDL_Keycode code, Key &key) {
 }
 struct Options {
     std::string server, font = "/usr/share/fonts/LG_Smart_UI-Regular.ttf",
-                screen = "home", capture, script, report, perf;
+                screen = "home", capture, script, report, perf, theme;
     Uint32 duration = 0;
     long long time = -1; // --time: fixed clock, stop and capture at this many ms; -1 is off
     bool windowed = false, probe = false;
@@ -86,7 +86,8 @@ Options options(int argc, char **argv) {
             std::puts("nativetv-tv [--server http://127.0.0.1:PORT] [--font font.ttf] [--screen "
                       "splash|home|dashboard|setup:welcome|kit:keyboard] [--windowed] [--script "
                       "steps.json] [--capture image.ppm] [--duration-ms N] [--time=MS] "
-                      "[--perf=log.jsonl] [--report report.json] [--probe]");
+                      "[--perf=log.jsonl] [--report report.json] [--theme n-google-tv|n-oled-care] "
+                      "[--probe]");
             std::exit(0);
         } else if (inlineValue || i + 1 < argc) {
             if (!inlineValue)
@@ -105,6 +106,11 @@ Options options(int argc, char **argv) {
                 result.report = value;
             else if (arg == "--perf")
                 result.perf = value;
+            else if (arg == "--theme") {
+                if (!kit::useTheme(value))
+                    throw std::runtime_error("Unknown theme: " + value);
+                result.theme = value;
+            }
             else if (arg == "--duration-ms")
                 result.duration = static_cast<Uint32>(std::stoul(value));
             else if (arg == "--time") {
@@ -305,6 +311,16 @@ int main(int argc, char **argv) {
         Options opts = options(argc, argv);
         if (opts.probe)
             return runProbe(opts.windowed);
+        // The theme the client last drew in: it opens in it, before the server has said (caps answer
+        // after the first frame), so an OLED panel never lights Google TV's wash first and never asks
+        // for a feed it will not draw. Not with a fixed clock, so captures stay the same everywhere.
+        const std::string themeFile = clientThemePath(clientServerConfigPath());
+        if (opts.theme.empty() && opts.time < 0) {
+            const std::string saved = readClientTheme(themeFile);
+            if (!saved.empty())
+                kit::useTheme(saved);
+        }
+        const char *savedTheme = kit::themeId();
         std::setlocale(LC_TIME, "");
         // The loop wakes on the display's schedule while the TV runs a load average near 30, and
         // at normal priority the wake-ups come up to several ms late: 16.7 ms frames spread over
@@ -477,6 +493,10 @@ int main(int argc, char **argv) {
                     app.wallClock(local.tm_hour, local.tm_min, local.tm_wday, local.tm_mday,
                                   local.tm_mon);
                     wallClockAt = now + 1000;
+                    if (kit::themeId() != savedTheme) { // the theme changed: the next start opens in it
+                        savedTheme = kit::themeId();
+                        writeClientTheme(themeFile, savedTheme);
+                    }
                 }
                 for (bool more = pending || SDL_PollEvent(&event); more;
                      more = SDL_PollEvent(&event)) {

@@ -123,6 +123,8 @@ bool Application::update(uint32_t now) {
     if (state_.screen == Screen::Splash)
         return true;
     clock_.tick();
+    if (shownTheme_ != kit::themeId())
+        themeChanged();
     bool moved = motion_.update(clock_);
     updateWallpaperTransition();
     if (static_cast<int32_t>(now_ - refreshAt_) >= 0)
@@ -327,6 +329,14 @@ void Application::buildFrame() {
         scene.background = kit::color::ink;
         return;
     }
+    // A theme with drift moves everything it draws, pointer hits included, by a few pixels as the
+    // minutes pass; the idle veil stays put so it still covers the whole screen.
+    const kit::geometry::Drift drift =
+        kit::geometry::driftAt(state_.hour * 60 + state_.minute, kit::look::driftX, kit::look::driftY);
+    const bool drifting = drift.x != 0 || drift.y != 0;
+    const size_t hitsBefore = scene.hits.size();
+    if (drifting)
+        scene.pushTransform(Transform::translate(drift.x, drift.y));
     if (screen_) {
         scene.background = kit::color::ink;
         if (!screen_->paintsWall())
@@ -352,6 +362,13 @@ void Application::buildFrame() {
                           kit::type::title, kit::color::onSurface);
         scene.popTransform();
         scene.popOpacity();
+    }
+    if (drifting) {
+        scene.popTransform();
+        for (size_t i = hitsBefore; i < scene.hits.size(); ++i) {
+            scene.hits[i].rect.x += drift.x;
+            scene.hits[i].rect.y += drift.y;
+        }
     }
     drawIdleDim(paint);
 }
