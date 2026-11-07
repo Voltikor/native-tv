@@ -9,8 +9,6 @@
 // animated values. Ids stay under 16 characters so building one allocates nothing.
 namespace nativetv {
 namespace home {
-constexpr size_t kGridColumns = static_cast<size_t>(kit::layout::tileCols);
-constexpr float kGridPitch = kit::layout::tilePitchY;
 constexpr size_t kSpotlightMax = 6;
 
 // Hue in degrees, saturation and lightness in 0..1.
@@ -48,6 +46,11 @@ inline unsigned hashOf(const std::string &text) {
 inline bool isApps(const CardRow &row) {
     return row.key == "app";
 }
+// Whether every app circle on the page carries its name: always on the Apps page, and on Home
+// while the layout's App names switch is on (its default).
+inline bool namesShown(const std::string &tabKey, const Json &layout) {
+    return tabKey == "apps" || layout["appNames"].boolean(true);
+}
 inline float itemWidth(const CardRow &row) {
     return isApps(row) ? kit::layout::appD : kit::layout::cardW;
 }
@@ -71,16 +74,6 @@ inline Rect item(const CardRow &row, size_t rowIndex, size_t column, bool named 
     return {kit::canvas::safeX + static_cast<float>(column) * (width + gap),
             kit::geometry::rowItemsY(static_cast<int>(rowIndex)), width,
             isApps(row) ? kit::layout::appD : kit::layout::cardH};
-}
-// The apps grid's scroll target while focus is on `column`: three rows fit under the page
-// title, so the grid follows once focus passes the second row, and stops when the last row is
-// in view.
-inline float gridScrollTarget(size_t column, size_t count) {
-    size_t rows = (count + kGridColumns - 1) / kGridColumns, at = column / kGridColumns;
-    float visible = 3;
-    float room = rows > visible ? (static_cast<float>(rows) - visible) * kGridPitch : 0;
-    float wanted = at > 1 ? static_cast<float>(at - 1) * kGridPitch : 0;
-    return -(wanted > room ? room : wanted);
 }
 // The Apps page by kind starts at layout::appsTop and holds this many rows whole.
 constexpr size_t kKindRowsVisible =

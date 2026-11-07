@@ -96,8 +96,10 @@ std::string pictureLabel(const Json &picture) {
 }
 std::vector<Tab> homeTabs(const Json &catalogue) {
     std::vector<Tab> tabs = {{"home", "Home", Operation::None}};
+    // The tab needs channels: the TV's count when it gave one, else the channels added to Home. A count
+    // that did not come (null) is not a count of zero channels, nor a promise of any.
     if (catalogue["layout"]["showLive"].boolean() &&
-        catalogue["sources"]["channels"].number(-1) != 0)
+        (catalogue["sources"]["channels"].number(0) > 0 || catalogue["channels"].size() > 0))
         tabs.push_back({"live", "Live", Operation::None});
     tabs.push_back({"apps", "Apps", Operation::None});
     if (catalogue["layout"]["showInputs"].boolean(true) && catalogue["devices"].size())
@@ -172,23 +174,23 @@ CardRow catalogueRow(const std::string &kind, const Json &catalogue, const Json 
     row.cards.insert(row.cards.end(), hiddenCards.begin(), hiddenCards.end());
     return row;
 }
-// The apps as one row or, with the apps sorted by kind, one row per kind in the owner's order.
+// The apps as one row per kind, in the owner's order of the kinds.
 // `list` names the hidden apps that are left out: Home's ("app") or the Apps tab's ("appsTab").
 std::vector<CardRow> appRows(const Json &catalogue, const Json &guide, const std::string &list) {
     CardRow all = catalogueRow("app", catalogue, guide, false, list);
     std::vector<CardRow> rows;
-    if (catalogue["layout"]["sort"]["app"].string() == "kind")
-        for (const auto &kind : catalogue["kinds"].items()) {
-            CardRow row;
-            row.key = "app";
-            row.group = kind["key"].string();
-            row.title = kind["label"].string(row.group);
-            for (const Card &card : all.cards)
-                if (kindOf(card) == row.group)
-                    row.cards.push_back(card);
-            if (!row.cards.empty())
-                rows.push_back(row);
-        }
+    for (const auto &kind : catalogue["kinds"].items()) {
+        CardRow row;
+        row.key = "app";
+        row.group = kind["key"].string();
+        row.title = kind["label"].string(row.group);
+        for (const Card &card : all.cards)
+            if (kindOf(card) == row.group)
+                row.cards.push_back(card);
+        if (!row.cards.empty())
+            rows.push_back(row);
+    }
+    // A catalogue with no kinds (an older daemon's) shows the apps as one row.
     if (rows.empty())
         rows.push_back(all);
     return rows;
@@ -251,11 +253,12 @@ std::vector<CardRow> homeRows(const std::string &tab, const Json &catalogue, con
     for (const auto &source : discover["rows"].items())
         feedRows[source["key"].string()] = source;
     // The apps lead, as on Google TV, in their kinds' order when sorted by kind; the top picks
-    // follow and the hero is drawn from them.
+    // follow and the hero is drawn from them. The rows that open in an app (Netflix, YouTube)
+    // come next, so they are not four rows down.
     CardRow apps = appsRow(catalogue, guide, false);
     if (!apps.cards.empty())
         result.push_back(apps);
-    for (const auto &key : {"trending", "movies", "series", "netflix", "youtube"}) {
+    for (const auto &key : {"trending", "netflix", "youtube", "movies", "series"}) {
         if (!feedRows.count(key))
             continue;
         Json source = feedRows[key];

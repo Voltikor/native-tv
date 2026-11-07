@@ -38,6 +38,10 @@
       ],
       "script": [
         {
+          "at": 1400,
+          "key": "down"
+        },
+        {
           "at": 1500,
           "key": "right"
         },
@@ -236,7 +240,6 @@
       "name": "apps-kinds",
       "time": 3200,
       "fixture": "home",
-      "sort": "kind",
       "args": [
         "--screen",
         "home"
@@ -268,7 +271,6 @@
       "name": "apps-arrange",
       "time": 3400,
       "fixture": "home",
-      "sort": "kind",
       "args": [
         "--screen",
         "home"
@@ -1096,6 +1098,10 @@
       ],
       "script": [
         {
+          "at": 1300,
+          "key": "down"
+        },
+        {
           "at": 1500,
           "key": "ok"
         }
@@ -1110,6 +1116,10 @@
         "home"
       ],
       "script": [
+        {
+          "at": 1300,
+          "key": "down"
+        },
         {
           "at": 1500,
           "key": "ok"

@@ -81,14 +81,6 @@ struct HomeRecentHistoryState {
     std::string path;
 };
 
-// The input a device tile just opened: its arrival in front is the tile, not
-// the remote, so the foreground watcher skips that stamp.
-struct HomeTileInputState {
-    std::mutex mutex;
-    std::string appId;
-    int64_t at = 0;
-};
-
 class HttpFrontDoor {
   public:
     HttpFrontDoor(ServerConfig config, std::string version, std::string dataRoot,
@@ -352,7 +344,6 @@ class HttpFrontDoor {
     void persistHomeRecent(HttpExchange &exchange) const;
     void syncHomeAutoLaunch(HttpExchange &exchange) const;
     Json synchronizeHomeAutoLaunch(bool escaped) const;
-    Json recordHomeRecent(const std::string &row, const std::string &id) const;
     service::HomeRecentApps queryHomeRecentApps() const;
     Json homeChannelSnapshot(bool &tunerAvailable) const;
     void setNativeHomeScreen(HttpExchange &exchange) const;
@@ -416,7 +407,6 @@ class HttpFrontDoor {
     mutable std::shared_ptr<LunaSubscription> homePictureVideoSubscription_;
     mutable std::shared_ptr<HomeNowTrackingState> homeNowState_;
     mutable std::shared_ptr<HomeRecentHistoryState> homeRecentHistoryState_;
-    mutable std::shared_ptr<HomeTileInputState> homeTileInputState_;
     mutable std::shared_ptr<std::atomic<bool>> homeEscapeActive_;
     mutable std::shared_ptr<std::atomic<bool>> homeEscapeReturnPending_;
     mutable std::mutex homeRecentAppsMutex_;

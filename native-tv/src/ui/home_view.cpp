@@ -117,7 +117,6 @@ void drawTopBar(kit::Paint paint, const Frame &frame, int pageTab) {
     bar.settingsSelected = pageTab < 0 && !home.navigation;
     bar.pillLeft = static_cast<float>(motion.value("pill:0"));
     bar.pillRight = static_cast<float>(motion.value("pill:1"));
-    bar.pillHot = static_cast<float>(motion.value("pill:hot"));
     bar.avatarFocus = static_cast<float>(motion.value("f:av"));
     bar.settingsFocus = static_cast<float>(motion.value("f:gr"));
     bar.clock = clockText(state);
@@ -144,9 +143,8 @@ void rows(kit::Paint paint, const Frame &frame, float top = 0) {
     const HomeState &home = state.home;
     const Motion &motion = frame.motion;
     const float stack = static_cast<float>(motion.value("sy")) + top;
-    const bool appNames = state.catalogue["layout"]["appNames"].boolean(true);
-    // On the Apps page every circle carries its name; on Home only the focused one does.
-    const bool namedApps = home.tabs[home.tab].key == "apps";
+    // Every circle carries its name on the Apps page, and on Home while App names is on.
+    const bool namedApps = home::namesShown(home.tabs[home.tab].key, state.catalogue["layout"]);
     for (size_t ri = 0; ri < home.rows.size(); ++ri) {
         const CardRow &row = home.rows[ri];
         float labelY = kit::geometry::rowLabelY(static_cast<int>(ri)) + stack;
@@ -164,7 +162,7 @@ void rows(kit::Paint paint, const Frame &frame, float top = 0) {
                 const float overhang = namedApps ? (layout::appGapNamed - 8) / 2 : 0;
                 right = std::min(right, last.x + last.w + overhang + kPad +
                                             static_cast<float>(motion.value(home::id("rx", ri))));
-                right = std::max(right, left + 480);
+                right = std::max(right, left + 800);
             }
             const float height = layout::rowLabelH + layout::rowLabelGap +
                                  (home::isApps(row) ? layout::appD + 56 : layout::cardH + 12);
@@ -173,10 +171,35 @@ void rows(kit::Paint paint, const Frame &frame, float top = 0) {
             slab.ring = {1, 0, kit::alpha::outline};
             slab.shadow = {0, kit::elevation::raised.dy, kit::elevation::raised.blur, 0,
                            {0, 0, 0, .5f}};
+            // The card's buttons in its top right corner, level with the row's name: Hide (Show,
+            // on a hidden app) for the focused app, Move kind, which picks the card up, and Done.
+            // Up from the apps reaches them; the pointer clicks them.
+            const bool focusedHidden = home.column < row.cards.size() && row.cards[home.column].hidden;
+            kit::PillButton done, move, hide;
+            done.rest = {right - 20 - 150, labelY - 4, 150, 48};
+            done.id = "arrange:done";
+            done.label = "Done";
+            done.icon = "check";
+            done.focus = static_cast<float>(motion.value("f:ad"));
+            move.rest = {done.rest.x - 16 - 196, labelY - 4, 196, 48};
+            move.id = "arrange:move";
+            move.label = home.carryingKind ? "Put down" : "Move kind";
+            move.icon = "arrowup";
+            move.focus = static_cast<float>(motion.value("f:am"));
+            hide.rest = {move.rest.x - 16 - 140, labelY - 4, 140, 48};
+            hide.id = "arrange:hide";
+            hide.label = focusedHidden ? "Show" : "Hide";
+            hide.icon = focusedHidden ? "eye" : "eyeoff";
+            hide.focus = static_cast<float>(motion.value("f:ah"));
+            kit::pillButton(paint, hide);
+            kit::pillButton(paint, move);
+            kit::pillButton(paint, done);
         }
         kit::Row label;
         label.index = static_cast<int>(ri);
         label.label = home.editing && ri == home.row && home::isApps(row) ? "Moving apps" : row.title;
+        if (home.arranging && home.carrying && ri == home.row && home.column < row.cards.size())
+            label.label = "Moving " + row.cards[home.column].title;
         label.dim = static_cast<float>(motion.value(home::id("rd", ri)));
         label.enter = enterOf(motion, home::id("ER", ri));
         // The next row's name is not shown cut by the screen's edge: it fades in as it rises.
@@ -200,7 +223,7 @@ void rows(kit::Paint paint, const Frame &frame, float top = 0) {
                 kit::AppCircle circle;
                 circle.rest = rest;
                 circle.id = id;
-                circle.name = appNames || namedApps ? card.title : "";
+                circle.name = namedApps ? card.title : "";
                 circle.icon = card.id == "lg-home" ? "home" : "apps";
                 circle.image = card.image;
                 circle.color = appColor(card);
@@ -263,46 +286,6 @@ void hintBand(kit::Paint paint, const std::vector<kit::Hint> &hints) {
     kit::hintBar(paint, {kit::canvas::safeX, 998, 0, 30}, hints);
 }
 
-// The Apps page: the same circles as Home's apps row, larger, with their names, six to a row.
-// It has no head: the first row starts under the bar.
-void grid(kit::Paint paint, const Frame &frame) {
-    const HomeState &home = frame.state.home;
-    const Motion &motion = frame.motion;
-    if (home.rows.empty())
-        return;
-    const CardRow &row = home.rows[0];
-    const float lift = kEditLift * static_cast<float>(motion.value("lift"));
-    const float scroll = static_cast<float>(motion.value("gy")) + lift;
-    // Rows that scroll away disappear under the bar rather than over it.
-    const float clipTop = kit::layout::appsTop + lift - 16;
-    bool clipped = scroll - lift < -.5f;
-    if (clipped)
-        paint.scene.pushClip({0, clipTop, kit::canvas::width, kit::canvas::height});
-    for (size_t i = 0; i < row.cards.size(); ++i) {
-        Rect rest = kit::geometry::appTile(static_cast<int>(i));
-        rest.y += scroll;
-        if (rest.y > kit::canvas::height + 40 || rest.y + rest.h < clipTop - 44)
-            continue;
-        const Card &card = row.cards[i];
-        kit::AppCircle circle;
-        circle.rest = rest;
-        circle.id = home::hit(0, i);
-        circle.name = card.title;
-        circle.icon = card.id == "lg-home" ? "home" : "apps";
-        circle.image = card.image;
-        circle.color = appColor(card);
-        circle.named = true;
-        circle.nameWidth = layout::tilePitchX - 40;
-        circle.focus = static_cast<float>(motion.value(home::id("f", 0, i)));
-        circle.enter = enterOf(motion, home::id("EC", 0, i));
-        if (card.hidden) // hidden from the Apps page: listed only while its apps are edited
-            circle.enter.alpha *= .4f;
-        kit::appCircle(paint, circle);
-    }
-    if (clipped)
-        paint.scene.popClip();
-}
-
 // The Apps page with its apps grouped by kind: rows as on Home from under the bar, which pass
 // under it once they scroll.
 void appRows(kit::Paint paint, const Frame &frame) {
@@ -315,8 +298,26 @@ void appRows(kit::Paint paint, const Frame &frame) {
     rows(paint, frame, layout::appsTop - layout::rowsTop + lift);
     if (clipped)
         paint.scene.popClip();
-    if (home.arranging)
-        hintBand(paint, {{"", "Move"}, {"OK", "Save"}, {"Back", "Cancel"}});
+    if (home.arranging) {
+        const bool hidden = home.row < home.rows.size() && home.column < home.rows[home.row].cards.size() &&
+                            home.rows[home.row].cards[home.column].hidden;
+        if (home.carryingKind)
+            hintBand(paint, {{"Up/Down", "Move kind"}, {"OK", "Put down"}});
+        else if (home.carrying)
+            hintBand(paint, {{"Left/Right", "Move app"}, {"OK", "Put down"}});
+        else if (home.arrangeFocus)
+            hintBand(paint, {{"Left/Right", "Choose"},
+                             {"OK", home.arrangeFocus == 1   ? (hidden ? "Show app" : "Hide app")
+                                    : home.arrangeFocus == 2 ? "Move kind"
+                                                             : "Done"},
+                             {"Down", "Back to the apps"},
+                             {"Back", "Done"}});
+        else
+            hintBand(paint, {{"Left/Right", "Select"},
+                             {"OK", "Pick up"},
+                             {"Up", "Hide, move kind, done"},
+                             {"Back", "Done"}});
+    }
 }
 
 void banner(kit::Paint paint, float amount) {
@@ -344,20 +345,21 @@ void drawHome(kit::Paint paint, const Frame &frame) {
     const bool apps = home.tabs[home.tab].key == "apps";
     wallpaper(scene, home);
     float wall = static_cast<float>(motion.value("wall"));
-    kit::ambientWall(paint, 1 - wall, home.art.wallTint);
+    // The Apps page, and a page with nothing to show, wash in the neutral colour: the tint is the last
+    // hero's, which they would otherwise keep.
+    kit::ambientWall(paint, 1 - wall, apps || home.rows.empty() ? neutralWash : home.art.wallTint);
     if (apps) {
         kit::Hero none = heroOf(frame);
         none.wallAlpha = wall;
         kit::heroWall(paint, none);
-        if (home.grid)
-            grid(paint, frame);
-        else
-            appRows(paint, frame);
+        appRows(paint, frame);
     } else {
         kit::Hero hero = heroOf(frame);
         kit::heroWall(paint, hero);
-        kit::heroText(paint, hero);
-        if (home.spotlight.size() > 1) {
+        // The hero's lines and dots belong to the rows under them: with none, the last ones would stay.
+        if (!home.rows.empty())
+            kit::heroText(paint, hero);
+        if (home.spotlight.size() > 1 && !home.rows.empty()) {
             kit::Pagination dots;
             dots.count = static_cast<int>(home.spotlight.size());
             for (int i = 0; i < dots.count; ++i)
@@ -370,11 +372,14 @@ void drawHome(kit::Paint paint, const Frame &frame) {
             kit::pagination(paint, dots);
         }
         rows(paint, frame);
-        if (home.rows.empty())
+        if (home.rows.empty()) {
+            const bool live = home.tabs[home.tab].key == "live";
             paint.glyphs.text(scene, {kit::canvas::safeX, 800, 1600, kit::type::body.line},
-                              state.catalogue.valid() ? "No items to show. Open Settings to arrange Home."
-                                                      : "Loading Home…",
+                              !state.catalogue.valid() ? "Loading Home…"
+                              : live ? "No channels added yet. Add some on the dashboard's Native Tv Home tab."
+                                     : "No items to show. Open Settings to arrange Home.",
                               kit::type::body, kit::color::onSurface2);
+        }
     }
     if (home.editing && home.row < home.rows.size() && home.column < home.rows[home.row].cards.size()) {
         // Editing the apps: the button above the page hides the focused app, or shows it again when

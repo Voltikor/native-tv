@@ -625,10 +625,10 @@ change nothing on a TV that has others (`E2E-119` expects the test B3's own leve
 `withSession` sends it back, which `E2E-104` uses to unlock; `save {name: "path"}` keeps a field of a reply and a body value `"$name"` is that field in
 a later step, which `E2E-113` uses for a saved page's id. A path name picks an array item by any value, dots included (`preload[id=com.webos.app.browser].off`). `E2E-103` is a client run, not an api case, with the same permission:
 it presses OK on a number row of the Game settings and goes round its range.
-`E2E-120` is a client run that changes the server: with the apps sorted by kind, a long press on a row of the Apps tab lifts it, Down
-moves it and OK saves the kinds' order, then it is moved back and Back cancels. A run case may carry a `before` flow of api steps
+`E2E-120` is a client run that changes the server: a long press on a row of the Apps tab lifts it as a card, Move kind picks the card up,
+Down moves it, and Back saves the kinds' order; then it is moved back and saved again. A run case may carry a `before` flow of api steps
 (POSTs need `control`), which the runner sends before the client starts, and a `cleanup` flow, which it sends even when the run
-failed, so `E2E-120` starts with the apps by kind and ends with them in Your order and the kinds in their default order. The script's
+failed, so `E2E-120` starts and ends with the kinds in their default order. The script's
 `longPress` step is the client's hold of OK and `longBack` its hold of Back (650 ms on a real remote), and a Home checkpoint
 reports the client's snapshot: `tab`, `row`, `rowGroup` (the kind of the focused row), `arranging`, `editing`, `editHide`,
 `focusCard` (the id of the focused card) and `rowHead` (the first three card ids of the focused row). `E2E-178` is a client run
@@ -674,7 +674,7 @@ the texture memory, the checkpoints the script took and the size of the capture.
 | E2E-105 | The Home Assistant settings refuse a URL or a space as the broker and markup as the device name (`api`, `control`) | |
 | E2E-106, 107 | LG rows round-trip: the ad switches, sound mode, balance, automatic volume and Bluetooth speaker mode (106); the Game Optimizer rows (107). Each is set, read back from the TV's settings service and put back (`api`, `control`) | |
 | E2E-110 to 119 | The rest of the settings, each set through the server, read back and put back: privacy switches and the ad blocker (110); screen saver and brightness (111); OLED protections, screen shift, logo dimming and the service menu lock (112); app preload and saved web pages, with the id the add gives (113); watch time and screen-time limits (114); NTP server (115); a damaged backup refused (116); an SSH key added and removed, the TV's own keys untouched (117); a 22 KB catalogue app installed and uninstalled (118); volume, mute, brightness, picture mode, energy saving and the sleep timer, from the test B3's own levels (119) (`api`, `control`) | |
-| E2E-120 | Arranging the kinds on the Apps tab: with the apps by kind, a long press lifts a row, Down moves it and OK saves, a second long press and Up move it back, Back cancels; the order is reset after (`control`, `before`, `cleanup`) | `home` |
+| E2E-120 | Arranging the kinds on the Apps tab: a long press lifts a row as a card, Move kind and Down move it, Back saves, a second long press, Move kind and Up move it back and Back saves; the order is reset after (`control`, `before`, `cleanup`) | `home` |
 | E2E-178 | Editing the apps on the Apps tab: a long press starts it, the Hide from Apps button hides an app, and the grid and the server's `hidden.appsTab` list lose it while Home's `hidden.app` stays as it was; the order and both hidden lists are put back after, on the B3's six hidden apps (`control`, `before`, `cleanup`) | `home` |
 | E2E-121, 122 | A TMDB key that is not 32 hex digits (a word, 20 digits, a number) is refused; `kind: title` is no longer a way to open a feed title (`api`, `control`) | |
 | E2E-125 | OK on Dark room mode in the TV's Game settings steps it Off, Level 1, Level 2, Off through the server and leaves it off (`control`, `cleanup`) | `dashboard:game` |
@@ -877,6 +877,34 @@ native-tv/build-host-full/nativetv-tv --server http://127.0.0.1:8080 --screen ho
 The arrow keys, Enter, Esc (Back), F1 (red) and Page Up and Down stand in for the remote. `--screen` takes `home`, `dashboard`, `setup:welcome`, `splash` and `kit:keyboard`; `--script steps.json` plays timed keys; `--capture frame.ppm --duration-ms 9000` saves a frame (`write_png` in `tests/golden/golden.py` turns the last width x height x 3 bytes of the PPM, the raw RGB, into a PNG). It draws through the computer's own GPU, so frame rate, smoothness and colour say nothing about a TV.
 
 The emulated TV has eight apps installed under their webOS ids (YouTube, Netflix, Prime Video, Disney+, Apple TV, Spotify, Plex and the browser), listed in `APPS` in `scripts/emulate-tv.js`. The script writes each one's `appinfo.json` as a TV has it and passes the list to the stand-in `luna-send` (`NATIVETV_FAKE_LUNA_MODE=emulator`); the client takes each brand icon from the pack by id, then by the title in `appinfo.json`. The Home is otherwise empty, with no feed or catalogue: `tests/home_fixture.py` serves those.
+
+## Testing in a webOS OSE virtual machine
+
+webOS Open Source Edition 2.28.0 (the `qemux86-64` devel image of build-webos v2.28.0) runs under QEMU on a Mac. It gives the daemon a real webOS to run on (Luna, systemd, the web runtime) and the native client a real backend, which the emulator above only fakes. It is not a TV: it has no `com.webos.service.tv.*` services, no ACR or EULA files, no Homebrew Channel and no LG apps, and its settings service rejects the consent writes, so LG settings, channels, now-playing and recents are empty. A change that depends on LG's services still needs a TV.
+
+Requirements:
+
+- A Mac with QEMU (`brew install qemu`; 11.1.3 tried). x86-64 runs without acceleration (TCG), so the guest is slow: it boots in about 15 s and has 4 GB of RAM.
+- Docker with amd64 containers (Rosetta on Apple Silicon), which builds the x86-64 daemon in Debian bookworm and runs the host tests there.
+- For the client window: `brew install cmake ninja sdl2 sdl2_image sdl2_ttf freetype json-c`. The client draws through the Mac's GPU; drawn inside the VM it needs minutes to its first frame, so the VM is its backend only.
+- The OSE image from the build-webos v2.28.0 release, set up once with an ssh key and the guest's dropbear socket enabled.
+- Python 3.
+
+The scripts that drive it are not in the repository; they live in `~/webos-ose` on the maintainer's Mac. From there, for the tree in `REPO`:
+
+```bash
+CPU=Haswell SMP=6 ./run.sh &   # boots the VM; HEADLESS=1 opens no QEMU window
+./up.sh                        # waits for ssh, stops the webOS compositor, starts the daemon
+REPO=<tree> ./build.sh         # x86-64 daemon and service; the host tests run in the container
+./deploy-vm.sh                 # lays /var/lib/tvweb out as deploy.sh does and restarts the daemon
+python3 smoke.py               # GETs every parameterless route in contract/routes.json
+./tv.sh                        # the TV client in a window on the Mac, the VM as its backend
+MAC=1 python3 remote.py        # the on-screen remote at http://127.0.0.1:9000
+```
+
+The dashboard is at `http://127.0.0.1:18080` with the token in `~/webos-ose/token` as a Bearer header. `tv.sh` runs `~/webos-ose/client-mac/nativetv-tv`: build the client as under Local TV emulation and copy it there with `native-tv/assets` beside it. The client reaches the daemon through an ssh tunnel on port 18081, so its requests arrive from the guest's own loopback, as on a TV (a plain port forward gets 401).
+
+In the client window the arrow keys, Enter, Esc (Back), F1 (red) and Page Up and Down are the remote. The remote page sends the same keys: with `MAC=1` to the client window, which needs the terminal allowed under System Settings > Privacy & Security > Accessibility (without it System Events refuses with error 1002 and the buttons do nothing); without `MAC=1` to the VM's own screen through the QEMU monitor, for the client running inside the VM.
 
 ## Route and Home controller tests
 

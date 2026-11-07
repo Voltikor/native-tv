@@ -170,8 +170,11 @@ int main() {
         reply(app, "catalogue", catalogue);
         reply(app, "discover", feed);
         check(app.snapshot()["rows"].number() == 2, "Live catalogue and feed rows are combined");
+        check(app.snapshot()["row"].number() == 0 && app.snapshot()["column"].number() == 0,
+              "Initial selection lands on the apps row, with the top picks behind it");
+        app.key(Key::Down);
         check(app.snapshot()["row"].number() == 1 && app.snapshot()["column"].number() == 0,
-              "Initial selection lands on the first top pick, under the apps row");
+              "Down reaches the first top pick");
         app.key(Key::Ok);
         check(app.screenName() == "details", "OK on a title opens details");
         check(transport.count("action") == 0, "Opening details does not launch the title");
@@ -192,8 +195,7 @@ int main() {
         Application navigation(navigationTransport);
         reply(navigation, "catalogue", catalogue);
         reply(navigation, "discover", feed);
-        navigation.key(Key::Up); // to the apps row
-        navigation.key(Key::Up); // to the bar
+        navigation.key(Key::Up); // from the apps row to the bar
         for (int i = 0; i < 3; ++i)
             navigation.key(Key::Right);
         navigation.key(Key::Ok);
@@ -229,9 +231,9 @@ int main() {
         reply(clock, "catalogue", twelveHourCatalogue.dump());
         Scene twelveHourScene = clock.scene();
         const Node *twelveHourTime = textNode(twelveHourScene, "5:05");
-        check(twelveHourTime && twelveHourTime->rect.x == 1740 && twelveHourTime->rect.y == 72 &&
+        check(twelveHourTime && twelveHourTime->rect.x == 1556 && twelveHourTime->rect.y == 72 &&
                   twelveHourTime->rect.w == 100 && twelveHourTime->align == Node::Align::Right,
-              "The 12-hour clock sits right-aligned at the bar's right margin");
+              "The 12-hour clock sits right-aligned before the brand name at the bar's right margin");
         Json twentyFourHourCatalogue = Json::parse(catalogue);
         FakeTransport clock24Transport;
         Application clock24(clock24Transport);
@@ -302,6 +304,7 @@ int main() {
                       visibleWallpaper && std::fabs(visibleWallpaper->color.a - expected.opacity) < .01f,
                   "The Home clock selects and fades to the correct wallpaper time slot");
         }
+        wallpaper.key(Key::Down); // from the apps row to the top pick, which the hero then shows
         run(wallpaper, slotTime, 1500);
         Scene focusedWallpaper = wallpaper.scene();
         const Node *carouselTitle = textNode(focusedWallpaper, "Coast");
@@ -431,7 +434,7 @@ int main() {
         const char *fullCatalogue =
             R"({"ok":true,"apps":[{"id":"a","title":"Alpha"},{"id":"b","title":"Beta"},{"id":"c","title":"Gamma"},{"id":"d","title":"Delta"},{"id":"e","title":"Epsilon"},{"id":"f","title":"Zeta"},{"id":"g","title":"Eta"},{"id":"h","title":"Theta"}],"devices":[{"id":"hdmi1","name":"Console","port":1},{"id":"hdmi2","name":"Stick","port":2,"unused":true}],"channels":[],"order":{"app":["a","b","c","d","e","f","g","h","lg-home"],"dev":["hdmi1","hdmi2"]},"layout":{"rows":["app","dev"],"hidden":{},"showInputs":true},"profiles":[{"id":"main","name":"Main","active":true}]})";
         const char *fullFeed =
-            R"({"ok":true,"enabled":true,"titlesEnabled":true,"rows":[{"key":"trending","items":[{"id":1,"type":"movie","title":"One","overview":"First."},{"id":2,"type":"movie","title":"Two","overview":"Second."},{"id":3,"type":"tv","title":"Three","overview":"Third."},{"id":4,"type":"movie","title":"Four"},{"id":5,"type":"movie","title":"Five"},{"id":6,"type":"movie","title":"Six"},{"id":7,"type":"movie","title":"Seven"},{"id":8,"type":"movie","title":"Eight"}]},{"key":"movies","items":[{"id":9,"type":"movie","title":"Nine"}]}]})";
+            R"({"ok":true,"enabled":true,"titlesEnabled":true,"rows":[{"key":"trending","items":[{"id":1,"type":"movie","title":"One","overview":"First."},{"id":2,"type":"movie","title":"Two","overview":"Second."},{"id":3,"type":"tv","title":"Three","overview":"Third."},{"id":4,"type":"movie","title":"Four"},{"id":5,"type":"movie","title":"Five"},{"id":6,"type":"movie","title":"Six"},{"id":7,"type":"movie","title":"Seven"},{"id":8,"type":"movie","title":"Eight"},{"id":10,"type":"movie","title":"Ten"},{"id":11,"type":"movie","title":"Eleven"},{"id":12,"type":"movie","title":"Twelve"},{"id":13,"type":"movie","title":"Thirteen"},{"id":14,"type":"movie","title":"Fourteen"},{"id":15,"type":"movie","title":"Fifteen"}]},{"key":"movies","items":[{"id":9,"type":"movie","title":"Nine"}]}]})";
         FakeTransport homeTransport;
         Application home(homeTransport);
         home.update(0);
@@ -452,10 +455,15 @@ int main() {
               "The entrance finishes for every item");
         check(home.snapshot()["heroTitle"].string() == "One",
               "The hero shows the first top pick once its art is ready");
-        // Focus: ring and lift follow the focused card, the row keeps the 4th slot. The top
-        // picks (row 1, under the apps) start focused.
-        check(motion.value("f:1.0") == 1 && motion.value("f:1.1") == 0,
-              "The first top pick starts focused");
+        // Focus: ring and lift follow the focused card, the row keeps the 4th slot. The apps
+        // row starts focused, with the hero on the carousel; the top picks (row 1) hold the
+        // eight titles the carousel's six left.
+        check(motion.value("f:0.0") == 1 && motion.value("f:1.0") == 0,
+              "The apps row starts focused");
+        home.key(Key::Down);
+        clockMs = run(home, clockMs, 300);
+        check(motion.value("f:1.0") == 1 && home.snapshot()["rowCards"].number() == 8,
+              "Down reaches the first of the top picks the carousel left");
         for (int i = 0; i < 6; ++i)
             home.key(Key::Right);
         clockMs = run(home, clockMs, 900);
@@ -464,7 +472,7 @@ int main() {
         float rowTarget = kit::geometry::rowScrollTarget(6, 8, 300, 24);
         check(rowTarget < 0 && std::fabs(motion.value("rx:1") - rowTarget) < .5,
               "The row scrolls so the focused card keeps the keyline slot");
-        check(home.snapshot()["heroTitle"].string() == "Seven",
+        check(home.snapshot()["heroTitle"].string() == "Fourteen",
               "The hero follows a focused title after the key settles");
         home.key(Key::Down);
         clockMs = run(home, clockMs, 900);
@@ -485,8 +493,7 @@ int main() {
         home.key(Key::Up);
         check(home.snapshot()["navigation"].boolean(), "Up from the apps row focuses the bar");
         clockMs = run(home, clockMs, 900);
-        check(std::fabs(motion.value("sy")) < .5 && motion.value("pill:hot") == 1,
-              "The bar returns the stack to the top and turns the pill hot");
+        check(std::fabs(motion.value("sy")) < .5, "The bar returns the stack to the top");
 
         // The bar: the pill leads with the focus, the page follows after the focus rests.
         kit::LegacyGlyphs glyphs;
@@ -522,30 +529,27 @@ int main() {
         home.key(Key::Right);
         clockMs = run(home, clockMs, 1000);
 
-        // Apps: a six-column grid, no horizontal scroll.
+        // Apps: the apps by kind (this catalogue lists no kinds, so they come as one row).
         home.key(Key::Down);
         clockMs = run(home, clockMs, 800);
         check(home.snapshot()["navigation"].boolean() == false && home.snapshot()["row"].number() == 0 &&
                   home.snapshot()["column"].number() == 0,
               "Down from the Apps tab lands on the first tile");
         home.key(Key::Right);
-        home.key(Key::Down);
-        check(home.snapshot()["column"].number() == 7, "Down moves one grid row of six");
-        for (int i = 0; i < 2; ++i)
-            home.key(Key::Down);
-        check(home.snapshot()["column"].number() == 7,
-              "The grid stops at its last row");
         clockMs = run(home, clockMs, 800);
-        check(motion.value("f:0.7") == 1 && motion.value("f:0.0") == 0,
-              "The tile focus follows the grid");
+        check(home.snapshot()["column"].number() == 1 && motion.value("f:0.1") == 1 &&
+                  motion.value("f:0.0") == 0,
+              "The tile focus follows the row");
 
         // Back goes to the first tab from any other, then up one level at a time, and stops at the
         // bar; it never opens the recent apps.
         home.key(Key::Back);
         clockMs = run(home, clockMs, 600);
         check(home.snapshot()["tab"].string() == "home" && !home.snapshot()["navigation"].boolean() &&
-                  home.snapshot()["row"].number() == 1,
-              "Back from a grid tile goes to the Home tab, focus on its top picks");
+                  home.snapshot()["row"].number() == 0,
+              "Back from an Apps tile goes to the Home tab, focus on its apps row");
+        home.key(Key::Down);
+        check(home.snapshot()["row"].number() == 1, "Down from the apps row reaches the top picks");
         home.key(Key::Back);
         check(home.snapshot()["row"].number() == 0 && !home.snapshot()["navigation"].boolean(),
               "Back from the top picks goes to the apps row");
@@ -555,8 +559,8 @@ int main() {
         check(home.screenName() == "home" && home.snapshot()["navigation"].boolean(),
               "Back on the bar does nothing");
 
-        // Apps sorted by kind: one row per kind. Holding OK lifts the focused row; Down moves it,
-        // Back puts the server's order back, OK saves the kinds' order.
+        // Apps by kind: one row per kind. Holding OK lifts the focused row as a card; Up reaches its
+        // buttons, Move kind picks the card up so that Down moves it, and Back finishes and saves.
         const char *kindCatalogue =
             R"({"ok":true,"apps":[{"id":"a","title":"Alpha","kind":"video"},{"id":"b","title":"Beta","kind":"music"},{"id":"c","title":"Gamma","kind":"games"}],"devices":[],"channels":[],"kinds":[{"key":"video","label":"Movies & TV"},{"key":"music","label":"Music & audio"},{"key":"games","label":"Games"}],"order":{"app":["a","b","c"],"dev":[]},"layout":{"rows":["app"],"hidden":{},"sort":{"app":"kind"},"showInputs":false,"showLgHome":false},"profiles":[{"id":"main","name":"Main","active":true}]})";
         FakeTransport kindTransport;
@@ -575,32 +579,30 @@ int main() {
               "The Apps tab sorted by kind opens on the first kind's row");
         kinds.longPress();
         check(kinds.snapshot()["arranging"].boolean() && kinds.screenName() == "home",
-              "Holding OK on a row lifts it instead of opening the recent apps");
+              "Holding OK on a row lifts it as a card instead of opening the recent apps");
+        kinds.key(Key::Up);    // the card's buttons: Hide
+        kinds.key(Key::Right); // Move kind
+        kinds.key(Key::Ok);    // picks the card up
         kinds.key(Key::Down);
         check(kinds.snapshot()["row"].number() == 1 && kinds.snapshot()["rowGroup"].string() == "video",
-              "Down moves the lifted row under the next one, the focus with it");
-        // The ten-second refresh answers while a row is held: the move stays.
+              "Down moves the carried card under the next one, the focus with it");
+        // The ten-second refresh answers while a card is lifted: the move stays.
         reply(kinds, "catalogue", kindCatalogue);
         reply(kinds, "discover", fullFeed);
         check(kinds.snapshot()["arranging"].boolean() && kinds.snapshot()["row"].number() == 1 &&
                   kinds.snapshot()["rowGroup"].string() == "video",
-              "A refresh that lands while a row is lifted does not put it back");
-        kinds.key(Key::Back);
-        check(!kinds.snapshot()["arranging"].boolean() && kinds.snapshot()["row"].number() == 0 &&
-                  kinds.snapshot()["rowGroup"].string() == "video",
-              "Back puts the rows back and keeps the focus on the one that was lifted");
-        kinds.longPress();
-        kinds.key(Key::Down);
+              "A refresh that lands while a card is lifted does not put it back");
         kinds.key(Key::Down);
         kinds.key(Key::Down); // no row below the last: nothing moves
+        kinds.key(Key::Ok);   // puts the card down
         size_t writes = kindTransport.requests.size();
-        kinds.key(Key::Ok);
+        kinds.key(Key::Back); // finishes the card and saves
         const Json &saved = kindTransport.requests.back().body;
         check(!kinds.snapshot()["arranging"].boolean() && kindTransport.requests.size() == writes + 1 &&
                   kindTransport.requests.back().channel == "action" &&
                   saved["kinds"].size() == 3 && saved["kinds"][0].string() == "music" &&
                   saved["kinds"][1].string() == "games" && saved["kinds"][2].string() == "video",
-              "OK saves the kinds in their new order");
+              "Back finishes the card and saves the kinds in their new order");
 
         const auto replaced = [](std::string text, const std::string &from, const std::string &to) {
             text.replace(text.find(from), from.size(), to);
@@ -629,8 +631,12 @@ int main() {
             check(!hasHit(hiddenApps.scene(), "card:2:0") && hasHit(hiddenApps.scene(), "card:1:0"),
                   "The hidden app has no tile");
             hiddenApps.longPress();
+            hiddenApps.key(Key::Up);
+            hiddenApps.key(Key::Right);
+            hiddenApps.key(Key::Ok);
             hiddenApps.key(Key::Down);
             hiddenApps.key(Key::Ok);
+            hiddenApps.key(Key::Back);
             const Json &order = hiddenTransport.requests.back().body;
             check(order["kinds"].size() == 3 && order["kinds"][0].string() == "games" &&
                       order["kinds"][1].string() == "music" && order["kinds"][2].string() == "video",
@@ -642,8 +648,6 @@ int main() {
                       !hiddenApps.snapshot()["navigation"].boolean() &&
                       hiddenTransport.count("recents") == 0,
                   "Back from the Apps page by kind goes to the Home tab with focus in its content");
-            hiddenApps.key(Key::Up); // to the apps row
-            hiddenMs = run(hiddenApps, hiddenMs, 200);
             check(hasHit(hiddenApps.scene(), "card:0:2"),
                   "An app hidden on the Apps page is still on Home's row");
             hiddenApps.key(Key::Right);
@@ -710,32 +714,6 @@ int main() {
                       std::fabs(fiveMotion.value("sy") + 2 * kit::layout::rowPitch) < .5,
                   "The last rows end flush with the screen: three stay in view");
         }
-        // The Apps grid keeps its focus in range when apps are hidden under it.
-        {
-            const std::string eightApps =
-                R"({"ok":true,"apps":[{"id":"a","title":"A"},{"id":"b","title":"B"},{"id":"c","title":"C"},{"id":"d","title":"D"},{"id":"e","title":"E"},{"id":"f","title":"F"},{"id":"g","title":"G"},{"id":"h","title":"H"}],"devices":[],"channels":[],"order":{"app":["a","b","c","d","e","f","g","h"],"dev":[]},"layout":{"rows":["app"],"hidden":{"app":[],"appsTab":[]},"showInputs":false,"showLgHome":false},"profiles":[{"id":"main","name":"Main","active":true}]})";
-            FakeTransport gridTransport;
-            Application grid(gridTransport);
-            grid.update(0);
-            reply(grid, "catalogue", eightApps);
-            reply(grid, "discover", fullFeed);
-            uint32_t gridMs = run(grid, 16, 1500);
-            grid.key(Key::Up);
-            grid.key(Key::Up);
-            grid.key(Key::Right);
-            grid.key(Key::Ok);
-            gridMs = run(grid, gridMs, 1200);
-            grid.key(Key::Down); // the second grid row: apps 7 and 8
-            grid.key(Key::Right);
-            check(grid.snapshot()["focusCard"].string() == "h", "The last app of the grid is focused");
-            const std::string fewer =
-                replaced(eightApps, R"("appsTab":[])", R"("appsTab":["g","h"])");
-            reply(grid, "catalogue", fewer);
-            run(grid, gridMs, 100);
-            check(grid.snapshot()["focusCard"].string() == "f" &&
-                      grid.snapshot()["column"].number() == 5 && !hasHit(grid.scene(), "card:0:6"),
-                  "Hiding the focused app and the one before it puts the focus on the last left");
-        }
 
         // Editing the apps: holding OK on an app starts it, the arrows swap the app with its
         // neighbour, and OK, Back or Red ends it with one request. A hidden app keeps its place.
@@ -754,8 +732,7 @@ int main() {
             reply(app, "catalogue", catalogueJson);
             reply(app, "discover", feed);
             uint32_t at = run(app, 16, 1500);
-            app.key(Key::Up); // from the top picks to the apps row
-            if (tab) {
+            if (tab) { // Home opens on the apps row; the bar is one Up
                 app.key(Key::Up);
                 app.key(Key::Right);
                 app.key(Key::Ok);
@@ -774,7 +751,7 @@ int main() {
             app.key(Key::Ok);
             const auto writes = layoutWrites(transport);
             check(writes.size() == 1 &&
-                      writes[0].dump() == R"({"order":{"app":["b","h","a","c"]},"sort":{"app":"custom"}})",
+                      writes[0].dump() == R"({"order":{"app":["b","h","a","c"]}})",
                   "OK saves the new order, the hidden app where it was, and Your order");
             check(!app.snapshot()["editing"].boolean() && app.snapshot()["rowHead"].string() == "b,a,c",
                   "The row shows the saved order at once");
@@ -852,7 +829,7 @@ int main() {
             const auto writes = layoutWrites(transport);
             check(writes.size() == 1 &&
                       writes[0].dump() ==
-                          R"({"order":{"app":["b","c","a","h"]},"sort":{"app":"custom"},"hidden":{"app":[]}})",
+                          R"({"order":{"app":["b","c","a","h"]},"hidden":{"app":[]}})",
                   "OK on a hidden app shows it again, after the app that was carried to the end");
             check(!textNode(app.scene(), "Show on Home") && app.snapshot()["rowHead"].string() == "b,c,a",
                   "The button goes when editing ends and the row lists the shown app");
@@ -924,7 +901,7 @@ int main() {
             const auto writes = layoutWrites(transport);
             check(writes.size() == 1 &&
                       writes[0].dump() ==
-                          R"({"order":{"app":["h","c","a","b"]},"sort":{"app":"custom"},"hidden":{"appsTab":[]}})" &&
+                          R"({"order":{"app":["h","c","a","b"]},"hidden":{"appsTab":[]}})" &&
                       app.snapshot()["rowHead"].string() == "h,c,a",
                   "OK on it shows the app on the Apps page again, after the apps that were carried to the end");
         }
@@ -937,7 +914,8 @@ int main() {
             reply(app, "catalogue", editCatalogue);
             reply(app, "discover", feed);
             run(app, 16, 1500);
-            app.longPress(); // on a title of the top picks
+            app.key(Key::Down); // from the apps row to a title of the top picks
+            app.longPress();
             check(app.screenName() == "home" && !app.snapshot()["editing"].boolean() &&
                       transport.count("recents") == 0,
                   "Holding OK on a title does nothing");
@@ -964,19 +942,17 @@ int main() {
         const std::string ownApps =
             R"("apps":[{"id":"com.tvweb.dashboard","title":"Native Tv","kind":"tools"},{"id":"a","title":"Alpha","kind":"video"}],"devices":[],"channels":[],"kinds":[{"key":"tools","label":"Tools"},{"key":"video","label":"Movies & TV"}],"order":{"app":["com.tvweb.dashboard","a"],"dev":[]},)";
         const std::string ownProfiles = R"("profiles":[{"id":"main","name":"Main","active":true}]})";
-        for (int layoutCase = 0; layoutCase < 3; ++layoutCase) {
-            // 0: the apps row on Home's first page; 1: the Apps tab's grid; 2: the Apps tab by kind.
-            const std::string sort = layoutCase == 2 ? R"("sort":{"app":"kind"},)" : "";
-            const std::string layout = R"("layout":{"rows":["app"],"hidden":{},)" + sort +
-                                       R"("showInputs":false,"showLgHome":false},)";
+        for (int layoutCase = 0; layoutCase < 2; ++layoutCase) {
+            // 0: the apps row on Home's first page; 1: the Apps tab, by kind.
+            const std::string layout =
+                R"("layout":{"rows":["app"],"hidden":{},"showInputs":false,"showLgHome":false},)";
             FakeTransport ownTransport;
             Application own(ownTransport);
             own.update(0);
             reply(own, "catalogue", R"({"ok":true,)" + ownApps + layout + ownProfiles);
             reply(own, "discover", fullFeed);
             uint32_t ownMs = run(own, 16, 1500);
-            own.key(Key::Up); // to the apps row
-            if (layoutCase) {
+            if (layoutCase) { // Home opens on the apps row; the bar is one Up
                 own.key(Key::Up);
                 own.key(Key::Right); // the Apps tab, after Home's
                 own.key(Key::Ok);
@@ -991,7 +967,7 @@ int main() {
             own.key(Key::Back);
             check(own.screenName() == "home", "Back from the settings returns to Home");
             run(own, ownMs, 600);
-            own.key(layoutCase == 2 ? Key::Down : Key::Right); // by kind, Alpha has its own row
+            own.key(layoutCase ? Key::Down : Key::Right); // by kind, Alpha has its own row
             own.key(Key::Ok);
             check(ownTransport.count("action") == launches + 1 &&
                       ownTransport.requests.back().operation == Operation::OpenHomeItem &&
@@ -1153,9 +1129,9 @@ int main() {
                   "The apps enter on their icons, without the feed");
             reply(iconed, "discover", fullFeed);
             iconClock = run(iconed, iconClock, 300);
-            check(iconed.snapshot()["rows"].number() == 3 && iconed.snapshot()["row"].number() == 1 &&
+            check(iconed.snapshot()["rows"].number() == 3 && iconed.snapshot()["row"].number() == 0 &&
                       hasHit(iconed.scene(), "card:1:0"),
-                  "The feed's rows enter when it answers and the focus lands on the top picks");
+                  "The feed's rows enter when it answers and the focus stays on the apps row");
 
             FakeTransport lateTransport;
             Application late(lateTransport);

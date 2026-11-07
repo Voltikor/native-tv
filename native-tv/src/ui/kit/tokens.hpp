@@ -45,6 +45,7 @@ constexpr Color onFocus = rgb(0x131118);
 constexpr Color warn = rgb(0xFFB784);
 constexpr Color bad = rgb(0xFF8A80);
 constexpr Color pillRest = rgb(0x2E2C35);
+constexpr Color navButton = rgb(0x393B3B);
 } // namespace color
 // Colours that carry an alpha.
 namespace alpha {
@@ -105,9 +106,11 @@ constexpr ShadowRecipe raised = {14, 36, 0.5f};
 namespace layout {
 constexpr float navTop = 60;
 constexpr float navH = 72;
-constexpr float circle = 56;
+constexpr float circle = 80;
 constexpr float avatarGap = 32;
 constexpr float tabPad = 32;
+constexpr float brandW = 160;
+constexpr float brandGap = 24;
 constexpr float clockW = 100;
 constexpr float clockGap = 28;
 constexpr float heroW = 1400;
@@ -128,9 +131,9 @@ constexpr float dotsTop = 488;
 constexpr float dotSlotW = 28;
 constexpr float dotSlotH = 20;
 constexpr float dot = 8;
-constexpr float rowsTop = 548;
+constexpr float rowsTop = 556;
 constexpr float rowPitch = 252;
-constexpr float rowLabelH = 48;
+constexpr float rowLabelH = 40;
 constexpr float rowLabelGap = 12;
 constexpr float cardW = 300;
 constexpr float cardH = 169;
@@ -142,10 +145,10 @@ constexpr float appNameTop = 124;
 constexpr float pageTitleTop = 160;
 constexpr float pageSubTop = 232;
 constexpr float gridTop = 320;
-constexpr float appsTop = 160;
+constexpr float appsTop = 180;
 constexpr float tileW = 156;
 constexpr float tileH = 156;
-constexpr float tilePitchX = 293;
+constexpr float tilePitchX = 320;
 constexpr float tilePitchY = 240;
 constexpr float tilePad = 20;
 constexpr float bannerTop = 290;
@@ -253,32 +256,33 @@ constexpr int heroText[3] = {80, 160, 240};
 } // namespace motion
 namespace metrics {
 namespace home {
-constexpr Rect avatar = {80, 68, 56, 56};
-constexpr Rect tabHome = {168, 60, 153.3f, 72};
-constexpr Rect tabApps = {321.3f, 60, 140.9f, 72};
-constexpr Rect tabLive = {462.2f, 60, 123.1f, 72};
-constexpr Rect gear = {1656, 68, 56, 56};
-constexpr Rect clock = {1740, 72, 100, 48};
+constexpr Rect avatar = {80, 56, 80, 80};
+constexpr Rect tabHome = {192, 60, 153.3f, 72};
+constexpr Rect tabApps = {345.3f, 60, 140.9f, 72};
+constexpr Rect tabLive = {486.2f, 60, 123.1f, 72};
+constexpr Rect gear = {1448, 56, 80, 80};
+constexpr Rect clock = {1556, 72, 100, 48};
+constexpr Rect brand = {1680, 76, 160, 40};
 constexpr Rect heroMeta = {80, 226, 1400, 40};
 constexpr Rect heroTitle = {80, 274, 1400, 88};
 constexpr Rect heroSubtitle = {80, 370, 1400, 40};
 constexpr Rect dots6Slots = {1672, 488, 168, 20};
 constexpr Rect dotSlot1 = {1672, 488, 28, 20};
 constexpr Rect dotProgressTrack = {1672, 494, 28, 8};
-constexpr Rect row1Label = {80, 548, 1840, 48};
+constexpr Rect row1Label = {80, 556, 1840, 40};
 constexpr Rect card1 = {80, 608, 300, 169};
 constexpr Rect card2 = {404, 608, 300, 169};
-constexpr Rect row2Label = {80, 800, 1840, 48};
+constexpr Rect row2Label = {80, 808, 1840, 40};
 constexpr Rect app1 = {80, 860, 112, 112};
 constexpr Rect app2 = {220, 860, 112, 112};
-constexpr Rect row3Label = {80, 1052, 1840, 48};
+constexpr Rect row3Label = {80, 1060, 1840, 40};
 constexpr Rect input1 = {80, 1112, 300, 169};
 constexpr Rect row2Box = {0, 800, 1920, 252};
 } // namespace home
 namespace apps {
-constexpr Rect tile1 = {80, 160, 156, 156};
-constexpr Rect tile2 = {373, 160, 156, 156};
-constexpr Rect tile7Row2 = {80, 400, 156, 156};
+constexpr Rect tile1 = {80, 180, 156, 156};
+constexpr Rect tile2 = {400, 180, 156, 156};
+constexpr Rect tile7Row2 = {80, 420, 156, 156};
 } // namespace apps
 namespace live {
 constexpr Rect title = {80, 160, 490, 72};
