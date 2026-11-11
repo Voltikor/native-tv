@@ -78,6 +78,10 @@ void carriedAppChecks() {
           "A refresh preserves the app being carried");
     world.app.activate("card:0:0");
     check(world.snapshot()["focusCard"].string() == "a", "A pointer click puts the app down without selecting its neighbour");
+    check(world.app.activate("tab:0"), "The Home tab is reachable while editing");
+    world.settle(1200);
+    check(world.snapshot()["tab"].string() == "home" && !world.snapshot()["arranging"].boolean(),
+          "Switching tabs finishes category editing instead of carrying it onto Home");
 }
 }
 

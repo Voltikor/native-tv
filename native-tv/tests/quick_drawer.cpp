@@ -505,6 +505,7 @@ void fullSettingsChecks() {
 void dimmingOptionChecks() {
     Quick world;
     world.focusRow(13);
+    world.settle(900);
     check(world.snapshot()["focus"].string() == "Idle dimming" && world.app.shows("Auto (OLED only)"),
           "Quick settings exposes automatic panel-aware dimming");
     world.press(Key::Ok, 250);

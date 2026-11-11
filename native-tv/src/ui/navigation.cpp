@@ -5,6 +5,8 @@
 
 namespace nativetv {
 void Application::route(const std::string &path) {
+    if (state_.home.arranging) homeArrangeDone();
+    if (state_.home.editing) homeEditDone(false);
     confirmId_.clear();
     services_.cancel("menu");
     state_.qr.clear();
@@ -181,7 +183,6 @@ void Application::back() {
         } else if (state_.home.editing)
             homeEditDone(false);
         else if (state_.home.navigation || state_.home.tab != 0 || flow_.pendingTab > 0) {
-            state_.home.navigation = true;
             state_.home.nav = 0;
             homeSelectTab(0);
         } else if (!state_.home.navigation) {

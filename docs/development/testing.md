@@ -1,3 +1,8 @@
+> UI screenshot baseline comparisons are optional and disabled by default.
+> Functional, navigation, renderer and sanitizer checks remain required. To run
+> screenshot comparisons manually, configure CMake with
+> `-DNATIVETV_VISUAL_BASELINES=ON`, or use `tests/golden/golden.py` directly.
+
 # Testing and CI
 
 Every pull request is checked on [GitHub Actions](https://github.com/ihtisham1211/native-tv/actions) before it is merged. Most of

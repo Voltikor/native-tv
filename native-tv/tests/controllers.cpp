@@ -190,6 +190,9 @@ int main() {
                   transport.count("recents") == 0,
               "A tap of Back on the bar does nothing");
         app.longBack();
+        check(app.screenName() == "home", "Back held on the toolbar stays on Home");
+        app.key(Key::Down);
+        app.longBack();
         check(app.screenName() == "quick:recents", "Back held opens recent apps");
         FakeTransport navigationTransport;
         Application navigation(navigationTransport);
@@ -231,9 +234,9 @@ int main() {
         reply(clock, "catalogue", twelveHourCatalogue.dump());
         Scene twelveHourScene = clock.scene();
         const Node *twelveHourTime = textNode(twelveHourScene, "5:05");
-        check(twelveHourTime && twelveHourTime->rect.x == 1556 && twelveHourTime->rect.y == 72 &&
+        check(twelveHourTime && twelveHourTime->rect.x == 1740 && twelveHourTime->rect.y == 72 &&
                   twelveHourTime->rect.w == 100 && twelveHourTime->align == Node::Align::Right,
-              "The 12-hour clock sits right-aligned before the brand name at the bar's right margin");
+              "The 12-hour clock sits right-aligned at the bar's right margin");
         Json twentyFourHourCatalogue = Json::parse(catalogue);
         FakeTransport clock24Transport;
         Application clock24(clock24Transport);
@@ -632,6 +635,7 @@ int main() {
             check(!hasHit(hiddenApps.scene(), "card:2:0") && hasHit(hiddenApps.scene(), "card:1:0"),
                   "The hidden app has no tile");
             hiddenApps.longPress();
+            hiddenApps.key(Key::Ok); // put the app down before moving its category
             hiddenApps.key(Key::Up);
             hiddenApps.key(Key::Right);
             hiddenApps.key(Key::Ok);

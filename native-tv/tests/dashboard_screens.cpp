@@ -1156,6 +1156,7 @@ void idle() {
     {
         FakeTransport transport;
         Application app(transport, "live");
+        reply(app, "catalogue", Json::parse(R"({"ok":true,"oledPanel":true})"));
         reply(app, "live:stats", fixture("stats-c4-webos9.json"));
         uint32_t clock = run(app, 16, 1500);
         app.key(Key::Right);
@@ -1179,6 +1180,7 @@ void idle() {
     for (const char *route : {"dashboard", "catalog", "setup:welcome"}) {
         FakeTransport transport;
         Application app(transport, route);
+        reply(app, "catalogue", Json::parse(R"({"ok":true,"oledPanel":true})"));
         run(app, 16, 33000);
         check(app.snapshot()["idle"].boolean() && dimmed(app, .66f),
               (std::string(route) + " dims after thirty seconds without a key").c_str());

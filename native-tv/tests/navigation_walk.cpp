@@ -480,9 +480,10 @@ struct Walk {
             settle(1000);
         std::string before = signature(true);
         std::string name = app().screenName();
+        const bool wasDimmed = app().snapshot()["idle"].boolean();
         press(Key::Back);
         settle(16);
-        expect(signature(true) == before && app().screenName() == name, "wake",
+        expect(!wasDimmed || (signature(true) == before && app().screenName() == name), "wake",
                "the first key after the screen dimmed did more than wake it");
         expect(!app().snapshot()["idle"].boolean(), "wake", "a key did not wake the dimmed screen");
     }

@@ -86,8 +86,8 @@ int main() {
                   gridRows[0].cards[0].id == "b" && gridRows[1].cards[0].id == "c",
               "The Apps page leaves out what it hides, and keeps what only Home hides");
         homeApps = homeRows("home", hiddenGrid, Json(), Json());
-        check(homeApps[0].cards.size() == 2 && homeApps[0].cards[0].id == "b" &&
-                  homeApps[0].cards[1].id == "a",
+        check(homeApps[0].cards.size() == 2 && homeApps[0].cards[0].id == "a" &&
+                  homeApps[0].cards[1].id == "b",
               "Home's row leaves out what Home hides, and keeps what only the Apps page hides");
         CardRow pageShown = appsRow(hiddenGrid, Json(), false, "appsTab"),
                 pageListed = appsRow(hiddenGrid, Json(), true, "appsTab"),

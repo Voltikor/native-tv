@@ -499,7 +499,7 @@ HomeDocumentUpdate updateHomeProfile(const Json &input, const Json &body,
         return update;
     }
 
-    Json profiles = current["profiles"];
+    Json profiles = copyJson(current["profiles"]);
     const std::string activeId = profiles.size() ? current["profile"].string() : kMainProfile;
     if (profiles.size() == 0) {
         Json main = Json::object();

@@ -525,6 +525,8 @@ void Application::homeSelectTab(size_t tab) {
     flow_.tabPending = false;
     if (tab >= home.tabs.size() || (tab == flow_.shown && flow_.pendingTab < 0))
         return;
+    if (home.arranging) homeArrangeDone();
+    if (home.editing) homeEditDone(false);
     flow_.pendingTab = static_cast<int>(tab);
     flow_.swapAt = now_ + kPageSwapMs;
     // The Apps page's icons are asked for while the old page leaves, so its entrance does not wait
