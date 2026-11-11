@@ -203,12 +203,14 @@ bool packedIcon(const std::string &packPath, const std::string &key, AppIconFile
 } // namespace
 
 AppIconFile readAppIcon(const std::string &appId, const std::string &systemRoot,
-                        const std::string &assetsRoot) {
+                        const std::string &assetsRoot, bool banner) {
     AppIconFile result;
     if (!validAppId(appId))
         return result;
     const std::string packPath =
         assetsRoot.empty() ? std::string() : assetsRoot + "/app-icons/app-icons.pack";
+    if (banner && packedIcon(packPath, "banner." + appId, result))
+        return result;
     if (packedIcon(packPath, appId, result))
         return result;
 
@@ -228,6 +230,8 @@ AppIconFile readAppIcon(const std::string &appId, const std::string &systemRoot,
         return result;
     const Json appInfo = Json::parse(appInfoText);
     if (!appInfo.isObject())
+        return result;
+    if (banner && packedIcon(packPath, "banner." + titleKey(appInfo["title"].string()), result))
         return result;
     if (packedIcon(packPath, titleKey(appInfo["title"].string()), result))
         return result;

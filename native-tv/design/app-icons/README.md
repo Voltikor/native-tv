@@ -46,3 +46,24 @@ To update artwork, retrieve the original image from its official listing, verify
 the publisher, replace the source image and its URL/hash in `official.json`, then
 regenerate the pack and run the coverage check. Build and runtime need no artwork
 downloads; the app uses the committed pack offline.
+
+## Tile shapes and wide artwork
+
+Quick settings → Home settings → App tile shape cycles Round, Square and Rectangle.
+Round remains the default; the choice is stored in the active profile's layout.
+Square tiles have rounded corners. Rectangles use a 16:9 frame and retain the
+same height, with row spacing, scrolling and pointer targets using the wider size.
+
+Banner source priority is the publisher's Android TV app resources first, then
+verified publisher/Google-hosted TV artwork. Jellyfin and Kodi use their actual
+Android TV resource PNGs, pinned to repository commits. Nine commercial-service
+banners come from Google's published Google TV app sheet; these are marketing
+references, not extracted APK resources. Their source rectangles and URLs are
+recorded under `banners` in `official.json`. Those 11 banners are packed at
+320×180 without stretching. The remaining 28 services use their complete square
+icon centered in the wide frame. No square icon is cropped to fill a rectangle.
+
+The best source for the remaining commercial banners is their original Android
+TV package resource or a publisher-provided banner. We do not substitute fan-made
+art or label mobile store feature graphics as TV launcher banners. No Google TV
+device was available to verify the banners against its installed app versions.

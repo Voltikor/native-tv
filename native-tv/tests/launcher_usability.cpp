@@ -1,10 +1,27 @@
 #include "overlay_harness.hpp"
+#include "ui/home_layout.hpp"
 
 using namespace overlay_test;
 
 namespace {
 std::string apps() {
     return R"({"ok":true,"profile":"main","apps":[{"id":"a","title":"Alpha","kind":"video"},{"id":"b","title":"Beta","kind":"music"},{"id":"c","title":"Gamma","kind":"video"},{"id":"d","title":"Delta","kind":"music"}],"kinds":[{"key":"video","label":"Movies & TV"},{"key":"music","label":"Music & audio"}],"order":{"app":["a","b","c","d"]},"layout":{"rows":["app"],"hidden":{},"showLgHome":false,"showInputs":false},"profiles":[{"id":"main","name":"Main","active":true}]})";
+}
+
+void shapeChecks() {
+    for (const char *shape : {"round", "square", "rectangle"}) {
+        Json catalogue = Json::parse(apps());
+        catalogue["layout"].set("appShape", Json::text(shape));
+        CardRow row = appsRow(catalogue, Json::object(), false);
+        check(row.appShape == shape, "The saved app shape reaches Home's row model");
+        const Rect first = home::item(row, 0, 0, true), second = home::item(row, 0, 1, true);
+        const bool wide = std::string(shape) == "rectangle";
+        check(std::fabs(first.w / first.h - (wide ? 16.f / 9 : 1.f)) < .001f,
+              "Tile geometry uses the requested aspect ratio");
+        check(second.x > first.x + first.w, "Adjacent rectangular tiles never overlap");
+        check(row.cards[0].image == (wide ? "banner:a" : "app:a"),
+              "Wide tiles request banner art; square and round tiles share square art");
+    }
 }
 
 void dimmingChecks() {
@@ -87,6 +104,7 @@ void carriedAppChecks() {
 
 int main() {
     try {
+        shapeChecks();
         dimmingChecks();
         rowMemoryChecks();
         barBackChecks();

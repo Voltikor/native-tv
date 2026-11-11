@@ -443,6 +443,13 @@ class QuickScreen final : public ScreenView {
     }
     // The text at the right of a row.
     std::string trail(ScreenHost &host, const Row &row) {
+        if (row.id == "appShape") {
+            const std::string shape = host.optimistic().text("layout.appShape",
+                host.view().catalogue["layout"]["appShape"].string("round"));
+            return shape == "square" ? msg("launcher.shape.square", "Square")
+                 : shape == "rectangle" ? msg("launcher.shape.rectangle", "Rectangle")
+                                        : msg("launcher.shape.round", "Round");
+        }
         if (row.id == "idleDimming") {
             const std::string mode = host.optimistic().text("layout.idleDimming",
                 host.view().catalogue["layout"]["idleDimming"].string("auto"));
@@ -550,6 +557,7 @@ class QuickScreen final : public ScreenView {
                 for (const auto &title : titles)
                     if (title.first == entry.key)
                         add(Row::Kind::Switch, entry.key, entry.icon, title.second);
+            add(Row::Kind::Plain, "appShape", "apps", msg("launcher.shape.title", "App tile shape"));
         }
         if (rows.empty())
             add(Row::Kind::Plain, "", "", msg("tv.quick.nothing", "Nothing to choose from"), "", false, true);
@@ -874,6 +882,15 @@ class QuickScreen final : public ScreenView {
         }
     }
     void choose(ScreenHost &host, const Row &row) {
+        if (level_ == Level::Layout && row.id == "appShape") {
+            const std::string before = host.view().catalogue["layout"]["appShape"].string("round");
+            const std::string shown = host.optimistic().text("layout.appShape", before);
+            host.optimistic().set("layout.appShape",
+                Json::text(shown == "round" ? "square" : shown == "square" ? "rectangle" : "round"),
+                Json::text(before), layoutWrite("appShape"));
+            host.invalidate();
+            return;
+        }
         if (level_ == Level::Layout) {
             bool on = !layoutFlag(host, row.id);
             host.optimistic().set("layout." + row.id, Json::flag(on), Json::flag(layoutServer(host, row.id)),

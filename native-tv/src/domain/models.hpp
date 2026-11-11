@@ -49,6 +49,7 @@ struct CardRow {
     std::string group; // the kind of the apps in an "app" row, while the apps are sorted by kind
     bool posters = false;
     std::vector<Card> cards;
+    std::string appShape = "round";
 };
 struct Tab {
     std::string key, title;

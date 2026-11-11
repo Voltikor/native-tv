@@ -348,6 +348,25 @@ void choiceChecks() {
     check(levels.screen() == "quick", "so does Left");
 }
 
+void shapeOptionChecks() {
+    Quick world;
+    world.focusRow(10);
+    world.press(Key::Ok);
+    world.settle(400);
+    world.focusRow(6);
+    check(world.snapshot()["focus"].string() == "App tile shape" && world.app.shows("Round"),
+          "Tile shape is reachable in Home settings and defaults to Round");
+    world.press(Key::Ok);
+    world.settle(300);
+    check(world.app.shows("Square"), "OK previews the next tile shape");
+    auto writes = world.on("w:layout.appShape");
+    check(!writes.empty() && writes.back().body["appShape"].string() == "square",
+          "The shape choice uses the existing layout persistence API");
+    world.answer(writes.back(), false, "Refused");
+    world.settle(400);
+    check(world.app.shows("Round"), "A refused shape change restores the previous value");
+}
+
 void switchChecks() {
     Quick world;
     world.focusRow(10);
@@ -529,6 +548,7 @@ int main() {
         failureChecks();
         choiceChecks();
         switchChecks();
+        shapeOptionChecks();
         actionChecks();
         navigationChecks();
         fullSettingsChecks();

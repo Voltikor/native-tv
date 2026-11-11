@@ -567,5 +567,149 @@
   },
   "fallbackSources": {
     "telecine": "https://ajuda.globo/google/amp/globoplay/app/telecine/faq/assino-o-telecine-via-desktop-tv-como-faco-para-acessar-apos-a-mudanca.ghtml"
+  },
+  "banners": {
+    "youtube": {
+      "file": "banners/youtube.png",
+      "sha256": "821cb61f159ad334960b05fb489a6b3dec1f1a9a1558dd22ca04e6ab1b458a2e",
+      "url": "https://www.gstatic.com/marketing-cms/assets/images/69/65/75bcef0444cdbb65e89bb5efd72a/lg-movie-show-2x.svg",
+      "publisher": "Google TV marketing; respective app brand artwork",
+      "sourceRect": [
+        216,
+        46,
+        546,
+        302
+      ],
+      "sourceType": "google-tv-marketing",
+      "sourcePage": "https://tv.google/features/"
+    },
+    "netflix": {
+      "file": "banners/netflix.png",
+      "sha256": "1749ff0bc8b36775964601779642ac0f7a82c603033929d0a5addddea3eb392f",
+      "url": "https://www.gstatic.com/marketing-cms/assets/images/69/65/75bcef0444cdbb65e89bb5efd72a/lg-movie-show-2x.svg",
+      "publisher": "Google TV marketing; respective app brand artwork",
+      "sourceRect": [
+        782,
+        46,
+        546,
+        302
+      ],
+      "sourceType": "google-tv-marketing",
+      "sourcePage": "https://tv.google/features/"
+    },
+    "disney-plus": {
+      "file": "banners/disney-plus.png",
+      "sha256": "23b8364ef8700dde59ed481c0cf050eba8834f1c271c04edeca75ba20409646a",
+      "url": "https://www.gstatic.com/marketing-cms/assets/images/69/65/75bcef0444cdbb65e89bb5efd72a/lg-movie-show-2x.svg",
+      "publisher": "Google TV marketing; respective app brand artwork",
+      "sourceRect": [
+        1348,
+        46,
+        546,
+        302
+      ],
+      "sourceType": "google-tv-marketing",
+      "sourcePage": "https://tv.google/features/"
+    },
+    "hbomax": {
+      "file": "banners/hbomax.png",
+      "sha256": "2966ab33be5db9e630d9ce33cb85fd715f49971d76bd2ea1cb34c5b3810320c2",
+      "url": "https://www.gstatic.com/marketing-cms/assets/images/69/65/75bcef0444cdbb65e89bb5efd72a/lg-movie-show-2x.svg",
+      "publisher": "Google TV marketing; respective app brand artwork",
+      "sourceRect": [
+        216,
+        370,
+        546,
+        302
+      ],
+      "sourceType": "google-tv-marketing",
+      "sourcePage": "https://tv.google/features/"
+    },
+    "hulu": {
+      "file": "banners/hulu.png",
+      "sha256": "20ef93bb4833ae4c5bceae6e52e7118a1581bfe5f218498a576ce136716af99e",
+      "url": "https://www.gstatic.com/marketing-cms/assets/images/69/65/75bcef0444cdbb65e89bb5efd72a/lg-movie-show-2x.svg",
+      "publisher": "Google TV marketing; respective app brand artwork",
+      "sourceRect": [
+        782,
+        370,
+        546,
+        302
+      ],
+      "sourceType": "google-tv-marketing",
+      "sourcePage": "https://tv.google/features/"
+    },
+    "prime-video-alt": {
+      "file": "banners/prime-video-alt.png",
+      "sha256": "5e4ed09ae59374f0231a423ebc05b7c9581dbfa4e5f036b1ca788ded691950d7",
+      "url": "https://www.gstatic.com/marketing-cms/assets/images/69/65/75bcef0444cdbb65e89bb5efd72a/lg-movie-show-2x.svg",
+      "publisher": "Google TV marketing; respective app brand artwork",
+      "sourceRect": [
+        1348,
+        370,
+        546,
+        302
+      ],
+      "sourceType": "google-tv-marketing",
+      "sourcePage": "https://tv.google/features/"
+    },
+    "appletv": {
+      "file": "banners/appletv.png",
+      "sha256": "7d4ec0ac9307dd1fa1edc9e36f7c7c542ab68883421f7e8c5f75d5809bdc8df9",
+      "url": "https://www.gstatic.com/marketing-cms/assets/images/69/65/75bcef0444cdbb65e89bb5efd72a/lg-movie-show-2x.svg",
+      "publisher": "Google TV marketing; respective app brand artwork",
+      "sourceRect": [
+        216,
+        694,
+        546,
+        302
+      ],
+      "sourceType": "google-tv-marketing",
+      "sourcePage": "https://tv.google/features/"
+    },
+    "paramountplus": {
+      "file": "banners/paramountplus.png",
+      "sha256": "f350b79f5e0e9340a19d7f55929e62a02106d3bf40e4eebbc90385f80176389b",
+      "url": "https://www.gstatic.com/marketing-cms/assets/images/69/65/75bcef0444cdbb65e89bb5efd72a/lg-movie-show-2x.svg",
+      "publisher": "Google TV marketing; respective app brand artwork",
+      "sourceRect": [
+        782,
+        694,
+        546,
+        302
+      ],
+      "sourceType": "google-tv-marketing",
+      "sourcePage": "https://tv.google/features/"
+    },
+    "peacock": {
+      "file": "banners/peacock.png",
+      "sha256": "aaca49c7845be00fe9f2137a7ca22f29674fa15639f9bd372c39059882e770d2",
+      "url": "https://www.gstatic.com/marketing-cms/assets/images/69/65/75bcef0444cdbb65e89bb5efd72a/lg-movie-show-2x.svg",
+      "publisher": "Google TV marketing; respective app brand artwork",
+      "sourceRect": [
+        1348,
+        694,
+        546,
+        302
+      ],
+      "sourceType": "google-tv-marketing",
+      "sourcePage": "https://tv.google/features/"
+    },
+    "jellyfin": {
+      "file": "banners/jellyfin.png",
+      "sha256": "e9e7782096c711613f67486d55029723779d64e07969737f319dfc2b207ccf65",
+      "url": "https://raw.githubusercontent.com/jellyfin/jellyfin-androidtv/dae2c8c06911734e9e1d2abf5fc1e737067fcfb6/app/src/main/res/mipmap-xxxhdpi/app_banner.png",
+      "sourceType": "android-tv-app-resource",
+      "publisher": "jellyfin/jellyfin-androidtv",
+      "commit": "dae2c8c06911734e9e1d2abf5fc1e737067fcfb6"
+    },
+    "kodi": {
+      "file": "banners/kodi.png",
+      "sha256": "aa127e6d3c74878bba64ff04f78455965614e73d3da7bda2fa628c40acdaafb9",
+      "url": "https://raw.githubusercontent.com/xbmc/xbmc/383db99b78d5c81453fa3fd5783334b17d9ac984/tools/android/packaging/media/mipmap-xhdpi/banner.png",
+      "sourceType": "android-tv-app-resource",
+      "publisher": "xbmc/xbmc",
+      "commit": "383db99b78d5c81453fa3fd5783334b17d9ac984"
+    }
   }
 }

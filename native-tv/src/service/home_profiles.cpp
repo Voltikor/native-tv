@@ -13,7 +13,7 @@ const char *kRows[] = {"app", "dev", "ch"};
 const char *kColors[] = {"#a8c7fa", "#f2b8b5", "#6dd58c", "#ffb74d",
                          "#7fcfff", "#d0bcff"};
 const char *kLayoutKeys[] = {"rows", "order", "hidden", "kinds", "channels",
-                             "picture", "appNames", "clockFormat", "showInputs",
+                             "picture", "appNames", "clockFormat", "appShape", "showInputs",
                              "showLgHome", "showLive", "colours"};
 const char *kPromoApps[] = {"com.webos.app.lgchannels",
                             "com.webos.app.sportsteamsettings",
@@ -164,6 +164,7 @@ Json defaultDocument() {
     document.set("picture", Json::flag(false));
     document.set("appNames", Json::flag(true));
     document.set("clockFormat", Json::text("24h"));
+    document.set("appShape", Json::text("round"));
     document.set("showInputs", Json::flag(true));
     document.set("showLgHome", Json::flag(true));
     document.set("showLive", Json::flag(false));
@@ -340,6 +341,8 @@ Json normalizeHomeDocument(const Json &raw) {
     result.set("restorePending", Json::flag(raw["restorePending"].boolean()));
     result.set("picture", Json::flag(raw["picture"].boolean()));
     result.set("appNames", Json::flag(!raw["appNames"].valid() || raw["appNames"].boolean(true)));
+    const std::string shape = raw["appShape"].string();
+    result.set("appShape", Json::text(shape == "square" || shape == "rectangle" ? shape : "round"));
     result.set("clockFormat", Json::text(raw["clockFormat"].string() == "12h" ? "12h" : "24h"));
     const std::string language = raw["language"].string();
     result.set("language", Json::text(language == "en" || language == "pt-BR" ? language : "auto"));
@@ -474,6 +477,13 @@ HomeDocumentUpdate updateHomeLayout(const Json &input, const Json &body) {
     proposed.set("clockFormat", Json::text(body["clockFormat"].string() == "12h" ||
         body["clockFormat"].string() == "24h" ? body["clockFormat"].string()
                                                : current["clockFormat"].string()));
+    if (body.has("appShape") && (!body["appShape"].isString() ||
+        (body["appShape"].string() != "round" && body["appShape"].string() != "square" &&
+         body["appShape"].string() != "rectangle"))) {
+        update.response = errorResponse("unsupported app shape");
+        return update;
+    }
+    proposed.set("appShape", body.has("appShape") ? body["appShape"] : current["appShape"]);
     proposed.set("colours", body.has("colours") ? body["colours"] : current["colours"]);
     Json next = normalizeHomeDocument(proposed);
     if (body["reset"].boolean()) {

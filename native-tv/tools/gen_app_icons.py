@@ -171,6 +171,23 @@ def main():
                 seen.add(key)
                 keys[key] = source
 
+    if not args.fallback_only:
+        for name, entry in official.get("banners", {}).items():
+            raw = (OFFICIAL.parent / entry["file"]).read_bytes()
+            if hashlib.sha256(raw).hexdigest() != entry["sha256"]:
+                raise ValueError("Official banner checksum mismatch: " + name)
+            with Image.open(io.BytesIO(raw)) as image:
+                art = image.convert("RGBA")
+                art.thumbnail((320, 180), Image.LANCZOS)
+                canvas = Image.new("RGBA", (320, 180))
+                canvas.alpha_composite(art, ((320 - art.width) // 2, (180 - art.height) // 2))
+                encoded = io.BytesIO()
+                canvas.save(encoded, "PNG", optimize=True)
+            source = ("banner", name)
+            blobs[source] = encoded.getvalue()
+            for key in official["apps"][name]["keys"]:
+                keys["banner." + key] = source
+
     data = bytearray()
     placed = {}
     lines = []

@@ -5252,5 +5252,21 @@
   "launcher.profiles.deleteFailed": {
     "from": "The profile could not be deleted",
     "text": "Não foi possível excluir o perfil"
+  },
+  "launcher.shape.title": {
+    "from": "App tile shape",
+    "text": "Formato dos ícones dos apps"
+  },
+  "launcher.shape.round": {
+    "from": "Round",
+    "text": "Redondo"
+  },
+  "launcher.shape.square": {
+    "from": "Square",
+    "text": "Quadrado"
+  },
+  "launcher.shape.rectangle": {
+    "from": "Rectangle",
+    "text": "Retangular"
   }
 }

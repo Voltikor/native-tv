@@ -506,7 +506,7 @@ void appCircle(Paint paint, const AppCircle &circle) {
     Scene &scene = paint.scene;
     Transform scale = focus::transformAt(circle.rest, look.scale);
     Group group(scene, circle.enter, look.scale != 1 ? &scale : nullptr);
-    float rounding = circle.rest.h / 2;
+    float rounding = circle.round ? circle.rest.h / 2 : radius::md;
     // The ring and the shadow belong to the circle, not to its fill, which is hidden once an
     // opaque picture covers it (Node::backing).
     if (look.ringAlpha > 0)
@@ -526,9 +526,10 @@ void appCircle(Paint paint, const AppCircle &circle) {
     base.gradient = gradient(145, {{circle.color, 0},
                                    {withByteAlpha(circle.color, 0xcc), .55f},
                                    {{0, 0, 0, 0x55 / 255.0f}, 1.4f}});
-    base.backing = !circle.image.empty();
+    // Contained square art leaves the rectangular tile's side background visible.
+    base.backing = !circle.image.empty() && circle.rest.w == circle.rest.h;
     if (!circle.image.empty())
-        scene.picture(circle.rest, 0, rounding).value = circle.image;
+        scene.picture(circle.rest, 0, rounding, circle.rest.w > circle.rest.h).value = circle.image;
     else
         paint.glyphs.icon(scene, centreOf(circle.rest, 52), circle.icon, white);
     if (dimmed)

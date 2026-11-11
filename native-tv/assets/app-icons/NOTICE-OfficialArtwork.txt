@@ -1,7 +1,9 @@
 Official app artwork
 
 The app icon pack includes developer-published artwork copied from the apps'
-official Google Play listings. TV-specific listings are preferred; where a
+official Google Play listings, original Android TV app repositories, and
+Google's Google TV website. Wide banner source types are recorded separately
+in the manifest. For square icons, TV-specific listings are preferred; where a
 separate TV listing is unavailable, the publisher's shared or standard Android
 listing supplies the artwork. These are app publisher assets, not a Google icon
 library. Each image keeps its publisher's colours and background and is scaled

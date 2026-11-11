@@ -28,7 +28,7 @@ def check():
         assert key not in packed and offset >= 0 and length > 0
         assert offset + length <= len(payload), "Artwork extends past the pack"
         packed[key] = payload[offset:offset + length]
-        assert png_size(packed[key]) == (192, 192), "Tile resolution changed"
+        assert png_size(packed[key]) == ((320, 180) if key.startswith("banner.") else (192, 192)), "Tile resolution changed"
 
     official = set()
     for name, entry in record["apps"].items():
@@ -46,6 +46,13 @@ def check():
             assert packed[key] == image, name + ": aliases do not share artwork"
             official.add(key)
 
+    for name, entry in record.get("banners", {}).items():
+        raw = (RECORD.parent / entry["file"]).read_bytes()
+        assert hashlib.sha256(raw).hexdigest() == entry["sha256"], name + ": banner source changed"
+        for key in record["apps"][name]["keys"]:
+            assert png_size(packed["banner." + key]) == (320, 180)
+
+    print(f"{len(record.get('banners', {}))} wide banners verified; remaining services use square artwork without cropping")
     fallback = set(record["fallbacks"])
     recognized = set(re.findall(r'\{"([^\"]+)", "(?:video|music)"\}',
                                (ROOT / "src/service/app_kinds.cpp").read_text(encoding="utf-8")))
