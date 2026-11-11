@@ -54,4 +54,3 @@ def cpp_literals(src, i):
             i = j + 1; found = True
             continue
         return (''.join(val), i) if found else None
-
