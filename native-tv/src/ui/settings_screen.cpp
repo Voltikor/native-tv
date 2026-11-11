@@ -125,6 +125,7 @@ class SettingsScreen final : public ScreenView {
             std::string from = host.cameFrom();
             bool sibling = from.empty() || from.compare(0, 9, "dashboard") == 0 ||
                            from == "settings" || from == "catalog" || from == "live" ||
+                           from.compare(0, 7, "tvtheme") == 0 ||
                            from.compare(0, 4, "tab:") == 0;
             host.open(sibling ? "home" : returnRoute(from));
             return true;

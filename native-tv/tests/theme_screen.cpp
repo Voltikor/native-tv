@@ -48,6 +48,21 @@ void answerLastWrite(World &world, long status, const char *body) {
     check(false, "There was a write to answer");
 }
 
+void settingsReturnChecks() {
+    kit::useTheme("n-google-tv");
+    World world;
+    world.app.open("dashboard:settings");
+    world.settle(600);
+    world.app.open("tvtheme");
+    world.settle(600);
+    world.press(Key::Back, 300);
+    check(world.screen() == "dashboard:settings", "Back from the picker returns to Settings");
+    world.press(Key::Back, 300);
+    check(world.screen() == "dashboard", "Back from the settings page reaches its sections");
+    world.press(Key::Back, 300);
+    check(world.screen() == "home", "Back from Settings closes it instead of reopening the picker");
+}
+
 void pickerChecks() {
     kit::useTheme("n-google-tv");
     World world;
@@ -253,6 +268,7 @@ void offerChecks() {
 
 int main() {
     try {
+        settingsReturnChecks();
         pickerChecks();
         refusedSaveChecks();
         followServerChecks();
