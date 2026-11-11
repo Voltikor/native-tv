@@ -302,18 +302,12 @@ void hintBand(kit::Paint paint, const std::vector<kit::Hint> &hints) {
     kit::hintBar(paint, {kit::canvas::safeX, 998, 0, 30}, hints);
 }
 
-// The Apps page with its apps grouped by kind: rows as on Home from under the bar, which pass
-// under it once they scroll.
+// The Apps page with its apps grouped by kind, below the navigation row.
 void appRows(kit::Paint paint, const Frame &frame) {
     const HomeState &home = frame.state.home;
     const Motion &motion = frame.motion;
     const float lift = kEditLift * static_cast<float>(motion.value("lift"));
-    bool clipped = motion.value("sy") < -.5;
-    if (clipped)
-        paint.scene.pushClip({0, layout::appsTop + lift - 16, kit::canvas::width, kit::canvas::height});
     rows(paint, frame, layout::appsTop - kit::look::homeTop + lift);
-    if (clipped)
-        paint.scene.popClip();
     if (home.arranging) {
         const bool hidden = home.row < home.rows.size() && home.column < home.rows[home.row].cards.size() &&
                             home.rows[home.row].cards[home.column].hidden;
@@ -422,7 +416,14 @@ void drawHome(kit::Paint paint, const Frame &frame) {
         hide.focus = static_cast<float>(motion.value("f:eh"));
         kit::pillButton(paint, hide);
     }
+    // Navigation belongs to the page: it scrolls away with the rows and returns with bar focus.
+    const float scroll = static_cast<float>(motion.value("sy"));
+    const size_t barHits = scene.hits.size();
+    scene.pushTransform(Transform::translate(0, scroll));
     drawTopBar(paint, frame, static_cast<int>(home.tab));
+    scene.popTransform();
+    for (size_t i = barHits; i < scene.hits.size(); ++i)
+        scene.hits[i].rect.y += scroll;
     float fault = static_cast<float>(motion.value("fault"));
     if (fault > .002f)
         banner(paint, fault);

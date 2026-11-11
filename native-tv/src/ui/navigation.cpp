@@ -193,7 +193,7 @@ void Application::back() {
                 state_.home.navigation = true;
         }
         if (state_.screen == Screen::Home) {
-            state_.home.nav = state_.home.navigation ? state_.home.tab : state_.home.nav;
+            state_.home.nav = 0;
             homeFocus();
         }
     } else

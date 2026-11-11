@@ -106,6 +106,79 @@ void carriedAppChecks() {
     check(world.snapshot()["tab"].string() == "home" && !world.snapshot()["arranging"].boolean(),
           "Switching tabs finishes category editing instead of carrying it onto Home");
 }
+
+void tabBackChecks() {
+    for (uint32_t delay : {0u, 100u, 800u})
+    for (Key next : {Key::Down, Key::Ok, Key::Back}) {
+        World world(apps().c_str());
+        world.press({Key::Up, Key::Right});
+        world.settle(delay);
+        world.press(Key::Back);
+        check(world.snapshot()["nav"].number() == 0,
+              "Back selects Inicio immediately, even while the old tab is leaving");
+        world.press(next);
+        if (next == Key::Back)
+            world.press({Key::Back, Key::Back, Key::Back});
+        world.settle(900);
+        check(world.snapshot()["tab"].string() == "home" &&
+                  world.snapshot()["nav"].number() == 0 && world.transport.count("recents") == 0,
+              "Down, OK and repeated Back cannot reopen the previous tab after Back");
+    }
+}
+
+void scrollingBarChecks() {
+    for (bool appsTab : {false, true}) {
+        Json catalogue = Json::parse(catalogueJson);
+        if (appsTab) {
+            Json entries = Json::array(), kinds = Json::array(), order = Json::array();
+            for (int i = 0; i < 6; ++i) {
+                std::string id = "kind" + std::to_string(i);
+                order.add(Json::text(id));
+                kinds.add(fields({{"key", Json::text(id)}, {"label", Json::text(id)}}));
+                entries.add(fields({{"id", Json::text(id)}, {"title", Json::text(id)},
+                                    {"kind", Json::text(id)}}));
+            }
+            catalogue.set("apps", entries);
+            catalogue.set("kinds", kinds);
+            catalogue.set("order", fields({{"app", order}}));
+        }
+        World world(catalogue.dump().c_str());
+        Json feed = Json::parse(feedJson), rows = Json::array();
+        for (const char *key : {"trending", "movies", "series"}) {
+            Json row = Json::parse(feedJson)["rows"][size_t(0)];
+            row.set("key", Json::text(key));
+            rows.add(row);
+        }
+        feed.set("rows", rows);
+        world.reply("discover", feed.dump());
+        world.settle(500);
+        if (appsTab) {
+            check(world.app.activate("tab:1"), "Apps is reachable before scrolling");
+            world.settle(900);
+        }
+        std::map<std::string, Rect> bar;
+        for (const Hit &hit : world.app.scene().hits)
+            if (hit.id.compare(0, 4, "nav:") == 0 || hit.id == "tool:2")
+                bar[hit.id] = hit.rect;
+        world.press({Key::Down, Key::Down, Key::Down});
+        world.settle(900);
+        double scroll = world.motion("sy");
+        check(scroll < -180, "The content has scrolled far enough to hide the navigation row");
+        for (const Hit &hit : world.app.scene().hits)
+            if (bar.count(hit.id))
+                check(std::fabs(hit.rect.y - bar[hit.id].y - scroll) < .5,
+                      "Navigation pointer targets scroll with the page");
+        bool gearMoved = false;
+        for (const Node &node : world.app.scene().nodes)
+            if (node.value == "local:icons/material/settings.svg")
+                gearMoved = std::fabs(node.group.ty - scroll) < .5;
+        check(gearMoved, "The navigation artwork scrolls with its pointer targets");
+        for (int i = 0; i < 6; ++i) world.press(Key::Back, 300);
+        world.settle(900);
+        check(world.snapshot()["navigation"].boolean() && std::fabs(world.motion("sy")) < .5,
+              "Returning to the navigation row brings it back into view");
+    }
+}
 }
 
 int main() {
@@ -114,6 +187,8 @@ int main() {
         dimmingChecks();
         rowMemoryChecks();
         barBackChecks();
+        tabBackChecks();
+        scrollingBarChecks();
         carriedAppChecks();
         std::printf("%d launcher usability checks passed\n", checkCount());
         return 0;
