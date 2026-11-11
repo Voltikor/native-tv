@@ -490,6 +490,18 @@ void navigationChecks() {
           "The newest volume is sent although the drawer has gone");
 }
 
+void fullSettingsChecks() {
+    Quick world;
+    world.focusRow(12);
+    check(world.snapshot()["focus"].string() == "Full settings", "The drawer exposes full Settings");
+    world.press(Key::Ok, 900);
+    check(world.screen() == "dashboard:settings", "Full settings opens the native Settings page");
+    world.press(Key::Back, 300);
+    world.press(Key::Back, 300);
+    check(world.screen() == "home", "Back from full Settings returns to Home");
+    check(!world.app.shows("Native Tv"), "The Home bar has no Native Tv label");
+}
+
 int main() {
     try {
         loadingChecks();
@@ -504,6 +516,7 @@ int main() {
         switchChecks();
         actionChecks();
         navigationChecks();
+        fullSettingsChecks();
         std::printf("%d native quick-drawer checks passed\n", checkCount());
         return 0;
     } catch (const std::exception &error) {

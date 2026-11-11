@@ -5212,5 +5212,9 @@
   "tv.theme.title": {
     "from": "TV theme",
     "text": "Tema da TV"
+  },
+  "launcher.quick.fullSettings": {
+    "from": "Full settings",
+    "text": "Configurações completas"
   }
 }

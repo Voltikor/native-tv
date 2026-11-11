@@ -290,7 +290,6 @@ void topBar(Paint paint, const TopBar &bar) {
     roundButton(paint, settings);
 
     text(paint, geometry::clock(), bar.clock, type::clock, color::onSurface, Node::Align::Right);
-    text(paint, geometry::brand(), "Native Tv", type::labelL, color::onSurface2, Node::Align::Right);
 }
 
 // ---- Hero and pagination -----------------------------------------------------------------------

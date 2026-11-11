@@ -513,6 +513,7 @@ class QuickScreen final : public ScreenView {
             add(Row::Kind::Plain, "profile", "profile", msg("tv.quick.profile", "Profile"), "", true);
             add(Row::Kind::Plain, "layout", "gear", msg("tv.quick.settings", "Home settings"), "", true);
             add(Row::Kind::Plain, "language", "globe", msg("launcher.language.title", "Language"), "", true);
+            add(Row::Kind::Plain, "full-settings", "gear", msg("launcher.quick.fullSettings", "Full settings"), "", true);
         } else if (level_ == Level::Picture) {
             for (const auto &mode : s["picture"]["modes"].items())
                 add(Row::Kind::Choice, mode["value"].string(), "picture", mode["label"].string(),
@@ -853,6 +854,8 @@ class QuickScreen final : public ScreenView {
             close(host, "profiles");
         else if (row.id == "language")
             close(host, "language");
+        else if (row.id == "full-settings")
+            close(host, "dashboard:settings");
     }
     void choose(ScreenHost &host, const Row &row) {
         if (level_ == Level::Layout) {
