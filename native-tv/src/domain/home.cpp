@@ -157,7 +157,7 @@ CardRow catalogueRow(const std::string &kind, const Json &catalogue, const Json 
         card.data = item;
         card.title = id == "lg-home" ? say::msg("launcher.home.lgHome", "LG Home" ): item["title"].string(item["name"].string(id));
         if (kind == "app" && id != "lg-home")
-            card.image = "app:" + id;
+            card.image = (catalogue["layout"]["appShape"].string() == "rectangle" ? "banner:" : "app:") + id;
         if (kind == "dev")
             card.subtitle =
                 item["unused"].boolean() ? say::msg("tv.quick.nothingConnected", "Nothing connected" ): "HDMI " + item["port"].string();
@@ -187,6 +187,7 @@ std::vector<CardRow> appRows(const Json &catalogue, const Json &guide, const std
     for (const auto &kind : catalogue["kinds"].items()) {
         CardRow row;
         row.key = "app";
+        row.appShape = catalogue["layout"]["appShape"].string("round");
         row.group = kind["key"].string();
         row.title = appKindTitle(row.group, kind["label"].string(row.group));
         for (const Card &card : all.cards)
@@ -221,6 +222,7 @@ std::string appKindTitle(const std::string &kind, const std::string &label) {
 CardRow appsRow(const Json &catalogue, const Json &guide, bool withHidden, const std::string &list) {
     CardRow apps;
     apps.key = "app";
+    apps.appShape = catalogue["layout"]["appShape"].string("round");
     apps.title = list == "appsTab" ? say::msg("launcher.apps.title", "Apps" ): say::msg("launcher.home.yourApps", "Your apps");
     if (list == "app") {
         apps.cards = catalogueRow("app", catalogue, guide, withHidden, list).cards;

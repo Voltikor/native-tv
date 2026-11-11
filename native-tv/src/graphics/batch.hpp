@@ -20,7 +20,7 @@ constexpr size_t kTextureBudgetBytes = 64 * 1024 * 1024;
 struct Vertex {
     float x, y, u, v;               // canvas position, texture coordinate
     float localX, localY, halfW, halfH; // offset from the shape centre, shape half extent
-    float radii[4];                 // top-left, top-right, bottom-right, bottom-left
+    float radii[4];                 // corners; negative radii[0] tags a squircle field (same 68-byte layout)
     float outer, inner, soft, slot; // see kCoverage in shaders.cpp; slot indexes Batch::textures
     uint8_t color[4];
 };
@@ -68,9 +68,11 @@ class Batcher {
         Rect box; // transformed box the distance field is built on
         float centerX, centerY, halfW, halfH;
         float radii[4];
+        bool squircle = false;
     };
     struct Style {
         float alpha, scale, scaleX, scaleY;
+        bool squircle = false;
         bool clipped;
         Rect clip;
     };

@@ -82,11 +82,17 @@ int main() {
 
     // The themed pack wins by id, even for an app that is not installed, then
     // by title; the app's own icon shows when the pack has neither.
-    writeFile(pack, "NTVICONS 1\npacked.id 0 5\nexamplevideoplus 5 4\nbroken.id 9 99\n\nAAAAABBBB");
+    writeFile(pack, "NTVICONS 1\npacked.id 0 5\nexamplevideoplus 5 4\nbroken.id 9 99\nbanner.packed.id 9 6\nbanner.examplevideoplus 15 7\n\nAAAAABBBBWIDEIDWIDETXT");
     const service::AppIconFile byId = service::readAppIcon("packed.id", systemRoot, assets);
     require(byId.found && byId.bytes == "AAAAA" && !byId.etag.empty(), "packed icon by id was not served");
     writeFile(titledApp + "/appinfo.json", "{\"title\":\"Example Video+\",\"icon\":\"own.png\"}");
     writeFile(titledApp + "/own.png", icon);
+    require(service::readAppIcon("packed.id", systemRoot, assets, true).bytes == "WIDEID",
+            "wide app artwork by id was not served");
+    require(service::readAppIcon("com.example.titled", systemRoot, assets, true).bytes == "WIDETXT",
+            "wide app artwork by regional title was not served");
+    require(service::readAppIcon("com.example.app", systemRoot, assets, true).bytes == icon,
+            "missing wide artwork lost the installed square icon fallback");
     const service::AppIconFile byTitle = service::readAppIcon("com.example.titled", systemRoot, assets);
     require(byTitle.found && byTitle.bytes == "BBBB", "packed icon by title was not served");
     require(service::readAppIcon("com.example.app", systemRoot, assets).bytes == icon,

@@ -161,3 +161,17 @@ The app can be added or removed at any time:
 * **From deploy.sh**: Pass `--app` to add it or `--no-app` to omit it during installation.
 
 [Native Tv Home](../dashboard/home.md) is this same app opened on its Home screen, so it needs the app on the home screen: with the app removed Home cannot be switched on, and Home that is on gives LG's Home back. Removing the app changes nothing else, since the dashboard server continues to run in the background and reaches any browser on the network regardless. Where a TV model will not take the app, the control is hidden and everything else works as before.
+
+### App tile shape
+
+Open **Quick settings → Home settings → App tile shape** and press OK to cycle
+**Round**, **Rounded square**, **Squircle** and **Rectangle**. The choice belongs to the active profile;
+Round is the default. Rectangle uses 16:9 artwork where available, and otherwise
+centers the complete square icon without stretching or cropping it.
+
+Squircle uses a continuous exponent-4 superellipse for its background, artwork
+mask and focus ring. Rounded square keeps the standard circular corner arcs.
+Existing saved `square` preferences remain rounded squares; `squircle` is a
+separate per-profile value. The renderer reuses its existing vertex layout and
+render passes, with a flat interior and the curve evaluated around the edge.
+TV GPU timing remains to be measured.

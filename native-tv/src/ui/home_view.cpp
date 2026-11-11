@@ -224,6 +224,8 @@ void rows(kit::Paint paint, const Frame &frame, float top = 0) {
             if (row.key == "app") {
                 kit::AppCircle circle;
                 circle.rest = rest;
+                circle.round = row.appShape == "round";
+                circle.squircle = row.appShape == "squircle";
                 circle.id = id;
                 circle.name = namedApps ? card.title : "";
                 circle.icon = card.id == "lg-home" ? "home" : "apps";
@@ -231,7 +233,7 @@ void rows(kit::Paint paint, const Frame &frame, float top = 0) {
                 circle.color = appColor(card);
                 circle.named = namedApps;
                 if (namedApps)
-                    circle.nameWidth = layout::appD + layout::appGapNamed - 8;
+                    circle.nameWidth = rest.w + layout::appGapNamed - 8;
                 circle.focus = focus;
                 circle.enter = enter;
                 if (card.hidden) // hidden from Home: listed only while the apps are edited

@@ -95,6 +95,7 @@ assets/i18n/launcher/pt-BR.json \
 assets/fonts/Roboto-Regular.woff assets/fonts/Roboto-Medium.woff assets/fonts/LICENSE-Roboto.txt \
 assets/fonts/GoogleSansFlex-Display.ttf assets/fonts/GoogleSansFlex-Regular.ttf assets/fonts/GoogleSansFlex-Medium.ttf assets/fonts/LICENSE-GoogleSansFlex-OFL.txt \
 assets/app-icons/app-icons.pack assets/app-icons/LICENSE-DashboardIcons.txt \
+assets/app-icons/NOTICE-OfficialArtwork.txt \
 assets/google-tv/shared/common.css assets/google-tv/shared/common.js assets/google-tv/shared/qr.js \
 assets/google-tv/pages/dashboard/index.html assets/google-tv/pages/dashboard/dashboard.css assets/google-tv/pages/dashboard/dashboard.js \
 assets/google-tv/pages/setup/index.html assets/google-tv/pages/setup/setup.css assets/google-tv/pages/setup/setup.js \

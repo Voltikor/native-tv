@@ -506,11 +506,16 @@ void appCircle(Paint paint, const AppCircle &circle) {
     Scene &scene = paint.scene;
     Transform scale = focus::transformAt(circle.rest, look.scale);
     Group group(scene, circle.enter, look.scale != 1 ? &scale : nullptr);
-    float rounding = circle.rest.h / 2;
+    const bool squircle = circle.squircle;
+    float rounding = circle.round ? circle.rest.h / 2
+                     : circle.rest.w > circle.rest.h ? circle.rest.h * .27f : radius::md;
     // The ring and the shadow belong to the circle, not to its fill, which is hidden once an
     // opaque picture covers it (Node::backing).
-    if (look.ringAlpha > 0)
-        applyFocus(scene.shape(circle.rest, clear, rounding), look);
+    if (look.ringAlpha > 0) {
+        Node &ring = scene.shape(circle.rest, clear, rounding);
+        ring.squircle = squircle;
+        applyFocus(ring, look);
+    }
     // The fill and the picture share one anti-aliased edge, so a fill in the app's colour shows
     // through the picture's rim as a light outline (LG gives Netflix, YouTube and Alexa white).
     // Under a picture the fill stops short of the edge, which then comes from the picture alone.
@@ -523,13 +528,17 @@ void appCircle(Paint paint, const AppCircle &circle) {
     Rect fill = {circle.rest.x + tuck, circle.rest.y + tuck, circle.rest.w - 2 * tuck,
                  circle.rest.h - 2 * tuck};
     Node &base = scene.shape(fill, circle.color, rounding - tuck);
+    base.squircle = squircle;
     base.gradient = gradient(145, {{circle.color, 0},
                                    {withByteAlpha(circle.color, 0xcc), .55f},
                                    {{0, 0, 0, 0x55 / 255.0f}, 1.4f}});
-    base.backing = !circle.image.empty();
-    if (!circle.image.empty())
-        scene.picture(circle.rest, 0, rounding).value = circle.image;
-    else
+    // Contained square art leaves the rectangular tile's side background visible.
+    base.backing = !circle.image.empty() && circle.rest.w == circle.rest.h;
+    if (!circle.image.empty()) {
+        Node &picture = scene.picture(circle.rest, 0, rounding, circle.rest.w > circle.rest.h);
+        picture.value = circle.image;
+        picture.squircle = squircle;
+    } else
         paint.glyphs.icon(scene, centreOf(circle.rest, 52), circle.icon, white);
     if (dimmed)
         scene.popOpacity();

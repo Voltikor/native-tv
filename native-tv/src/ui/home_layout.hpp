@@ -57,7 +57,7 @@ inline bool isPanel(const CardRow &row) {
     return row.key == "oled";
 }
 inline float itemWidth(const CardRow &row) {
-    return isApps(row) ? kit::layout::appD : isPanel(row) ? kPanelCardW : kit::layout::cardW;
+    return isApps(row) ? kit::layout::appD * (row.appShape == "rectangle" ? 16.f / 9 : 1.f) : isPanel(row) ? kPanelCardW : kit::layout::cardW;
 }
 // `named`: a row of apps that carries every name (the Apps page), so the circles stand wider.
 inline float itemGap(const CardRow &row, bool named = false) {

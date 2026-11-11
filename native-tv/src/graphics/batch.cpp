@@ -200,6 +200,7 @@ bool Batcher::admit(const Rect &bounds, const Style &style, bool layer, bool &cl
 Batcher::Shape Batcher::shapeOf(const Rect &box, const Corners &radii, const Style &style) const {
     Shape shape;
     shape.box = box;
+    shape.squircle = style.squircle;
     shape.centerX = box.x + box.w / 2;
     shape.centerY = box.y + box.h / 2;
     shape.halfW = box.w / 2;
@@ -213,7 +214,7 @@ Batcher::Shape Batcher::shapeOf(const Rect &box, const Corners &radii, const Sty
 
 static void putVertex(Batch &batch, float x, float y, float u, float v, const float *shape,
                       const float *radii, float outer, float inner, float soft, float slot,
-                      const Color &color, float alpha) {
+                      const Color &color, float alpha, bool squircle = false) {
     Vertex vertex;
     vertex.x = x;
     vertex.y = y;
@@ -225,6 +226,7 @@ static void putVertex(Batch &batch, float x, float y, float u, float v, const fl
     vertex.halfH = shape ? shape[3] : 0;
     for (int i = 0; i < 4; ++i)
         vertex.radii[i] = radii ? radii[i] : 0;
+    if (squircle) vertex.radii[0] = -1; // explicit field tag, without a new vertex attribute
     vertex.outer = outer;
     vertex.inner = inner;
     vertex.soft = soft;
@@ -234,19 +236,27 @@ static void putVertex(Batch &batch, float x, float y, float u, float v, const fl
 }
 static void putQuad(Batch &batch, const Rect &area, const Rect &uvArea, const Rect &uv,
                     const float *shape, const float *radii, float outer, float inner, float soft,
-                    float slot, const Color &color, float alpha) {
+                    float slot, const Color &color, float alpha, bool squircle = false) {
     float x0 = area.x, y0 = area.y, x1 = area.x + area.w, y1 = area.y + area.h;
     auto u = [&](float x) { return uv.x + (x - uvArea.x) / uvArea.w * uv.w; };
     auto v = [&](float y) { return uv.y + (y - uvArea.y) / uvArea.h * uv.h; };
     const float xs[6] = {x0, x1, x0, x1, x1, x0}, ys[6] = {y0, y0, y1, y0, y1, y1};
     for (int i = 0; i < 6; ++i)
         putVertex(batch, xs[i], ys[i], u(xs[i]), v(ys[i]), shape, radii, outer, inner, soft, slot,
-                  color, alpha);
+                  color, alpha, squircle);
 }
 
 bool Batcher::coreOf(const Shape &shape, float margin, Rect &core) const {
     if (debugSkip().noCore)
         return false;
+    if (shape.squircle) {
+        // 2^(-1/4): a conservative flat core inside the exponent-4 boundary.
+        const float safe = .840896415f;
+        core = {shape.centerX - shape.halfW * safe + margin,
+                shape.centerY - shape.halfH * safe + margin,
+                2 * shape.halfW * safe - 2 * margin, 2 * shape.halfH * safe - 2 * margin};
+        return core.w >= kMinCore && core.h >= kMinCore;
+    }
     float radius = std::max(std::max(shape.radii[0], shape.radii[1]),
                             std::max(shape.radii[2], shape.radii[3]));
     // The corner of the core must still be `margin` inside the arc of the largest radius.
@@ -258,7 +268,7 @@ bool Batcher::coreOf(const Shape &shape, float margin, Rect &core) const {
 Batcher::Cover Batcher::coverOf(const Shape &shape) const {
     Cover cover;
     float margin = 2 * softness();
-    bool rounded = shape.radii[0] > 0 || shape.radii[1] > 0 || shape.radii[2] > 0 ||
+    bool rounded = shape.squircle || shape.radii[0] > 0 || shape.radii[1] > 0 || shape.radii[2] > 0 ||
                    shape.radii[3] > 0;
     if (!rounded && std::min(shape.box.w, shape.box.h) >= kPlainMin && !debugSkip().noCore) {
         cover.kind = Cover::Plain;
@@ -276,7 +286,7 @@ void Batcher::quad(Program program, const Rect &rect, bool clipped, const Rect &
     float slot;
     Batch &batch = place(program, rect, clipped, clip, texture, slot);
     const float geometry[4] = {shape.centerX, shape.centerY, shape.halfW, shape.halfH};
-    putQuad(batch, rect, uvArea, uv, geometry, shape.radii, outer, inner, soft, slot, color, alpha);
+    putQuad(batch, rect, uvArea, uv, geometry, shape.radii, outer, inner, soft, slot, color, alpha, shape.squircle);
 }
 
 void Batcher::emitSdf(const Style &style, const Shape &shape, const Rect &area, float outer,
@@ -426,7 +436,7 @@ void Batcher::emitGradient(const Style &style, const Shape &shape, const Gradien
             for (int i = 1; i + 1 < n; ++i)
                 for (const Point *p : {&upper[0], &upper[i], &upper[i + 1]})
                     putVertex(batch, p->x, p->y, 0, 0, geometry, shape.radii, 0, kFar, softness(), 0,
-                              colorAt(p->t), style.alpha);
+                              colorAt(p->t), style.alpha, shape.squircle);
         }
     };
     if (cover.kind == Cover::Plain) {
@@ -506,6 +516,7 @@ void Batcher::add(const Node &node, TextureId texture) {
     Transform transform = node.transform.then(node.group);
     Style style;
     style.alpha = node.opacity * node.groupOpacity;
+    style.squircle = node.squircle;
     style.scaleX = transform.sx;
     style.scaleY = transform.sy;
     style.scale = std::sqrt(std::fabs(transform.sx * transform.sy));

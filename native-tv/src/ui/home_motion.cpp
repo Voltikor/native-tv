@@ -131,11 +131,12 @@ bool iconsReady(Pictures *pictures, const std::vector<CardRow> &rows, bool named
         if (!home::isApps(row))
             continue;
         size_t shown = shownOf(row, named);
-        int texels = pictureTexels(kit::layout::appD);
+        int texels = pictureTexels(home::itemWidth(row));
         for (size_t c = 0; c < shown; ++c) {
             if (row.cards[c].image.empty())
                 continue;
-            ImageView view = pictures->view(row.cards[c].image, texels, texels, ImageFit::Cover, now);
+            ImageView view = pictures->view(row.cards[c].image, texels, pictureTexels(kit::layout::appD),
+                row.appShape == "rectangle" ? ImageFit::Contain : ImageFit::Cover, now);
             ready = ready && (view.texture != 0 || view.failed);
         }
     }

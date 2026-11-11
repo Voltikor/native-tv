@@ -49,6 +49,12 @@ inline float coverage(const Vertex &v) {
                            : (v.localY < 0 ? v.radii[1] : v.radii[2]);
     float qx = std::fabs(v.localX) - (v.halfW - r), qy = std::fabs(v.localY) - (v.halfH - r);
     float d = std::hypot(std::max(qx, 0.f), std::max(qy, 0.f)) + std::min(std::max(qx, qy), 0.f) - r;
+    if (v.radii[0] < 0) {
+        float x = std::fabs(v.localX) / v.halfW, y = std::fabs(v.localY) / v.halfH;
+        float f = x*x*x*x + y*y*y*y - 1;
+        float gradient = std::hypot(4*x*x*x / v.halfW, 4*y*y*y / v.halfH);
+        d = std::max(-std::min(v.halfW, v.halfH), f / std::max(gradient, .0001f));
+    }
     return std::min(1.f, std::max(0.f, edge(d - v.outer, v.soft) - edge(d + v.inner, v.soft)));
 }
 

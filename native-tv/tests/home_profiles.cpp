@@ -291,6 +291,15 @@ int main() {
     Json singleDocument = normalizeHomeDocument(Json::object());
     auto lastResult = updateHomeProfile(singleDocument, lastRemove);
     assert(!lastResult.response["ok"].boolean() && lastResult.document.dump() == singleDocument.dump());
+    auto shaped = updateHomeLayout(document, Json::parse(R"({"appShape":"rectangle"})"));
+    assert(shaped.response["ok"].boolean() && homeLayout(shaped.document)["appShape"].string() == "rectangle");
+    auto preservedShape = updateHomeLayout(shaped.document, Json::parse(R"({"appNames":false})"));
+    assert(homeLayout(preservedShape.document)["appShape"].string() == "rectangle");
+    auto squircle = updateHomeLayout(document, Json::parse(R"({"appShape":"squircle"})"));
+    assert(squircle.response["ok"].boolean() && homeLayout(squircle.document)["appShape"].string() == "squircle");
+    auto invalidShape = updateHomeLayout(shaped.document, Json::parse(R"({"appShape":"stretch"})"));
+    assert(!invalidShape.response["ok"].boolean() && invalidShape.document.dump() == shaped.document.dump());
+    assert(homeLayout(normalizeHomeDocument(Json::object()))["appShape"].string() == "round");
     std::cout << "Native Home profiles and layouts passed.\n";
     return 0;
 }
