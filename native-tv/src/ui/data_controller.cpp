@@ -14,10 +14,9 @@ void Application::rebuildHome() {
     std::string oldId;
     if (home.row < home.rows.size() && home.column < home.rows[home.row].cards.size())
         oldId = home.rows[home.row].cards[home.column].id;
-    home.rows = homeRows(home.tabs[home.tab].key, state_.catalogue, state_.discover, state_.guide);
+    home.rows = homeRowsFor(home.tabs[home.tab].key);
+    home.picksTaken = false; // homeData() takes the spotlight out of the whole top picks row
     home.arranging = false; // the rows are the server's again
-    home.grid = home.tabs[home.tab].key == "apps" &&
-                state_.catalogue["layout"]["sort"]["app"].string() != "kind";
     home.row = clampIndex(home.row, home.rows.size());
     if (home.row < home.rows.size()) {
         const auto &cards = home.rows[home.row].cards;
@@ -31,6 +30,44 @@ void Application::rebuildHome() {
         home.nav = home.tab;
     homeData();
     dirty_ = true;
+}
+std::vector<CardRow> Application::homeRowsFor(const std::string &tab) const {
+    if (tab == "home" && !kit::look::discover)
+        return compactHomeRows(state_.catalogue, state_.guide, state_.stats);
+    return homeRows(tab, state_.catalogue, state_.discover, state_.guide);
+}
+void Application::themeChanged() {
+    // The theme the client started in has nothing to redo, unless Home's data was already asked for under
+    // another one: a server that names the theme before the first frame.
+    const bool first = shownTheme_ == nullptr && (refreshedTheme_ == nullptr || refreshedTheme_ == kit::themeId());
+    shownTheme_ = kit::themeId();
+    // The wash the Home art falls back to is the theme's.
+    state_.home.art.wallTint = neutralWash();
+    state_.home.art.tint[0] = state_.home.art.tint[1] = neutralWash();
+    if (first)
+        return;
+    if (!state_.home.arranging && !state_.home.editing && state_.catalogue.valid())
+        rebuildHome();
+    if (kit::look::discover || state_.screen != Screen::Home)
+        refresh(); // back to a theme with a feed: ask for it
+    else
+        services_.read("stats", Operation::Metrics);
+    dirty_ = true;
+}
+void Application::followTheme(const Json &data) {
+    const std::string server = data["tvTheme"].string();
+    if (!server.empty()) {
+        const char *before = kit::themeId();
+        // A theme the person has just chosen shows until the server has it, not the one it still has.
+        if (kit::useTheme(optimistic_.text("tvTheme", server)) && kit::themeId() != before)
+            dirty_ = true;
+    }
+    // Offered on Home only, so never over setup, and once a run: the server keeps sending the offer
+    // until it is answered.
+    if (data["suggestTvTheme"].boolean() && !themeOffered_ && !screen_ && state_.screen == Screen::Home) {
+        themeOffered_ = true;
+        route("tvtheme:suggest");
+    }
 }
 void Application::refresh() {
     if (!active_)
@@ -48,9 +85,14 @@ void Application::refresh() {
     } else {
         services_.read("catalogue", Operation::HomeCatalogue);
         if (state_.screen == Screen::Home) {
-            services_.read("discover", Operation::HomeDiscover);
-            if (state_.catalogue["layout"]["showLive"].boolean())
-                services_.read("guide", Operation::HomeGuide);
+            refreshedTheme_ = kit::themeId();
+            // A theme without a feed asks neither TMDB nor YouTube for one; it asks for the panel.
+            if (kit::look::discover) {
+                services_.read("discover", Operation::HomeDiscover);
+                if (state_.catalogue["layout"]["showLive"].boolean())
+                    services_.read("guide", Operation::HomeGuide);
+            } else
+                services_.read("stats", Operation::Metrics);
         }
     }
     refreshAt_ = now_ + (state_.screen == Screen::Catalog ||
@@ -146,6 +188,7 @@ void Application::response(const Response &response) {
     if (response.channel == "caps") {
         state_.caps = data;
         capsAnswered_ = true;
+        followTheme(data);
         // The rule of the old dashboard page: a server that says setup is needed opens setup first,
         // whichever screen the client was asked for. A setup screen already open (Settings'
         // phone link, or setup itself) stays: it is where the person was sent.
@@ -163,6 +206,7 @@ void Application::response(const Response &response) {
             }
         }
         state_.catalogue = data;
+        followTheme(data);
         if (state_.serverSilent) {
             state_.serverSilent = false;
             motion_.tween("fault", 0, kit::motion::ms::fast, Easing::out());
@@ -186,6 +230,8 @@ void Application::response(const Response &response) {
             rebuildHome();
     } else if (response.channel == "stats") {
         state_.stats = data;
+        if (!kit::look::discover && state_.screen == Screen::Home && !state_.home.arranging)
+            rebuildHome();
     } else if (response.channel == "menu" && state_.screen == Screen::Dashboard) {
         state_.menuData = data;
         rebuildMenu();

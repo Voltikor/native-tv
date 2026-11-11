@@ -1,4 +1,5 @@
 #include "domain/locale.hpp"
+#include "core/themes.hpp"
 #include "domain/models.hpp"
 #include "domain/say.hpp"
 #include <algorithm>
@@ -1435,33 +1436,7 @@ void homeSettings(Rows &rows, const Json &data, const std::string &sub) {
         if (std::string(kind) == "ch")
             channelsListed = true;
         const bool apps = std::string(kind) == "app";
-        const std::string sortValue = layout["sort"][kind].string();
-        const bool recent = sortValue == "recent", byKind = apps && sortValue == "kind";
-        // OK steps Your order, Last opened and, for the apps, By kind round.
-        const std::string next = recent ? (apps ? "kind" : "custom") : byKind ? "custom" : "recent";
-        auto sortTo = [&](const char *value) {
-            return post(Operation::SetHomeLayout,
-                        fields({{"sort", fields({{kind, Json::text(value)}})}}));
-        };
-        MenuRow &order = row(
-            rows, say::msg("home.sort", "Order"),
-            recent   ? say::msg("home.sortRecent", "Last opened")
-            : byKind ? say::msg("home.sortKind", "By kind")
-                     : say::msg("home.sortCustom", "Your order"),
-            writable ? sortTo(next.c_str()) : Command(),
-            recent ? say::msg("home.sortRecentDesc",
-                              "The tile opened last comes first, whether it was opened from Native "
-                              "Tv Home or not. Tiles not yet opened follow in this row’s own order.")
-            : byKind ? say::msg("home.sortKindDesc",
-                                "Rows by kind on the Apps screen, in the order under Kinds. Tiles "
-                                "keep their order within a kind.")
-                     : say::msg("tv.home.sort.hint", "As arranged on the browser dashboard’s Home tab."),
-            say::msg("tv.settings.change", "Change"));
-        order.choices = {{say::msg("home.sortCustom", "Your order"), sortTo("custom")},
-                         {say::msg("home.sortRecent", "Last opened"), sortTo("recent")}};
         if (apps)
-            order.choices.push_back({say::msg("home.sortKind", "By kind"), sortTo("kind")});
-        if (byKind)
             row(rows, say::msg("home.kinds", "Kinds"), "", navigate("sub:kinds"),
                 say::msg("home.kindsDesc", "The rows of the Apps screen, top to bottom. On the Apps "
                                            "screen itself, holding OK on a row moves it."),
@@ -1612,6 +1587,13 @@ void settings(Rows &rows, const Json &data) {
         say::msg("tv.settings.open", "Open"));
     row(rows, say::msg("launcher.language.title", "Language"), "", navigate("language"),
         say::msg("launcher.language.description", "Choose the language of the launcher and movie information."));
+    const ThemeChoice *tvTheme = findTheme(data["tvTheme"].string());
+    row(rows, say::msg("tv.settings.tvTheme", "TV theme"),
+        (tvTheme ? tvTheme : findTheme(kDefaultTheme))->name, navigate("tvtheme"),
+        say::msg("tv.settings.tvTheme.hint",
+                 "Changes how the TV screens look. OLED Care's Home shows the apps, inputs and "
+                 "panel, without film picks."),
+        say::msg("tv.settings.open", "Open"));
     row(rows, say::msg("theme", "Theme"), say::msg("theme.dark", "Dark"), navigate("theme"),
         say::msg("tv.appearance.theme.hint", "Switches the dashboard interface between Dark (true "
                                              "black for OLED) and Light theme."));

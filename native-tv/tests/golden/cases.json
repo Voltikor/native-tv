@@ -38,6 +38,10 @@
       ],
       "script": [
         {
+          "at": 1400,
+          "key": "down"
+        },
+        {
           "at": 1500,
           "key": "right"
         },
@@ -236,7 +240,6 @@
       "name": "apps-kinds",
       "time": 3200,
       "fixture": "home",
-      "sort": "kind",
       "args": [
         "--screen",
         "home"
@@ -268,7 +271,6 @@
       "name": "apps-arrange",
       "time": 3400,
       "fixture": "home",
-      "sort": "kind",
       "args": [
         "--screen",
         "home"
@@ -1096,6 +1098,10 @@
       ],
       "script": [
         {
+          "at": 1300,
+          "key": "down"
+        },
+        {
           "at": 1500,
           "key": "ok"
         }
@@ -1110,6 +1116,10 @@
         "home"
       ],
       "script": [
+        {
+          "at": 1300,
+          "key": "down"
+        },
         {
           "at": 1500,
           "key": "ok"
@@ -1165,6 +1175,118 @@
           "at": 3000,
           "text": "lo"
         }
+      ]
+    },
+    {
+      "name": "oled-home-rest",
+      "time": 3000,
+      "fixture": "home",
+      "args": [
+        "--screen",
+        "home",
+        "--theme",
+        "n-oled-care"
+      ]
+    },
+    {
+      "name": "oled-apps-kinds",
+      "time": 3200,
+      "fixture": "home",
+      "args": [
+        "--screen",
+        "home",
+        "--theme",
+        "n-oled-care"
+      ],
+      "script": [
+        {
+          "at": 1450,
+          "key": "up"
+        },
+        {
+          "at": 1500,
+          "key": "up"
+        },
+        {
+          "at": 1510,
+          "key": "right"
+        },
+        {
+          "at": 1600,
+          "key": "ok"
+        },
+        {
+          "at": 2260,
+          "key": "right"
+        }
+      ]
+    },
+    {
+      "name": "oled-settings-groups",
+      "time": 3500,
+      "fixture": "dashboard",
+      "args": [
+        "--screen",
+        "dashboard",
+        "--theme",
+        "n-oled-care"
+      ]
+    },
+    {
+      "name": "tvtheme-row",
+      "time": 3200,
+      "fixture": "dashboard",
+      "args": [
+        "--screen",
+        "dashboard:settings"
+      ]
+    },
+    {
+      "name": "tvtheme-picker",
+      "time": 2400,
+      "fixture": "dashboard",
+      "args": [
+        "--screen",
+        "tvtheme"
+      ]
+    },
+    {
+      "name": "tvtheme-keep",
+      "time": 2800,
+      "fixture": "dashboard",
+      "args": [
+        "--screen",
+        "tvtheme"
+      ],
+      "script": [
+        {
+          "at": 1500,
+          "key": "right"
+        },
+        {
+          "at": 1650,
+          "key": "ok"
+        }
+      ]
+    },
+    {
+      "name": "tvtheme-suggest",
+      "time": 2400,
+      "fixture": "dashboard",
+      "args": [
+        "--screen",
+        "tvtheme:suggest"
+      ]
+    },
+    {
+      "name": "oled-tvtheme-picker",
+      "time": 2400,
+      "fixture": "dashboard",
+      "args": [
+        "--screen",
+        "tvtheme",
+        "--theme",
+        "n-oled-care"
       ]
     }
   ]

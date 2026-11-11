@@ -32,7 +32,10 @@ int main() {
           "\"redact\":true},"
         "\"screenTime\":{\"enabled\":true,\"dailyMinutes\":90,"
           "\"action\":\"off\",\"badKey\":\"omit\"},"
-        "\"update\":{\"check\":false,\"intervalHours\":24}}");
+        "\"volumeCeiling\":{\"enabled\":true,\"maxVolume\":35,\"nightStart\":\"22:00\","
+          "\"loud\":true},"
+        "\"update\":{\"check\":false,\"intervalHours\":24},"
+        "\"tvTheme\":{\"id\":\"n-oled-care\",\"suggested\":true}}");
     const Json rows = Json::parse(
         "[{\"id\":\"homePromotion\",\"type\":\"switch\",\"on\":false},"
         "{\"id\":\"soundMode\",\"type\":\"choice\",\"value\":\"cinema\"}]");
@@ -59,9 +62,20 @@ int main() {
     require(backup["nativetv"]["screenTime"]["dailyMinutes"].number() == 90 &&
             !backup["nativetv"]["screenTime"].has("badKey"),
             "screen time settings were not filtered");
+    require(backup["nativetv"]["volumeCeiling"]["maxVolume"].number() == 35 &&
+            backup["nativetv"]["volumeCeiling"]["nightStart"].string() == "22:00" &&
+            !backup["nativetv"]["volumeCeiling"].has("loud"),
+            "volume ceiling settings were not filtered");
     require(backup["nativetv"]["update"]["check"].valid() &&
             !backup["nativetv"]["update"].has("intervalHours"),
             "update settings were not filtered");
+    require(backup["nativetv"]["tvTheme"]["id"].string() == "n-oled-care" &&
+            !backup["nativetv"]["tvTheme"].has("suggested"),
+            "the TV theme was not carried, or its one-time offer was");
+    const Json unknownTheme = service::createSettingsBackup(
+        "2026-10-26T12:34:56.789Z", Json::text("OLED65C4"), Json::text("1.2.3"),
+        Json::parse("{\"tvTheme\":{\"id\":\"n-gone\"}}"), rows, home, apps);
+    require(!unknownTheme["nativetv"].has("tvTheme"), "a theme this build does not have was carried");
     require(!backup.has("host") && !backup.has("token") && !backup.has("mqtt"),
             "private server or MQTT settings leaked");
     require(backup["home"]["picture"].string() == "movie", "Home layout was lost");
@@ -87,6 +101,8 @@ int main() {
           "\"port\":70000},"
         "\"screenTime\":{\"enabled\":true,\"dailyMinutes\":90,"
           "\"apps\":{\"com.example.app\":30},\"action\":\"launch\"},"
+        "\"volumeCeiling\":{\"enabled\":true,\"maxVolume\":35,\"nightMaxVolume\":140,"
+          "\"startupVolume\":-1,\"nightEnd\":\"7:00\"},"
         "\"token\":\"must-not-restore\",\"mqtt\":{\"password\":\"secret\"}}"));
     require(restoreConfig["logging"]["level"].string() == "debug" &&
             !restoreConfig["logging"].has("invalid"),
@@ -100,6 +116,13 @@ int main() {
             !restoreConfig["screenTime"].has("action") &&
             !restoreConfig.has("token") && !restoreConfig.has("mqtt"),
             "backup restore config did not filter unsupported and unsafe values");
+
+    require(restoreConfig["volumeCeiling"]["enabled"].boolean() &&
+            restoreConfig["volumeCeiling"]["maxVolume"].number() == 35 &&
+            restoreConfig["volumeCeiling"]["startupVolume"].number() == -1 &&
+            !restoreConfig["volumeCeiling"].has("nightMaxVolume") &&
+            !restoreConfig["volumeCeiling"].has("nightEnd"),
+            "backup restore kept an out-of-range or malformed volume ceiling value");
 
     std::string unicodeServer;
     for (size_t index = 0; index < 130; ++index)

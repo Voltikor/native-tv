@@ -547,30 +547,6 @@
     "from": "Shown",
     "text": "Exibido"
   },
-  "home.sort": {
-    "from": "Order",
-    "text": "Ordem"
-  },
-  "home.sortCustom": {
-    "from": "Your order",
-    "text": "Sua ordem"
-  },
-  "home.sortKind": {
-    "from": "By kind",
-    "text": "Por categoria"
-  },
-  "home.sortKindDesc": {
-    "from": "Rows by kind on the Apps screen, in the order under Kinds. Tiles keep their order within a kind.",
-    "text": "Linhas por categoria na tela Apps, na ordem definida em Categorias. Os blocos mantêm sua ordem dentro de cada categoria."
-  },
-  "home.sortRecent": {
-    "from": "Last opened",
-    "text": "Última abertura"
-  },
-  "home.sortRecentDesc": {
-    "from": "The tile opened last comes first, whether it was opened from Native Tv Home or not. Tiles not yet opened follow in this row’s own order.",
-    "text": "O último bloco aberto aparece primeiro, mesmo que não tenha sido aberto pelo Início do Native Tv. Blocos ainda não abertos seguem a ordem própria desta linha."
-  },
   "home.startup": {
     "from": "Power-on screen",
     "text": "Tela ao ligar"
@@ -3877,10 +3853,6 @@
     "from": "Press OK, then again, to reset",
     "text": "Pressione OK duas vezes para redefinir"
   },
-  "tv.home.sort.hint": {
-    "from": "As arranged on the browser dashboard’s Home tab.",
-    "text": "Conforme organizado na aba Início do painel no navegador."
-  },
   "tv.home.tile.hint": {
     "from": "Tiles are moved on the browser dashboard’s Home tab.",
     "text": "Os blocos são movidos na aba Início do painel no navegador."
@@ -5136,5 +5108,109 @@
   "tv.write.timeout": {
     "from": "the TV did not answer",
     "text": "a TV não respondeu"
+  },
+  "tv.home.compCycle": {
+    "from": "Compensation cycle {pct}%",
+    "text": "Ciclo de compensação {pct}%"
+  },
+  "tv.home.oledCare": {
+    "from": "OLED Care",
+    "text": "OLED Care"
+  },
+  "tv.home.panelHours": {
+    "from": "Panel hours",
+    "text": "Horas de uso do painel"
+  },
+  "tv.home.refresher": {
+    "from": "Pixel Refresher",
+    "text": "Atualização de pixels"
+  },
+  "tv.home.refresherCycles": {
+    "from": "{n} cycles done",
+    "text": "{n} ciclos concluídos"
+  },
+  "tv.home.refresherOne": {
+    "from": "1 cycle done",
+    "text": "1 ciclo concluído"
+  },
+  "tv.settings.tvTheme": {
+    "from": "TV theme",
+    "text": "Tema da TV"
+  },
+  "tv.settings.tvTheme.hint": {
+    "from": "Changes how the TV screens look. OLED Care's Home shows the apps, inputs and panel, without film picks.",
+    "text": "Altera a aparência das telas da TV. A tela inicial do OLED Care mostra os apps, as entradas e o painel, sem sugestões de filmes."
+  },
+  "tv.theme.failed": {
+    "from": "The theme could not be saved",
+    "text": "Não foi possível salvar o tema"
+  },
+  "tv.theme.hint.back": {
+    "from": "Go back",
+    "text": "Voltar"
+  },
+  "tv.theme.hint.choose": {
+    "from": "Choose",
+    "text": "Escolher"
+  },
+  "tv.theme.hint.later": {
+    "from": "Not now",
+    "text": "Agora não"
+  },
+  "tv.theme.hint.return": {
+    "from": "Return",
+    "text": "Retornar"
+  },
+  "tv.theme.hint.use": {
+    "from": "Use",
+    "text": "Usar"
+  },
+  "tv.theme.inUse": {
+    "from": "In use",
+    "text": "Em uso"
+  },
+  "tv.theme.keep": {
+    "from": "Keep {name}?",
+    "text": "Manter {name}?"
+  },
+  "tv.theme.keepNo": {
+    "from": "Go back",
+    "text": "Voltar"
+  },
+  "tv.theme.keepNote": {
+    "from": "It goes back to {name} in {n} seconds if neither button is pressed.",
+    "text": "Volta para {name} em {n} segundos se nenhum botão for pressionado."
+  },
+  "tv.theme.keepYes": {
+    "from": "Keep",
+    "text": "Manter"
+  },
+  "tv.theme.lead": {
+    "from": "Changes how the TV screens look and what Home shows.",
+    "text": "Altera a aparência das telas da TV e o conteúdo da tela inicial."
+  },
+  "tv.theme.offer.body": {
+    "from": "This TV has an OLED panel. OLED Care keeps the screens black and dim, and they move a little, so they wear the panel less. Home shows your apps, inputs and panel, without film picks. Settings, TV theme changes it back.",
+    "text": "Esta TV tem um painel OLED. O OLED Care mantém as telas escuras, com brilho reduzido e pequenos deslocamentos, para diminuir o desgaste do painel. A tela inicial mostra seus apps, entradas e painel, sem sugestões de filmes. Para voltar, acesse Configurações, Tema da TV."
+  },
+  "tv.theme.offer.label": {
+    "from": "OLED panel",
+    "text": "Painel OLED"
+  },
+  "tv.theme.offer.no": {
+    "from": "Not now",
+    "text": "Agora não"
+  },
+  "tv.theme.offer.title": {
+    "from": "Use OLED Care?",
+    "text": "Usar OLED Care?"
+  },
+  "tv.theme.offer.use": {
+    "from": "Use it",
+    "text": "Usar"
+  },
+  "tv.theme.title": {
+    "from": "TV theme",
+    "text": "Tema da TV"
   }
 }

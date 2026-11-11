@@ -2,6 +2,7 @@
 #include "domain/models.hpp"
 #include "domain/locale.hpp"
 #include <algorithm>
+#include <cmath>
 #include <map>
 
 namespace nativetv {
@@ -100,8 +101,10 @@ std::string pictureLabel(const Json &picture) {
 }
 std::vector<Tab> homeTabs(const Json &catalogue) {
     std::vector<Tab> tabs = {{"home", say::msg("launcher.home.title", "Home"), Operation::None}};
+    // The tab needs channels: the TV's count when it gave one, else the channels added to Home. A count
+    // that did not come (null) is not a count of zero channels, nor a promise of any.
     if (catalogue["layout"]["showLive"].boolean() &&
-        catalogue["sources"]["channels"].number(-1) != 0)
+        (catalogue["sources"]["channels"].number(0) > 0 || catalogue["channels"].size() > 0))
         tabs.push_back({"live", say::msg("launcher.live.title", "Live"), Operation::None});
     tabs.push_back({"apps", say::msg("launcher.apps.title", "Apps"), Operation::None});
     if (catalogue["layout"]["showInputs"].boolean(true) && catalogue["devices"].size())
@@ -176,23 +179,23 @@ CardRow catalogueRow(const std::string &kind, const Json &catalogue, const Json 
     row.cards.insert(row.cards.end(), hiddenCards.begin(), hiddenCards.end());
     return row;
 }
-// The apps as one row or, with the apps sorted by kind, one row per kind in the owner's order.
+// The apps as one row per kind, in the owner's order of the kinds.
 // `list` names the hidden apps that are left out: Home's ("app") or the Apps tab's ("appsTab").
 std::vector<CardRow> appRows(const Json &catalogue, const Json &guide, const std::string &list) {
     CardRow all = catalogueRow("app", catalogue, guide, false, list);
     std::vector<CardRow> rows;
-    if (catalogue["layout"]["sort"]["app"].string() == "kind")
-        for (const auto &kind : catalogue["kinds"].items()) {
-            CardRow row;
-            row.key = "app";
-            row.group = kind["key"].string();
-            row.title = appKindTitle(row.group, kind["label"].string(row.group));
-            for (const Card &card : all.cards)
-                if (kindOf(card) == row.group)
-                    row.cards.push_back(card);
-            if (!row.cards.empty())
-                rows.push_back(row);
-        }
+    for (const auto &kind : catalogue["kinds"].items()) {
+        CardRow row;
+        row.key = "app";
+        row.group = kind["key"].string();
+        row.title = appKindTitle(row.group, kind["label"].string(row.group));
+        for (const Card &card : all.cards)
+            if (kindOf(card) == row.group)
+                row.cards.push_back(card);
+        if (!row.cards.empty())
+            rows.push_back(row);
+    }
+    // A catalogue with no kinds (an older daemon's) shows the apps as one row.
     if (rows.empty())
         rows.push_back(all);
     return rows;
@@ -269,11 +272,12 @@ std::vector<CardRow> homeRows(const std::string &tab, const Json &catalogue, con
     for (const auto &source : discover["rows"].items())
         feedRows[source["key"].string()] = source;
     // The apps lead, as on Google TV, in their kinds' order when sorted by kind; the top picks
-    // follow and the hero is drawn from them.
+    // follow and the hero is drawn from them. The rows that open in an app (Netflix, YouTube)
+    // come next, so they are not four rows down.
     CardRow apps = appsRow(catalogue, guide, false);
     if (!apps.cards.empty())
         result.push_back(apps);
-    for (const auto &key : {"trending", "movies", "series", "netflix", "youtube"}) {
+    for (const auto &key : {"trending", "netflix", "youtube", "movies", "series"}) {
         if (!feedRows.count(key))
             continue;
         Json source = feedRows[key];
@@ -309,5 +313,79 @@ std::vector<CardRow> homeRows(const std::string &tab, const Json &catalogue, con
             result.push_back(row);
     }
     return result;
+}
+} // namespace nativetv
+
+namespace nativetv {
+namespace {
+std::string grouped(long value) {
+    const std::string digits = std::to_string(value < 0 ? -value : value);
+    std::string text;
+    for (size_t i = 0; i < digits.size(); ++i) {
+        if (i && (digits.size() - i) % 3 == 0)
+            text += ',';
+        text += digits[i];
+    }
+    return (value < 0 ? "-" : "") + text;
+}
+// One of the panel's cards: `value` and `unit` are the big figure, `bar` 0..1 or -1 for none.
+Card panelCard(const std::string &id, const std::string &title, const std::string &value,
+               const std::string &unit, const std::string &caption, double bar) {
+    Card card;
+    card.id = id;
+    card.kind = "oled";
+    card.title = title;
+    card.subtitle = caption;
+    card.data = fields(
+        {{"value", Json::text(value)}, {"unit", Json::text(unit)}, {"bar", Json::numeric(bar)}});
+    card.command = navigate("dashboard:oled");
+    return card;
+}
+} // namespace
+
+std::vector<CardRow> compactHomeRows(const Json &catalogue, const Json &guide, const Json &stats) {
+    std::vector<CardRow> rows;
+    CardRow apps = appsRow(catalogue, guide, false);
+    if (!apps.cards.empty())
+        rows.push_back(apps);
+    if (catalogue["layout"]["showInputs"].boolean(true)) {
+        CardRow inputs = catalogueRow("dev", catalogue, guide);
+        if (!inputs.cards.empty())
+            rows.push_back(inputs);
+    }
+    const Json oled = stats["oled"];
+    if (!oled["panel_hours"].valid())
+        return rows;
+    CardRow panel;
+    panel.key = "oled";
+    panel.title = say::msg("tv.home.oledCare", "OLED Care");
+    // The panel's hours, with how far the compensation cycle has run.
+    const double interval = oled["comp_interval_hours"].number(0),
+                 since = oled["hours_since_comp"].number(-1);
+    const bool cycle = interval > 0 && since >= 0;
+    const double done = cycle ? std::min(1.0, since / interval) : -1;
+    Json percent = Json::object();
+    percent.set("pct", Json::text(std::to_string(static_cast<int>(done * 100 + .5))));
+    panel.cards.push_back(panelCard(
+        "oled:hours", say::msg("tv.home.panelHours", "Panel hours"),
+        grouped(std::lround(oled["panel_hours"].number())), "h",
+        cycle ? say::msg("tv.home.compCycle", "Compensation cycle {pct}%", percent) : std::string(),
+        done));
+    // The Pixel Refresher: the hours until it runs, and how far on its schedule the panel is.
+    if (oled["hours_until_refresher"].valid()) {
+        const double every = oled["refresher_interval_hours"].number(0),
+                     last = oled["hours_since_refresher"].number(-1);
+        const long cycles = std::lround(oled["refresher_cycles"].number(0));
+        Json count = Json::object();
+        count.set("n", Json::text(std::to_string(cycles)));
+        panel.cards.push_back(panelCard(
+            "oled:refresher", say::msg("tv.home.refresher", "Pixel Refresher"),
+            grouped(std::lround(oled["hours_until_refresher"].number())), "h",
+            cycles == 1 ? say::msg("tv.home.refresherOne", "1 cycle done")
+                        : say::msg("tv.home.refresherCycles", "{n} cycles done", count),
+            every > 0 && last >= 0 ? std::min(1.0, last / every) : -1));
+    }
+    rows.push_back(panel);
+    return rows;
 }
 } // namespace nativetv

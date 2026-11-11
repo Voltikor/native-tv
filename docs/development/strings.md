@@ -10,7 +10,8 @@ or the script shows the real words. [Spanish](#spanish) is the one language so f
 The native TV client supports English and Brazilian Portuguese; see
 [Native launcher](launcher-translations.md). The older pages the TV's own browser shows
 (`native-tv/assets/google-tv/`), Home Assistant entity names, MQTT topics and logs
-remain English.
+remain English. The offline service worker page
+(`assets/pwa/sw.js`) also remains English.
 
 `scripts/check-strings.py` enforces what follows, and runs in CI.
 

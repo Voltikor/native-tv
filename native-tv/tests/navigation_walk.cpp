@@ -507,7 +507,7 @@ struct Walk {
     static bool known(const std::string &name) {
         static const std::set<std::string> exact = {
             "home", "quick", "quick:recents", "profiles", "details", "rename", "search", "pin",
-            "live", "catalog", "qr", "dashboard", "language"};
+            "live", "catalog", "qr", "dashboard", "language", "tvtheme"};
         if (exact.count(name))
             return true;
         for (const char *prefix : {"dashboard:", "quick:", "setup:"})

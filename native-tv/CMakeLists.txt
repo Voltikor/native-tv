@@ -90,7 +90,8 @@ add_library(nativetv_daemon src/daemon/app_tile_manager.cpp
   src/daemon/remote_button_log_watcher.cpp
   src/daemon/remote_keys_reconciler.cpp
   src/daemon/state_subscriptions.cpp
-  src/daemon/screen_time_enforcer.cpp src/daemon/syslog_forwarder.cpp)
+  src/daemon/screen_time_enforcer.cpp src/daemon/volume_ceiling_enforcer.cpp
+  src/daemon/syslog_forwarder.cpp)
 target_link_libraries(nativetv_daemon PUBLIC nativetv_core nativetv_client_config nativetv_state
   Threads::Threads PkgConfig::CURL)
 target_link_libraries(nativetv_daemon PUBLIC nativetv_history)
@@ -126,6 +127,7 @@ add_library(nativetv_tv_services src/service/control_commands.cpp
   src/service/app_install_space.cpp
   src/service/admin_pin.cpp src/service/app_icons.cpp src/service/app_kinds.cpp src/service/backup.cpp
   src/service/quick_access.cpp src/service/release_check.cpp src/service/screen_time.cpp
+  src/service/volume_ceiling.cpp src/service/keyboard.cpp
   src/service/screensaver_policy.cpp
   src/service/stats_fields.cpp
   src/service/preload.cpp src/service/lg_settings.cpp src/service/piccap.cpp
@@ -327,6 +329,9 @@ if(BUILD_TESTING)
   add_test(NAME native-ha-golden
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/ha_golden.py
       $<TARGET_FILE:native-ha-entity-catalogue-tests> $<TARGET_FILE:native-ha-discovery-tests>)
+  add_test(NAME native-ha-config-example
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/ha_config_example.py)
+  set_tests_properties(native-ha-config-example PROPERTIES SKIP_RETURN_CODE 77)
   add_executable(native-saved-pages-tests tests/saved_pages.cpp)
   target_link_libraries(native-saved-pages-tests PRIVATE nativetv_tv_services)
   target_compile_options(native-saved-pages-tests PRIVATE -Wall -Wextra -Werror)
@@ -642,6 +647,14 @@ if(BUILD_TESTING)
   target_link_libraries(native-screen-time-tests PRIVATE nativetv_tv_services)
   target_compile_options(native-screen-time-tests PRIVATE -Wall -Wextra -Werror)
   add_test(NAME native-screen-time COMMAND native-screen-time-tests)
+  add_executable(native-volume-ceiling-tests tests/volume_ceiling.cpp)
+  target_link_libraries(native-volume-ceiling-tests PRIVATE nativetv_tv_services)
+  target_compile_options(native-volume-ceiling-tests PRIVATE -Wall -Wextra -Werror)
+  add_test(NAME native-volume-ceiling COMMAND native-volume-ceiling-tests)
+  add_executable(native-keyboard-tests tests/keyboard.cpp)
+  target_link_libraries(native-keyboard-tests PRIVATE nativetv_tv_services)
+  target_compile_options(native-keyboard-tests PRIVATE -Wall -Wextra -Werror)
+  add_test(NAME native-keyboard COMMAND native-keyboard-tests)
   add_executable(native-screensaver-policy-tests tests/screensaver_policy.cpp)
   target_link_libraries(native-screensaver-policy-tests PRIVATE nativetv_tv_services)
   target_compile_options(native-screensaver-policy-tests PRIVATE -Wall -Wextra -Werror)
@@ -759,6 +772,13 @@ if(BUILD_TESTING)
     NATIVETV_FAKE_LUNA_SEND="$<TARGET_FILE:native-fake-luna-send>")
   add_dependencies(native-screen-time-runtime-tests native-fake-luna-send)
   add_test(NAME native-screen-time-runtime COMMAND native-screen-time-runtime-tests)
+  add_executable(native-volume-ceiling-runtime-tests tests/volume_ceiling_enforcer.cpp)
+  target_link_libraries(native-volume-ceiling-runtime-tests PRIVATE nativetv_daemon)
+  target_compile_options(native-volume-ceiling-runtime-tests PRIVATE -Wall -Wextra -Werror)
+  target_compile_definitions(native-volume-ceiling-runtime-tests PRIVATE
+    NATIVETV_FAKE_LUNA_SEND="$<TARGET_FILE:native-fake-luna-send>")
+  add_dependencies(native-volume-ceiling-runtime-tests native-fake-luna-send)
+  add_test(NAME native-volume-ceiling-runtime COMMAND native-volume-ceiling-runtime-tests)
   add_executable(native-mqtt-tls-probe tests/mqtt_tls_probe.cpp)
   target_link_libraries(native-mqtt-tls-probe PRIVATE nativetv_daemon)
   target_compile_options(native-mqtt-tls-probe PRIVATE -Wall -Wextra -Werror)
@@ -848,7 +868,8 @@ if(NATIVETV_BUILD_CLIENT)
   add_library(nanosvg STATIC third_party/nanosvg/implementation.cpp)
   target_include_directories(nanosvg PUBLIC third_party/nanosvg)
   add_library(nativetv_presentation
-    src/ui/scene.cpp src/ui/kit/components.cpp src/ui/kit/widgets.cpp src/ui/kit/gallery.cpp
+    src/ui/scene.cpp src/ui/kit/palette.cpp src/ui/kit/components.cpp src/ui/kit/widgets.cpp
+    src/ui/kit/gallery.cpp
     src/ui/application.cpp src/ui/navigation.cpp src/ui/input.cpp
     src/ui/menu_controller.cpp src/ui/data_controller.cpp
     src/ui/home_view.cpp src/ui/menu_view.cpp
@@ -859,7 +880,8 @@ if(NATIVETV_BUILD_CLIENT)
     src/ui/dashboard_screens.cpp src/ui/live_screen.cpp src/ui/settings_list.cpp
     src/ui/settings_screen.cpp src/ui/catalog_screen.cpp
     src/ui/kit/overlay.cpp src/ui/quick_screen.cpp src/ui/profiles_screen.cpp
-    src/ui/details_screen.cpp src/ui/editor_screen.cpp src/ui/pin_screen.cpp src/ui/language_screen.cpp)
+    src/ui/details_screen.cpp src/ui/editor_screen.cpp src/ui/pin_screen.cpp
+    src/ui/theme_screen.cpp src/ui/language_screen.cpp)
   target_link_libraries(nativetv_presentation PUBLIC nativetv_models nativetv_motion nativetv_say qrcodegen)
   target_compile_options(nativetv_presentation PRIVATE -Wall -Wextra -Werror)
   add_library(nativetv_http src/adapters/http_services.cpp src/adapters/legacy_routes.cpp)
@@ -932,6 +954,10 @@ if(NATIVETV_BUILD_CLIENT)
     target_link_libraries(native-overlay-screen-tests PRIVATE nativetv_presentation)
     target_compile_options(native-overlay-screen-tests PRIVATE -Wall -Wextra -Werror)
     add_test(NAME native-overlay-screens COMMAND native-overlay-screen-tests)
+    add_executable(native-theme-screen-tests tests/theme_screen.cpp)
+    target_link_libraries(native-theme-screen-tests PRIVATE nativetv_presentation)
+    target_compile_options(native-theme-screen-tests PRIVATE -Wall -Wextra -Werror)
+    add_test(NAME native-theme-screen COMMAND native-theme-screen-tests)
     add_executable(native-navigation-walk-tests tests/navigation_walk.cpp)
     target_link_libraries(native-navigation-walk-tests PRIVATE nativetv_presentation)
     target_compile_definitions(native-navigation-walk-tests PRIVATE NATIVETV_FIXTURES="${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures")
@@ -1032,8 +1058,11 @@ if(NATIVETV_BUILD_CLIENT)
     # These run the client itself; they skip when the machine has no GL to give it.
     add_test(NAME native-client-platform COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/client_platform.py" "$<TARGET_FILE:nativetv-tv>")
     add_test(NAME native-golden-compare COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/golden/test_golden.py")
+    add_test(NAME native-oled-budget COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/golden/oled_budget.py")
     add_test(NAME native-golden COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/golden/golden.py" check --client "$<TARGET_FILE:nativetv-tv>")
-    set_tests_properties(native-golden PROPERTIES SKIP_RETURN_CODE 77)
+    # 188 s of the 465 s test phase on a 4-core CI runner under the sanitizers. CTest starts the
+    # costliest tests first, so this one runs beside the others instead of alone at the end.
+    set_tests_properties(native-golden PROPERTIES SKIP_RETURN_CODE 77 COST 200)
     # The end-to-end cases need a real TV (NATIVETV_TV_HOST); without one this entry skips, visibly.
     add_test(NAME native-e2e-runner COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/e2e/test_runner.py")
     add_test(NAME native-e2e-tv COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/e2e/run.py" --all)

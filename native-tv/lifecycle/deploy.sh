@@ -12,9 +12,10 @@
 #           and decoded on the TV.
 #
 # Deployment needs bash, Python 3, tar, base64 and fold, and the ARM build of the
-# server and TV app (native-tv/build.py --sdk ...) on the host; ssh and curl are
-# used when present (without ssh it uses telnet, without curl it skips the final
-# check). The TV needs no internet connection.
+# server and TV app (native-tv/build.py --sdk ...) on the host; ssh, nc and curl
+# are used when present (without ssh it uses telnet, without nc it probes the
+# telnet port with bash alone, without curl it skips the final check). The TV
+# needs no internet connection.
 #
 # Usage: ./deploy.sh <tv-ip> [--no-persist] [--telnet] [--app|--no-app] [--native-build=DIR]
 #   --no-persist  skip the boot hook, so the server does not come back after
@@ -76,9 +77,10 @@ SSH_OPTS=(-o BatchMode=yes -o ConnectTimeout=6 -o StrictHostKeyChecking=accept-n
 STAGE=/var/lib/tvweb/.deploy     # on the TV; beside the install so moves are renames
 
 FILES="tvwebctl assets/ui.html assets/favicon.svg \
+assets/pwa/manifest.webmanifest assets/pwa/sw.js assets/pwa/icon-192.png assets/pwa/icon-512.png assets/pwa/icon-maskable-512.png \
 assets/ui/theme.css assets/ui/ui.css assets/ui/i18n.js assets/ui/core.js assets/ui/theme.js assets/ui/format.js assets/ui/readouts.js \
 assets/ui/server.js assets/ui/controls.js assets/ui/privacy.js assets/ui/lgsettings.js assets/ui/game.js \
-assets/ui/system.js assets/ui/history.js assets/ui/ssh.js assets/ui/screentime.js assets/ui/apps.js assets/ui/install.js assets/ui/home.js assets/ui/tabs.js assets/ui/servicemenu.js \
+assets/ui/system.js assets/ui/history.js assets/ui/ssh.js assets/ui/screentime.js assets/ui/volumelimit.js assets/ui/keyboard.js assets/ui/report.js assets/ui/apps.js assets/ui/install.js assets/ui/home.js assets/ui/tabs.js assets/ui/servicemenu.js \
 assets/ui/oled.js assets/ui/screensavers.js assets/ui/mqtt.js assets/ui/tools.js assets/ui/search-aliases.js assets/ui/search.js assets/ui/main.js \
 assets/dashboard-app/appinfo.json assets/dashboard-app/packageinfo.json \
 assets/dashboard-app/install-app.sh \
@@ -273,8 +275,13 @@ deploy_ssh() {
 
 # ---------------------------------------------------------------- telnet
 # Does anything answer on this port within six seconds? A connection to an
-# address nothing is using would otherwise hang for over a minute.
+# address nothing is using would otherwise hang for over a minute. nc is asked
+# first where the host has it: on macOS, bash's own /dev/tcp open fails now and
+# then with "No route to host" on an address nc connects to.
 answers() {
+  if command -v nc >/dev/null 2>&1 && nc -z -w 6 "$TV" "$1" >/dev/null 2>&1; then
+    return 0
+  fi
   ( exec 3<>"/dev/tcp/$TV/$1" ) 2>/dev/null &
   p=$!
   for _ in 1 2 3 4 5 6; do
@@ -306,7 +313,16 @@ EOF
   echo "installing on $TV over telnet ..."
 
   # bash can open a network connection itself, so no telnet program is needed.
-  exec 3<>"/dev/tcp/$TV/23"
+  # The open fails now and then on macOS ("No route to host") where the next
+  # try connects, so it gets three.
+  for attempt in 1 2 3; do
+    { exec 3<>"/dev/tcp/$TV/23"; } 2>/dev/null && break
+    if [ "$attempt" = 3 ]; then
+      echo "Couldn't open a telnet connection to $TV." >&2
+      exit 1
+    fi
+    sleep 1
+  done
   cat <&3 > "$WORK/raw" &      # read while writing, so neither side can stall
   reader=$!
   sleep 1

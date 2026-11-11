@@ -525,12 +525,12 @@ Two further details from that file:
 The remap therefore catches the key earlier: `systemUi.js` runs before
 `appLaunch.js`, so a `case WebOS.Key_webOS_<Name>:` added to
 `handleSystemKeys()` that returns `KeyPolicy.Accepted` launches the chosen app
-and the CP-hotkey handler never sees the press. `shortcut-key.sh` bind-mounts a
+and the CP-hotkey handler never sees the press. The prototype bind-mounted a
 patched copy, rebuilt each time from a pristine original so cases cannot
-compound, and refuses to mount anything `node --check` rejects - a key filter
+compound, and refused to mount anything `node --check` rejected - a key filter
 that does not parse takes the compositor down with it. The mount does not
 survive a reboot, so a power cycle is always the way back; the boot hook
-re-applies it, before the compositor starts where it can, which saves a restart.
+re-applied it, before the compositor starts where it can, which saves a restart.
 
 Two traps when working on it: validate the staged copy under a name ending
 `.js`, since `node --check` refuses an unknown extension like `.tmp` and the
@@ -705,6 +705,22 @@ the same codes as the dashboard's media buttons (play 207, pause 119, stop 128,
 rewind 168, fast forward 208, volume up 115, volume down 114, mute 113;
 volume repeats while the key is held). Those keys go through the chain again, and the
 filter names none of them, so they reach LG's filters and the app in front.
+A key set to an action holds `action:` and its name (`action:screenOff`, `action:powerOff`) and its
+press calls `com.webos.service.tvpower` `/power/turnOffScreen` or `/power/powerOff` with `{}`, the
+two calls the daemon makes itself for the same actions. Screen off and Power off are offered only
+while `allowControl`, and for Power off `allowPower` too, are on, since the filter runs in the
+compositor where the server's switches cannot be checked; a key set earlier keeps its action if a
+switch is turned off later, until it is changed. The calls are the filter's own, under its role, which
+reaches `com.lge.*`, `com.palm.*` and `com.webos.*` services; a call to `tvpower` from the filter was
+answered on a B3 ([research](tv-research.md#running-our-own-code-early-in-a-cold-start-b3-webos-1032)),
+and the filter already calls `/power/getPowerOnReason`. That `powerOff` and `turnOffScreen` are
+allowed has not been tried on a TV, and a refusal would leave the key taken and doing nothing. There
+is no way yet for a key the filter takes to reach the daemon (the filter's console output is in no
+file, and a bus service of ours runs a fixed script that takes no input from the call), so a key
+cannot be sent to Home Assistant. `tests/ui/test-remote-keys-filter.js` runs the
+filter against stand-ins for the compositor's objects, which shows what the script does and not what
+the compositor allows. Only the JavaScript filter has actions: webOS 11's native key handling only
+launches apps, as it has no media controls either.
 LG's files are never written. configd has no way to
 delete a value, so **As LG has it** on every key leaves the filter in the
 chain, passing every key on, and `tvwebctl restore-keys` takes it out, deletes
@@ -851,6 +867,13 @@ Channel's update block, which points LG's update servers at `127.0.0.1` and
 `::1` and must not outlive update blocking being switched off. At boot,
 `50-tvweb` takes them from that boot's `/etc/hosts` before mounting and drops
 the previous boot's, so a tool that is no longer started leaves nothing behind.
+
+Block TV software updates sinkholes `snu`, `nsu`, `snu-dev`, `su`, `su-dev` and
+`su-ssl` under `lge.com`. `nsu` and `snu-dev` come from
+[a guide for a webOS 10.2.1 TV](https://forum.level1techs.com/t/lg-tv-block-mini-how-to/255178),
+not from a capture. `tv.wiselg.com` is left out because on webOS 11 it is the
+Content Store's platform, and `elastic.lgwebostv.com` because nothing found says
+it serves updates.
 The table is written in place rather than replaced, since app jails such as
 Amazon's bind-mount it as their own `tmp/hosts` while it is mounted.
 
@@ -1204,6 +1227,52 @@ screen-time limits' own, so it needs `allowControl` and `allowPower`. The raw pr
 `/dev/input` (see "Native key filters" in [tv-research.md](tv-research.md)), which is why app, input and volume
 changes count too.
 
+## Volume ceiling
+
+`volume_ceiling_enforcer` listens to the `audio` group of the live state, the same
+subscription the Overview's volume reads, so a change from any source arrives as an event:
+the remote's keys, an app, the dashboard, MQTT. It sets the volume back with
+`com.webos.audio/setVolume` when it is over the limit for the TV's local time
+(`service/volume_ceiling.cpp`), one request at a time, and checks again on the next event or
+every 30 s, which catches a night window that starts under a volume already set.
+
+The command goes through the command policy under its own resource, `volume-ceiling`, so that
+it does not collide with a person's `audio-volume` command in the dashboard (a busy resource is
+refused, not queued). A refusal of the kind LG gives an external sound device ("Current Scenario
+doesn't support volume") holds the enforcer off for five minutes. The start-up volume is set 3 s
+after the screen comes on, for the audio service to be up, and once at start-up when `/proc/uptime`
+is under 180 s: a C5 on webOS 10.3.1 shuts down fully and starts the server again as it comes on, so
+it sees no change of power. The TV's clock before 1 January 2026 is taken as unset, and leaves the
+night window out. Nothing is cached: the settings the front door saves are handed to the enforcer
+on the loop.
+
+## Typing into the TV's text fields
+
+`POST /api/keyboard` (`service/keyboard.cpp` maps the request) calls LG's text-input
+service, `com.webos.service.ime`: `insertText` with `{"text", "replace"}`, `deleteCharacters`
+with `{"count"}` and `sendEnterKey`, through the command policy under the resource
+`ime-keyboard`. LG's
+[reference](https://webosose.org/docs/reference/ls2-api/com-webos-service-ime) documents the
+three, with `replace` a boolean, which is how it is sent; that reference's own text for
+`insertText` is a copy of another method's, and a TV was not available to try them, so only
+the stand-in `luna-send` has answered them. Text longer than 256 characters, or with a control
+character (a line break presses Enter in some fields, which is what the enter action is for), is
+refused before it reaches the TV. The TV's refusal, with its `errorText`, comes back as
+`{"ok":false,"error":...}` with status 200, as `/api/control` does. The service also has
+`registerRemoteKeyboard`, which tells when a field gains focus; it is not used, so the page
+cannot tell beforehand whether a field is open.
+
+## Exporting the block list
+
+`GET /api/adblock/export` builds the names with `adBlockExportNames`, which is `adBlockList`
+at the tier (the current level, or ads while off) with the update servers when updates are
+blocked, and formats them with `adBlockExport`. It uses `sdpGraceActive` false, so the
+`nextlgsdp.com` hosts are in the full tier, which the TV itself leaves out for a while after
+a start. A hosts file and a Pi-hole list match exact names, as the TV's table does, so the
+regional names (`gb.info.lgsmartad.com` and the like) are listed one by one; an AdGuard
+rule also matches subdomains. The page's links carry the token as `k=`, as a download
+cannot send a header.
+
 ## Reading the Magic Remote's battery
 
 LG's pairing file has only the remote model's battery thresholds, so
@@ -1234,7 +1303,7 @@ TV-RESEARCH.md has how this was found.
 `service/release_check` fetches
 `github.com/ihtisham1211/native-tv/releases/latest/download/<id>.manifest.json`,
 the file `scripts/build-ipk.py` writes and the Homebrew Channel workflow attaches
-to each published release (a pre-release is never "latest"). The manifest has to
+to each release's draft, before it is published (a pre-release is never "latest"). The manifest has to
 name Native Tv's app id, an `x.y.z` version and a 64-digit SHA-256; the release
 and `.ipk` links are then built from that version, not read from the file. The
 request is libcurl through `AppPackageFetcher`, cancelled after 20 seconds, and
@@ -1415,6 +1484,14 @@ overlay and the layout is one recognised from #612's dumps, and only once
 feature off, or `tvwebctl restore-home` before uninstalling, deletes the webOS
 9 file or takes the webOS 10 overlay away, and restarts the home app.
 
+## TV themes
+
+A theme is a palette plus `look` values (`native-tv/design/themes/<id>.json` over `tokens.json`); `tools/gen_tokens.py` writes them as `Palette` structs and the references `color::`, `alpha::` and `look::` that every screen reads, so a screen's code does not know the theme. `kit::useTheme(id)` copies a palette into the one in use. It also writes `core/themes.hpp`, the list of ids and names that the daemon and the client's Settings share.
+
+The daemon keeps the theme in `config.json` as `tvTheme: {id, suggested}` and changes it with `/api/control` `setTvTheme` (an id the list does not have is refused). It is read fresh from the config file, not from the copy loaded at start, and appears in `/api/update` (with the list, for the phone's Server tab), `/api/caps` (for the client's first frame), the Home catalogue (the read an open client repeats, so a change from the phone arrives) and the setup state (the TV's Settings row). `suggestTvTheme` is added to the catalogue, until answered, when the panel is OLED (the config's `panel`, the panel type marker, or the model the stats collector read) and the theme is still the default.
+
+The client applies the theme in `Application::followTheme`, from caps and from every catalogue answer, through the optimistic layer so a choice still being saved is not undone by a read made before it. The picker (`ui/theme_screen.cpp`) saves with `optimistic().set` and puts the old theme back on a refused save or an unconfirmed Keep sheet. The drift moves the scene in `Application::buildFrame`, with the pointer hits.
+
 ## Native Tv Home
 
 `home_orchestrator` and the `home_*_manager` modules run a home screen of Native Tv's own in place of LG's, opt-in
@@ -1585,34 +1662,23 @@ takes the other's, and the view's next heartbeat brings the new `layoutVersion`.
 keys, so profiles cannot nest; there are at most five, with names of up to 20 characters and colours from the kit's six.
 `/api/home` and `/api/home/catalogue` carry `profiles` and `profile`.
 
-A row set to Last opened (`sort` in `home.json`) is ordered by
-`home-recent.json`, the time each tile id was last opened. sam's foreground
-app gives apps and HDMI inputs, an input as `hdmiN`, which counts for every
-device on it; a device's own tile records that device and keeps the input
-switch it causes from counting for the others. Live TV's channel is read from
-`utp.boot/getLastChannelId` when Live TV leaves the foreground, since changing
-channel within it changes nothing in front, and when the catalogue is asked
-for while Live TV is still in front: on a G3 the view asks about 0.2 s before
-sam names it. The catalogue waits for that read. Only rows set to Last opened are
-recorded, and a row going back to its own order is forgotten.
-
-The apps row's third order, By kind (`sort.app: "kind"`), groups the apps by a
-table in `service/app_kinds.cpp`: an app's id, then its title keyed as the icon
+The apps are always grouped by kind (the layout has no `sort`: a document or a body that still carries one is read without
+it, and nothing is recorded of what was opened last). The grouping uses a table in `service/app_kinds.cpp`: an app's id, then its title keyed as the icon
 pack keys titles, then LG's own id prefixes, else `other`. The catalogue gives
 each app its `kind` and lists `kinds` (key and label) in the layout's `kinds`
 order, which `/api/home/layout` saves after dropping unknown keys and appending
 missing ones; the TV client builds one row per non-empty kind from them, and a
 long press on a row of the Apps screen moves it, posting the new `kinds`.
 
-Editing the apps (a long press on an app of Home's apps row or the Apps grid) saves in one `/api/home/layout` request: `order.app`
-(`orderAfterMove` in `domain/home.cpp`, which leaves the hidden apps where they were), `sort.app: "custom"` unless the apps are by
-kind, and `hidden.app` (Home's row) or `hidden.appsTab` (the Apps page) when one was hidden or shown. The two lists are independent:
+Editing the apps (a long press on an app of Home's apps row, or on the Apps page when it has one kind) saves in one `/api/home/layout` request: `order.app`
+(`orderAfterMove` in `domain/home.cpp`, which leaves the hidden apps where they were), and `hidden.app` (Home's row) or
+`hidden.appsTab` (the Apps page) when one was hidden or shown. The two lists are independent:
 `home_profiles.cpp` keeps `hidden.appsTab` next to `hidden.app`, seeds it from `hidden.app` the first time a layout without it is
 normalised (so what was hidden, LG's promotions included, stays hidden on the Apps page), and gives a reset and a new profile the
 same defaults in both. The client's `catalogueRow` leaves out the list that applies (`hiddenIds`: `app`, `dev`, `ch` or
 `appsTab`; a catalogue with no `appsTab` falls back to `app`, as the seed does). `appsRow(…, withHidden, list)` lists the hidden
-apps of that list, flagged, last, and is used while editing, Home's row with `app` and the Apps page with `appsTab`. The order and
-the sort are shared by both. An app hidden under Hide home screen system apps is dropped from the catalogue itself
+apps of that list, flagged, last, and is used while editing, Home's row with `app` and the Apps page with `appsTab`. The order
+is shared by both. An app hidden under Hide home screen system apps is dropped from the catalogue itself
 (`homeCatalogueApps` skips launch points that are not visible), so it is on neither list's page whatever the lists say. The client
 applies the saved values to its copy of the catalogue at once, and the next read replaces them.
 
@@ -1706,7 +1772,7 @@ The debloating engine (`background_services`, kept by `services_keeper`) switche
 
 * **Symptom When Disabled**: On an OLED65C4PUA (webOS 10.3.1, firmware 33.31.68), the native Plex app showed video stretched vertically. Switching the service back on and rebooting restored the aspect ratio (#374).
 * **Why Disabling Offers No Benefit**: It saves about 3 MB of RAM. The Always Ready screen itself is switched off with the **Always Ready** setting under **Advanced &rarr; Power** (`lifeOnScreenMode`), which leaves the daemon in place.
-* **Migration**: `services.init()` drops both retired IDs (`RETIRED`) from `disabled_services.json`, removes their masks under `/run/systemd/transient`, starts them and rewrites the boot hook. The reported Plex fault cleared only after a reboot with the service running.
+* **Migration**: at start the services keeper drops both retired IDs from `disabled_services.json`, removes their masks under `/run/systemd/transient`, starts them and rewrites the boot hook. The reported Plex fault cleared only after a reboot with the service running.
 ---
 
 ## Screensaver Staging & Boot Persistence
@@ -1714,8 +1780,8 @@ The debloating engine (`background_services`, kept by `services_keeper`) switche
 Custom QML screensavers are staged in `/var/lib/tvweb/screensaver` and bind-mounted over `/usr/palm/applications/com.webos.app.screensaver`.
 
 * **Cold Boot vs Quick Start+**: On Quick Start+ suspend-to-RAM, active bind-mounts persist in memory. On a cold boot (such as after the 4-hour OLED Pixel Cleaning cycle or extended standby on webOS 9 and 10), `/var/lib/webosbrew/init.d/50-tvweb` re-applies the bind-mount if `/var/lib/tvweb/screensaver/.tvweb-screensaver` is present.
-* **Making sam read the new manifest**: sam reads an `appinfo.json` only when it scans, and where LG's screen saver is Flutter (webOS 10 and later) ours changes the app's `type`, so sam has to read it again or the launch goes to the wrong runner. `ScreensaverControl` (`screensaver_control`) and the boot hook try two things in turn: `applicationManager/blockSystemApp` followed by `releaseBlockSystemApp` for the one app (`samrescan.rereadApp`; the block adds `"forceBlockSystemApp": false` where the TV's `applicationManager.blockSystemApp.schema` names it, as webOS 11.2 requires; on a C5 on webOS 10.3.1 sam reported the new type within the second and kept its pid), then the configd nudge below (webOS 9). They never restart sam, the restart behind the black-picture reports in #366, which they used to fall back to. A switch to one of ours that sam has not taken is undone (unmounted, staged files cleared) and answered with an error, and a switch back to LG's is answered as taking effect from the next restart; the boot hook unmounts ours likewise. A running screen saver is relaunched after either, since neither stops it. The release goes out even when the block got no answer, which may still have been a block sam made, and on a TV whose stock screen saver is not QML the boot hook releases it once at every boot, so a run cut short between the two calls cannot leave it blocked. Custom screen savers are on by default on webOS 10 and 11 (#768) and stay held back on webOS 12 and later unless `allowExperimentalScreensavers` is set; the version is read from `/etc/issue`.
-* **Reverting to Stock**: When the user selects "LG default" (`stock`), `screensavers.setScreensaver('stock')` unmounts the live overlay and deletes `.tvweb-screensaver` along with all staged files. Without this cleanup, the boot hook would see the stale marker file on cold boot and re-mount the previously staged screensaver. `screensavers.init()` also auto-heals any orphaned marker files if the live screensaver is currently stock.
+* **Making sam read the new manifest**: sam reads an `appinfo.json` only when it scans, and where LG's screen saver is Flutter (webOS 10 and later) ours changes the app's `type`, so sam has to read it again or the launch goes to the wrong runner. `ScreensaverControl` (`screensaver_control`) and the boot hook try two things in turn: `applicationManager/blockSystemApp` followed by `releaseBlockSystemApp` for the one app (`SamRescanManager::rereadApp`; the block adds `"forceBlockSystemApp": false` where the TV's `applicationManager.blockSystemApp.schema` names it, as webOS 11.2 requires; on a C5 on webOS 10.3.1 sam reported the new type within the second and kept its pid), then the configd nudge below (webOS 9). They never restart sam, the restart behind the black-picture reports in #366, which they used to fall back to. A switch to one of ours that sam has not taken is undone (unmounted, staged files cleared) and answered with an error, and a switch back to LG's is answered as taking effect from the next restart; the boot hook unmounts ours likewise. A running screen saver is relaunched after either, since neither stops it. The release goes out even when the block got no answer, which may still have been a block sam made, and on a TV whose stock screen saver is not QML the boot hook releases it once at every boot, so a run cut short between the two calls cannot leave it blocked. Custom screen savers are on by default on webOS 10 and 11 (#768) and stay held back on webOS 12 and later unless `allowExperimentalScreensavers` is set; the version is read from `/etc/issue`.
+* **Reverting to Stock**: When the user selects "LG default" (`stock`), `ScreensaverManager::restoreStock()` unmounts the live overlay and deletes `.tvweb-screensaver` along with all staged files. Without this cleanup, the boot hook would see the stale marker file on cold boot and re-mount the previously staged screensaver. `ScreensaverManager::reconcileStartup()` also clears any orphaned staged files at start if the live screensaver is stock.
 
 ---
 
@@ -1737,8 +1803,8 @@ order, at most 16, asked once each (the lookup is the one details uses, and is
 kept for then).
 
 `GET /api/home/details?type=movie|tv&id=…` and
-`GET /api/home/search?q=…` delegate through `home.js` to `home-content.js`.
-The transport is the existing server `getJson`; details append
+`GET /api/home/search?q=…` are answered by `HomeContent`
+(`native-tv/src/service/home_content.cpp`), which fetches over libcurl; details append
 `credits,videos,similar,external_ids`. TV runtime uses episode runtime.
 YouTube trailers require an eleven-character video ID. Queries are 2–80
 characters; IDs and types are validated before transport.

@@ -10,6 +10,7 @@
   <a href="https://ihtisham1211.github.io/native-tv/"><img alt="Documentation" src="https://img.shields.io/badge/docs-ihtisham1211.github.io%2Fnative--tv-1fb653"></a>
   <img alt="LG webOS 4 and later" src="https://img.shields.io/badge/LG%20webOS-4%20and%20later-a50034">
   <img alt="Home Assistant over MQTT Discovery" src="https://img.shields.io/badge/Home%20Assistant-MQTT%20Discovery-41bdf5?logo=homeassistant&logoColor=white">
+  <a href="https://buymeacoffee.com/ihtisham12z"><img alt="Buy me a coffee" src="https://img.shields.io/badge/Buy%20me%20a%20coffee-donate-FFDD00?logo=buymeacoffee&logoColor=black"></a>
 </p>
 
 <p align="center">
@@ -17,19 +18,21 @@
   <a href="https://ihtisham1211.github.io/native-tv/getting-started/install/">Install</a> ·
   <a href="https://ihtisham1211.github.io/native-tv/getting-started/tested-tvs/">Tested TVs</a> ·
   <a href="https://ihtisham1211.github.io/native-tv/integrations/home-assistant/">Home Assistant</a> ·
-  <a href="https://github.com/ihtisham1211/native-tv/issues">Issues</a>
+  <a href="https://github.com/ihtisham1211/native-tv/issues">Issues</a> ·
+  <a href="https://buymeacoffee.com/ihtisham12z">Support the project</a>
 </p>
 
 **Native Tv** is a server that runs directly on a rooted LG webOS TV. It gives the TV a live browser dashboard for any phone or computer, a native app on the TV itself, and an MQTT bridge for Home Assistant and other smart-home software.
 
-Use it to control an LG OLED or LCD TV without the cloud, see and switch off what LG's ACR (Live Plus), ad tracking and data agreements collect, block LG's ad and telemetry servers, debloat apps and background services, remap the remote's buttons, protect an OLED panel from burn-in, and read the TV's hardware telemetry.
+Use it to control an LG OLED or LCD TV without the cloud, see and switch off what LG's ACR (Live Plus), ad tracking and data agreements collect, block LG's ad and telemetry servers, debloat apps and background services, remap the remote's buttons, protect an OLED panel from burn-in with panel care and an OLED-friendly TV theme, and read the TV's hardware telemetry.
 
 Native Tv grew out of [Glasshouse](https://github.com/rorygallagher2024/glasshouse) by Rory Gallagher and is now its own project: the server is a C++ daemon with no Node on the TV, and the TV has a native app in Google TV's design. It supports webOS 4 and later; Glasshouse covers webOS 2 and 3.
 
 <p align="center">
-  <img src="docs/screenshots/dashboard.png" alt="Native Tv dashboard in the dark theme: what the TV is showing, quick controls, processor, temperature, memory and network readings" width="49%">
-  <img src="docs/screenshots/privacy.png" alt="Native Tv Privacy tab: what LG can collect, the ad and telemetry blocker and the advertising identifier" width="49%">
+  <img src="docs/screenshots/tv-home-google-tv.jpg" alt="The Native Tv app's Home in the default Google TV theme: a featured title, the apps and top picks" width="49%">
+  <img src="docs/screenshots/tv-home-oled-care.jpg" alt="The Native Tv app's Home in the OLED Care theme: true black, the apps, the HDMI inputs and the panel's hours" width="49%">
 </p>
+<p align="center"><sub>The TV app in its two themes: Google TV, the default, and OLED Care, for OLED panels. Rendered by the TV app against a webOS emulator, not photographed on a TV; the HDMI inputs and the panel figures are sample values.</sub></p>
 
 > [!NOTE]
 >
@@ -48,22 +51,32 @@ Native Tv grew out of [Glasshouse](https://github.com/rorygallagher2024/glasshou
 
 * **Native launcher in English and Brazilian Portuguese.** A Language picker follows the TV or keeps an explicit choice, including movie metadata. [Translation details](docs/development/launcher-translations.md).
 
-* **[Control without the cloud](https://ihtisham1211.github.io/native-tv/dashboard/control/).** D-pad, volume, playback keys, app launcher, picture presets, sound output routing, power and reboot, from any browser.
-* **[Privacy: see what the TV collects, and switch it off](https://ihtisham1211.github.io/native-tv/dashboard/privacy/).** Whether LG's content-recognition engine is running, the advertising identifier, and every recorded data agreement, most of them switchable. An on-TV blocker for LG's ad and telemetry endpoints, and a switch for the two diagnostics services that upload to LG. [What LG's ACR does](https://ihtisham1211.github.io/native-tv/administration/acr/).
-* **[Debloat and home screen cleanup](https://ihtisham1211.github.io/native-tv/dashboard/apps/).** Install apps from the Homebrew Channel catalogue, uninstall LG apps to reclaim flash storage, disable background services to free RAM and CPU ([the list](https://ihtisham1211.github.io/native-tv/dashboard/apps/#turn-off-lgs-bloatware-background-services): LG's ad service, Live Plus, the diagnostics and telemetry uploaders, the ThinQ cloud services and more), hide built-in apps from the launcher, and on webOS 9 strip LG's Home screen down to apps and inputs.
-* **[Admin PIN](https://ihtisham1211.github.io/native-tv/administration/security/).** A four-digit PIN, asked in the TV's first-run setup, guards installing and removing apps, SSH keys, restoring a backup and power actions, on the TV and in the dashboard.
-* **[Switch off when idle](https://ihtisham1211.github.io/native-tv/dashboard/advanced/#switch-off-when-idle).** The TV switches itself off after 15 minutes to eight hours with no key press, no change and nothing playing, with a toast a minute before. An HDMI input is never switched off.
-* **[Power and standby](https://ihtisham1211.github.io/native-tv/dashboard/advanced/#power-and-standby).** Keep the TV on the network while it is off, Quick Boot, Wake-on-LAN, Always Ready and the On and Off timers, and a switch that [blocks LG's firmware updates](https://ihtisham1211.github.io/native-tv/dashboard/advanced/#system-updates), which can take root access away.
-* **[Remote button remapping](https://ihtisham1211.github.io/native-tv/dashboard/apps/#remote-keys).** Point Netflix, Prime Video, Guide, the colour keys and other shortcut buttons at any app, an HDMI input or Live TV. The change survives reboots.
-* **[OLED care](https://ihtisham1211.github.io/native-tv/dashboard/oled-care/).** Panel hours, compensation cycle progress, Pixel Refresher scheduling and failure alerts, and switches for screen shift, logo dimming, ASBL and Global Stress Reduction, which are normally reachable only from the service menu.
-* **[Game mode](https://ihtisham1211.github.io/native-tv/dashboard/game/).** On TVs with LG's Game Optimizer, a game's frame rate in large type while the source uses VRR, beside the Optimizer's settings.
-* **[Home Assistant and MQTT](https://ihtisham1211.github.io/native-tv/integrations/home-assistant/).** The TV appears as one device through MQTT Discovery, with controls, telemetry and [remote button events](https://ihtisham1211.github.io/native-tv/integrations/home-assistant-remote-buttons/) for automations. The same topics work for any MQTT client.
-* **[Monitoring](https://ihtisham1211.github.io/native-tv/dashboard/metrics/).** SoC temperature, per-core CPU load, memory, swap, Wi-Fi signal and throughput; [Prometheus metrics](https://ihtisham1211.github.io/native-tv/integrations/prometheus/) and [syslog forwarding](https://ihtisham1211.github.io/native-tv/integrations/syslog/).
-* **[Update notice](https://ihtisham1211.github.io/native-tv/dashboard/server/).** The Server tab says when a newer release is out, when asked or once a day if switched on, with its release notes, package and SHA-256, and opens the Homebrew Channel on the TV to install it. Off until asked, so the TV contacts GitHub only on request.
-* **[Backup and logs](https://ihtisham1211.github.io/native-tv/dashboard/server/).** LG's sound, device, HDMI and ad settings and Native Tv's own, saved to a file or once a day on the TV and restored on the same TV or another. The [System, Native Tv and kernel logs](https://ihtisham1211.github.io/native-tv/dashboard/tools/) in one searchable timeline in the browser, with no SSH, and private details hidden when copied or exported.
-* **[English and Spanish](https://ihtisham1211.github.io/native-tv/dashboard/server/).** The dashboard follows the browser's language, with a Language setting on the Server tab, and shows the TV's own messages in it too, such as errors and screen saver names. The Spanish is [partly machine-translated](https://ihtisham1211.github.io/native-tv/development/strings/#spanish) and open to review by native speakers.
-* **[Screen savers](https://ihtisham1211.github.io/native-tv/dashboard/screen-savers/) and [the service menu](https://ihtisham1211.github.io/native-tv/dashboard/service-menu/).** A clock, starfield, fireworks or the TV's own readings in place of LG's screen saver; LG's engineering menu opened from a browser, with no service remote, and unlocked where newer firmware cuts it down.
-* **[A native TV app](https://ihtisham1211.github.io/native-tv/apps/tv-app/).** A C++ and OpenGL ES client after Google TV's design puts the same readings and controls on the TV, driven by the remote, and offers [Native Tv Home](https://ihtisham1211.github.io/native-tv/dashboard/home/) as a replacement home screen. It is drawn on the GPU at the display's 60 frames a second with no browser behind it ([how smooth it is](https://ihtisham1211.github.io/native-tv/apps/tv-app/#how-smooth-it-is)).
+* **Control and automation**
+  * **[Control without the cloud](https://ihtisham1211.github.io/native-tv/dashboard/control/).** D-pad, typing into the TV's text fields, volume, playback keys, app launcher, picture presets, sound output routing, power and reboot, from any browser.
+  * **[Remote button remapping](https://ihtisham1211.github.io/native-tv/dashboard/apps/#remote-keys).** Point Netflix, Prime Video, Guide, the colour keys and other shortcut buttons at any app, an HDMI input or Live TV; it survives reboots.
+  * **[Home Assistant and MQTT](https://ihtisham1211.github.io/native-tv/integrations/home-assistant/).** The TV appears as one device through MQTT Discovery, with controls, telemetry and [remote button events](https://ihtisham1211.github.io/native-tv/integrations/home-assistant-remote-buttons/). The topics work for any MQTT client.
+* **Privacy and cleanup**
+  * **[Privacy: see what the TV collects, and switch it off](https://ihtisham1211.github.io/native-tv/dashboard/privacy/).** Whether LG's content-recognition engine is running, the advertising identifier and every recorded data agreement, most of them switchable; an on-TV blocker for LG's ad and telemetry endpoints, with its list for a router, Pi-hole or AdGuard Home; a switch for the two diagnostics services that upload to LG. [What LG's ACR does](https://ihtisham1211.github.io/native-tv/administration/acr/).
+  * **[Debloat and home screen cleanup](https://ihtisham1211.github.io/native-tv/dashboard/apps/).** Install apps from the Homebrew Channel catalogue, uninstall LG apps, disable background services ([the list](https://ihtisham1211.github.io/native-tv/dashboard/apps/#turn-off-lgs-bloatware-background-services)), hide built-in apps from the launcher, and on webOS 9 strip LG's Home screen down to apps and inputs.
+  * **[Admin PIN](https://ihtisham1211.github.io/native-tv/administration/security/).** A four-digit PIN, asked in the TV's first-run setup, guards installing and removing apps, SSH keys, restoring a backup and power actions, on the TV and in the dashboard.
+* **OLED care and power**
+  * **[OLED care](https://ihtisham1211.github.io/native-tv/dashboard/oled-care/).** Panel hours, compensation cycle progress, Pixel Refresher scheduling and failure alerts, and switches for screen shift, logo dimming, ASBL and Global Stress Reduction, normally reachable only from the service menu.
+  * **[Power and standby](https://ihtisham1211.github.io/native-tv/dashboard/advanced/#power-and-standby).** Keep the TV on the network while it is off, Quick Boot, Wake-on-LAN, Always Ready, the On and Off timers, and a switch that [blocks LG's firmware updates](https://ihtisham1211.github.io/native-tv/dashboard/advanced/#system-updates), which can take root access away.
+  * **[Volume ceiling](https://ihtisham1211.github.io/native-tv/dashboard/advanced/#volume-ceiling).** A maximum volume that holds whoever sets it, a lower limit at night and a start-up volume.
+  * **[Switch off when idle](https://ihtisham1211.github.io/native-tv/dashboard/advanced/#switch-off-when-idle).** The TV switches itself off after 15 minutes to eight hours with no key press, no change and nothing playing, with a toast a minute before; an HDMI input is never switched off.
+* **On the TV**
+  * **[A native TV app](https://ihtisham1211.github.io/native-tv/apps/tv-app/).** A C++ and OpenGL ES client after Google TV's design puts the same readings and controls on the TV, driven by the remote, and offers [Native Tv Home](https://ihtisham1211.github.io/native-tv/dashboard/home/) as a replacement home screen. It draws on the GPU at 60 frames a second with no browser behind it ([how smooth it is](https://ihtisham1211.github.io/native-tv/apps/tv-app/#how-smooth-it-is)).
+  * **[TV themes](https://ihtisham1211.github.io/native-tv/apps/tv-app/#tv-theme).** Google TV, or OLED Care for OLED panels: true black, dimmed icons, a focus ring and a layout that moves a few pixels. Home shows the apps, the inputs and the panel's hours, with no film picks. An OLED panel is offered it once.
+  * **[Game mode](https://ihtisham1211.github.io/native-tv/dashboard/game/).** On TVs with LG's Game Optimizer, a game's frame rate in large type while the source uses VRR, beside the Optimizer's settings.
+  * **[Screen savers](https://ihtisham1211.github.io/native-tv/dashboard/screen-savers/) and [the service menu](https://ihtisham1211.github.io/native-tv/dashboard/service-menu/).** A clock, starfield, fireworks or the TV's own readings in place of LG's screen saver; LG's engineering menu opened from a browser, with no service remote, and unlocked where newer firmware cuts it down.
+* **Monitoring and maintenance**
+  * **[Monitoring](https://ihtisham1211.github.io/native-tv/dashboard/metrics/).** SoC temperature, per-core CPU load, memory, swap, Wi-Fi signal and throughput; [Prometheus metrics](https://ihtisham1211.github.io/native-tv/integrations/prometheus/) and [syslog forwarding](https://ihtisham1211.github.io/native-tv/integrations/syslog/).
+  * **[TV report](https://ihtisham1211.github.io/native-tv/dashboard/server/).** The versions, model and which readings the TV answered, with nothing private in them, to paste into an issue.
+  * **[Update notice](https://ihtisham1211.github.io/native-tv/dashboard/server/).** The Server tab says when a newer release is out, with its notes, package and SHA-256, and opens the Homebrew Channel on the TV to install it. The TV contacts GitHub only on request, or once a day if switched on.
+  * **[Backup and logs](https://ihtisham1211.github.io/native-tv/dashboard/server/).** LG's sound, device, HDMI and ad settings and Native Tv's own, saved to a file or once a day and restored on the same TV or another; the [System, Native Tv and kernel logs](https://ihtisham1211.github.io/native-tv/dashboard/tools/) in one searchable timeline in the browser, with no SSH, and private details hidden when copied or exported.
+* **The dashboard**
+  * **[Install as an app](https://ihtisham1211.github.io/native-tv/dashboard/#install-as-an-app).** A web app manifest and icons let a phone or computer put the dashboard on the home screen or in the app list; where the browser allows one, a service worker shows a retry page when the TV is off.
+  * **[English and Spanish](https://ihtisham1211.github.io/native-tv/dashboard/server/).** The dashboard follows the browser's language, with a Language setting on the Server tab, and shows the TV's own messages in it too. The Spanish is [partly machine-translated](https://ihtisham1211.github.io/native-tv/development/strings/#spanish) and open to review by native speakers.
 
 ## Screenshots
 
@@ -86,7 +99,7 @@ Native Tv grew out of [Glasshouse](https://github.com/rorygallagher2024/glasshou
 | **webOS** | 4 and later. webOS 2.2 and 3.x ran the earlier Node release and are not supported by the native server |
 | **Verified with this server** | LG B3 (OLED65B3PUA), webOS 10.3.2. Other models and versions are untried |
 | **Reports from the earlier release** | 48 TVs across 33 series, 2015 to 2026 models, webOS 2.2 to 11 ([the table](https://ihtisham1211.github.io/native-tv/getting-started/tested-tvs/)) |
-| **Panels** | OLED (panel wear telemetry and burn-in controls) and LCD (the OLED Care tab hides itself) |
+| **Panels** | OLED (panel wear telemetry, burn-in controls and the OLED Care TV theme) and LCD (the OLED Care tab hides itself; the theme can still be chosen) |
 | **Access** | Rooted, with the Homebrew Channel; SSH or telnet |
 
 LG names its versions two ways; [webOS version numbers](https://ihtisham1211.github.io/native-tv/getting-started/tested-tvs/#webos-version-numbers) gives both.
@@ -95,7 +108,16 @@ Native Tv running on a model that is not listed? A [TV report](https://github.co
 
 ## Install
 
-Native Tv installs from a computer on the same network as the TV, over SSH, or over the Homebrew Channel's telnet when no SSH key is set up. The TV needs no internet access.
+Native Tv installs from a release package, with no build, or from a computer on the same network as the TV that builds it and installs it over SSH, or over the Homebrew Channel's telnet when no SSH key is set up. The TV needs no internet access.
+
+### Install a release (no build)
+
+1. Root the TV and install the [Homebrew Channel](https://github.com/webosbrew/webos-homebrew-channel). Native Tv does not root the TV.
+2. Download `io.github.ihtisham1211.nativetv_<version>_all.ipk` (about 12 MB) from the [latest release](https://github.com/ihtisham1211/native-tv/releases/latest).
+3. Install it on the TV with [webOS Dev Manager](https://github.com/webosbrew/dev-manager-desktop) or `ares-install`.
+4. Open the Native Tv app on the TV. It sets the server up and opens the dashboard, and the first run starts the setup wizard.
+
+### Build and install from source
 
 The computer needs Git, Bash, Python 3, CMake, `pkg-config`, Ninja or `make` and the [webOSbrew native SDK](https://github.com/webosbrew/native-toolchain), which is built for macOS (Apple silicon and Intel) and arm64 Linux only. The [installation guide](https://ihtisham1211.github.io/native-tv/getting-started/install/#get-the-sdk) has the commands that download the SDK.
 
@@ -211,13 +233,19 @@ No. It runs on the TV, serves the dashboard on the local network, collects no da
 Through an MQTT broker. The TV publishes itself with MQTT Discovery as one device with its controls and telemetry, and the remote's buttons can fire automations. [Setup](https://ihtisham1211.github.io/native-tv/integrations/home-assistant/) and the [entity list](https://ihtisham1211.github.io/native-tv/integrations/home-assistant-entities/) are in the docs.
 
 **Does it work on LCD and non-OLED LG TVs?**
-Yes. The dashboard, controls and telemetry work on LCD panels; the OLED Care tab hides itself.
+Yes. The dashboard, controls and telemetry work on LCD panels; the OLED Care tab hides itself, and the OLED Care theme can be chosen on any TV.
+
+**Is there an OLED-friendly theme, and does it prevent burn-in?**
+Yes: OLED Care, chosen in Settings, TV theme on the TV or on the dashboard's Server tab. It is true black with dimmed icons, a thin focus ring and a layout that moves a few pixels each minute, and its Home shows the apps, the inputs and the panel's hours with no film picks. Measured on the rendered screens, it puts about 70% less light on the panel than the default Google TV theme. That lowers the load on the panel, but it cannot promise there is no burn-in; the [OLED care tab](https://ihtisham1211.github.io/native-tv/dashboard/oled-care/) has the panel's own protections. [The TV theme](https://ihtisham1211.github.io/native-tv/apps/tv-app/#tv-theme) describes it. It has been checked in the client's tests and an emulator, not yet on a real TV.
 
 **Is the TV app smooth, or does it lag like a slow home screen?**
 It is a native OpenGL ES client, not a web page, and it draws at the display's 60 Hz. On an LG B3 with the processor busy (load average about 32) its frames arrive 15 to 18 ms apart, against 16.7 ms ideal. [How it stays smooth](https://ihtisham1211.github.io/native-tv/apps/tv-app/#how-smooth-it-is) lists the reasons and the measurement.
 
 **Is the dashboard available in Spanish?**
 Yes. It follows the browser's language, and the Language setting on the Server tab, or `/?lang=es`, changes it. The TV's messages the dashboard shows are translated too. The native TV app has a separate English/Brazilian Portuguese language picker. The older pages the TV's own browser shows remain English. Much of the Spanish is machine-translated, and [corrections are welcome](https://ihtisham1211.github.io/native-tv/development/strings/#spanish).
+
+**Can the dashboard be installed as an app on a phone?**
+Yes. It is an installable web app (PWA): add it to the home screen from the browser's menu. On the TV's plain `http://` address a browser skips the service worker, so the page has its manifest and icons only; behind HTTPS, Chrome offers a full install. [Install as an app](https://ihtisham1211.github.io/native-tv/dashboard/#install-as-an-app) has the details.
 
 **What does it change on the TV?**
 [What it changes on the TV](https://ihtisham1211.github.io/native-tv/administration/tv-changes/) lists every change and how each is undone. The read-only system partition is left untouched.
@@ -235,6 +263,10 @@ The pages are built from [docs/](docs/), so they can also be read there.
 ## Contributing
 
 Native Tv is MIT-licensed and open to contributions. [Contributing](CONTRIBUTING.md) explains how to build, test and open a pull request. Bugs and ideas go in the [issues](https://github.com/ihtisham1211/native-tv/issues). Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Support the project
+
+Native Tv is free and MIT-licensed. If it is useful, [buy me a coffee](https://buymeacoffee.com/ihtisham12z) or use the **Sponsor** button at the top of this repository. Starring the repository, reporting a TV that works or does not, and [contributing](CONTRIBUTING.md) also help. More on the [support page](https://ihtisham1211.github.io/native-tv/support/).
 
 ## Disclaimer
 

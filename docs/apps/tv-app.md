@@ -6,7 +6,7 @@ description: "The Native Tv app on an LG webOS TV’s home screen: the same read
 
 The dashboard can also run directly on the TV's home screen, driven by the remote, for when there is no phone or laptop to hand.
 
-It is drawn by the Native Tv client in the style of Google TV: a dark page with one accent colour, cards that lift and glow when they are focused, and a top bar with the profile, the tabs and the clock. The pages below are its own screens, not web pages. Its type, colour, shape, spacing, focus, motion and icons follow Google's TV Design Kit (Material 3); [Material 3 Expressive](../development/material-3-expressive.md) records the values and where the client differs.
+It is drawn by the Native Tv client in the style of Google TV: a dark page with one accent colour, cards that lift and glow when they are focused, and a top bar with the profile, the tabs, the clock and the name Native Tv. The pages below are its own screens, not web pages. Its type, colour, shape, spacing, focus, motion and icons follow Google's TV Design Kit (Material 3); [Material 3 Expressive](../development/material-3-expressive.md) records the values and where the client differs.
 
 Because the panel is an OLED, no screen of the app holds still at full brightness: thirty seconds without a key or a click dim it to two thirds black, and the first key or click after that only wakes it. This holds for Home, Live, Settings, the catalogue and the setup pages alike; the TV's own screen saver is left as it is set.
 
@@ -44,6 +44,21 @@ The **Live** tab is the TV's own readings as cards: the processor's load with a 
 * **Magic Remote pointer**: clicking a row selects it and clicking it again acts on it.
 
 A change shows the moment OK is pressed: the switch has already slid and a faint dot says it is on its way. It is sent to the same server routes as the browser dashboard behind the page, and the section is read again afterwards. A refusal puts the old value back and says why. Metrics and System refresh every ten seconds while open; a refresh keeps the focused row, the subsection and the scroll where they were. The first read of a section shows a thin turning arc where its rows will be. Opening or closing the web dashboard to the network restarts the server: the row reads "Switching…" and the page waits until the server answers again.
+
+### TV theme
+
+**Settings, TV theme** (in the Settings section) opens the picker: a card for each theme, drawn from that theme's own colours, with the one in use marked. A theme changes how the screens look. OLED Care also changes what Home shows and has no title search (below); everything else, every row and key, is the same in every theme.
+
+* **Google TV** (`n-google-tv`) is the default: ambient artwork behind Home and the filled white focus pill.
+* **OLED Care** (`n-oled-care`) is for OLED panels. The canvas is `#000000`, so pixels that are off do not wear. App icons rest at 62% brightness and the focused one is at full. Focus is a thin ring, the selected tab an underline, and Settings rows have no background until focused. The whole screen moves a few pixels as the minutes pass: up to 8 px sideways and 6 px up or down, in whole pixels, at most 3 px between two minutes. Its Home is the apps, the inputs and two cards from the panel's own figures (its hours with the compensation cycle's progress, and the hours to the Pixel Refresher), and OK on a card opens OLED Care in Settings. It has no hero, no film or series picks and no YouTube row, so it asks neither TMDB nor YouTube for anything, and without TMDB there is no title search. The [design notes](../development/material-3-expressive.md#n-oled-care) give each value and its reason.
+
+The idle behaviour is the same in every theme: the dim after 30 seconds and the screen saver's start time in Settings are not the theme's.
+
+**OK** on a theme shows it at once and saves it, and a sheet asks **Keep OLED Care?**. **Keep** ends it. **Go back**, Back, or ten seconds without a key put the previous theme back, and so does a save the TV refuses. A change made from the phone's [Server tab](../dashboard/server.md) reaches the open app with Home's next ten-second refresh.
+
+An OLED panel still on the default theme is offered OLED Care once, on Home: **Use it** or **Not now** (Back is Not now). Either answer ends the offer.
+
+The setting is the `tvTheme` section of `config.json` (`id`, and `suggested` once the offer has been answered). [Settings backup](../dashboard/server.md) carries `id`.
 
 ### First-run setup wizard
 
@@ -105,7 +120,7 @@ The **Apps** section lists the apps installed from outside LG's store, each with
 
 ### Native Tv Home
 
-The **Home** section sets up [Native Tv Home](../dashboard/home.md) from the TV, as the browser dashboard's Home tab does, and is left out on a TV Native Tv Home is not offered on. It has the on/off switch (a second press confirms), a way to open Native Tv Home while it is on, the order of its rows, then a section for each row in that order: each row's Order (Your order or Last opened, and By kind for the apps, with a **Kinds** list where OK moves a kind up one), apps and inputs each shown or hidden (an app has two switches, one for Native Tv Home's Your apps row and one for the Apps tab, which keep separate lists), and the channels added, each removed with OK, with **Add channels** listing the TV's channels not yet on Home. Then **Reset the layout**. Apps are moved and hidden on Native Tv Home itself, by holding OK on an app ([editing the apps](../dashboard/home.md#editing-the-apps)), and the other tiles on the browser dashboard's Home tab; with the apps by kind, holding OK on a row of the Apps screen lifts it, Up and Down move it, OK saves and Back puts it back.
+The **Home** section sets up [Native Tv Home](../dashboard/home.md) from the TV, as the browser dashboard's Home tab does, and is left out on a TV Native Tv Home is not offered on. It has the on/off switch (a second press confirms), a way to open Native Tv Home while it is on, the order of its rows, then a section for each row in that order: a **Kinds** list for the apps, where OK moves a kind up one, then apps and inputs each shown or hidden (an app has two switches, one for Native Tv Home's Your apps row and one for the Apps tab, which keep separate lists), and the channels added, each removed with OK, with **Add channels** listing the TV's channels not yet on Home. Then **Reset the layout**. Apps are moved and hidden on Native Tv Home itself, by holding OK on an app ([editing the apps](../dashboard/home.md#editing-the-apps)), and the other tiles on the browser dashboard's Home tab; with the apps by kind, holding OK on a row of the Apps screen lifts it, Up and Down move it, OK saves and Back puts it back.
 
 ### Sleep timer and power
 

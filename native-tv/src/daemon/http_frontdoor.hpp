@@ -46,6 +46,7 @@ class AdBlockManager;
 class GameFrameRate;
 class Logger;
 class ScreenTimeEnforcer;
+class VolumeCeilingEnforcer;
 class StateSubscriptions;
 class DevtoolsFirewall;
 class HomeScreenManager;
@@ -80,14 +81,6 @@ struct HomeRecentHistoryState {
     std::string path;
 };
 
-// The input a device tile just opened: its arrival in front is the tile, not
-// the remote, so the foreground watcher skips that stamp.
-struct HomeTileInputState {
-    std::mutex mutex;
-    std::string appId;
-    int64_t at = 0;
-};
-
 class HttpFrontDoor {
   public:
     HttpFrontDoor(ServerConfig config, std::string version, std::string dataRoot,
@@ -109,7 +102,8 @@ class HttpFrontDoor {
                   service::AppCatalogFetcher appCatalogFetcher = {},
                   service::AppPackageDownload appPackageFetcher = {},
                   HomeTakeoverLifecycleManager *homeTakeoverLifecycleManager = nullptr,
-                  EventLoop *eventLoop = nullptr);
+                  EventLoop *eventLoop = nullptr,
+                  VolumeCeilingEnforcer *volumeCeilingEnforcer = nullptr);
     ~HttpFrontDoor();
     void handle(HttpExchange &exchange) const;
     // A live state event: the next stats read is made afresh, and the cached
@@ -288,6 +282,10 @@ class HttpFrontDoor {
     // config.json as it is now. config_ is read once at start, so settings
     // written since (by this daemon or by hand) show only through this.
     Json currentConfigDocument() const;
+    // The TV theme in `document`: its `tvTheme` when that names a theme, else the default.
+    static std::string tvThemeId(const Json &document);
+    // Whether to offer OLED Care once: an OLED panel, still on the default theme, never asked.
+    bool suggestTvTheme(const Json &document) const;
     void sendOledCare(HttpExchange &exchange) const;
     void sendPrivacyProjection(HttpExchange &exchange) const;
     void setSshKeys(HttpExchange &exchange) const;
@@ -350,7 +348,6 @@ class HttpFrontDoor {
     void persistHomeRecent(HttpExchange &exchange) const;
     void syncHomeAutoLaunch(HttpExchange &exchange) const;
     Json synchronizeHomeAutoLaunch(bool escaped) const;
-    Json recordHomeRecent(const std::string &row, const std::string &id) const;
     service::HomeRecentApps queryHomeRecentApps() const;
     Json homeChannelSnapshot(bool &tunerAvailable) const;
     void setNativeHomeScreen(HttpExchange &exchange) const;
@@ -414,7 +411,6 @@ class HttpFrontDoor {
     mutable std::shared_ptr<LunaSubscription> homePictureVideoSubscription_;
     mutable std::shared_ptr<HomeNowTrackingState> homeNowState_;
     mutable std::shared_ptr<HomeRecentHistoryState> homeRecentHistoryState_;
-    mutable std::shared_ptr<HomeTileInputState> homeTileInputState_;
     mutable std::shared_ptr<std::atomic<bool>> homeEscapeActive_;
     mutable std::shared_ptr<std::atomic<bool>> homeEscapeReturnPending_;
     mutable std::mutex homeRecentAppsMutex_;
@@ -481,6 +477,7 @@ class HttpFrontDoor {
     SamRescanManager *samRescanManager_;
     AppTileManager *appTileManager_;
     EventLoop *eventLoop_;
+    VolumeCeilingEnforcer *volumeCeilingEnforcer_;
     TvAppManager *tvAppManager_ = nullptr;
     mutable std::unique_ptr<ScreensaverControl> screensaverControl_;
     mutable std::once_flag screensaverControlOnce_;

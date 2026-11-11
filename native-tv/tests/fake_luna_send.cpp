@@ -211,6 +211,19 @@ int main(int argc, char **argv) {
          uri == "com.webos.service.tvpower/power/powerOff" ||
          uri == "com.webos.service.tvpower/power/turnOffScreen")) {
         reply.set("returnValue", Json::flag(true));
+    } else if ((mode == "keyboard" || mode == "emulator") &&
+               startsWith(uri, "com.webos.service.ime/")) {
+        reply.set("returnValue", Json::flag(true));
+    } else if (mode == "keyboard-refused" && startsWith(uri, "com.webos.service.ime/")) {
+        // The TV's answer when no text field is open: its text here is a stand-in.
+        reply.set("returnValue", Json::flag(false));
+        reply.set("errorText", Json::text("No text field is open"));
+    } else if (mode == "volume-ceiling" && uri == "com.webos.audio/setVolume") {
+        reply.set("returnValue", Json::flag(true));
+    } else if (mode == "volume-ceiling-refused" && uri == "com.webos.audio/setVolume") {
+        // An external sound device takes no set level.
+        reply.set("returnValue", Json::flag(false));
+        reply.set("errorText", Json::text("Current Scenario doesn't support volume"));
     } else if (mode == "home-starting-notice" &&
                uri == "com.webos.notification/createToast") {
         reply.set("returnValue", Json::flag(
@@ -732,6 +745,8 @@ int main(int argc, char **argv) {
             settings.set("homePromotion", Json::text("off"));
         else if (category == "sound")
             settings.set("soundMode", Json::text("movie"));
+        else if (category == "other")
+            settings.set("lgLogoDisplay", Json::text("on"));
         reply.set("returnValue", Json::flag(true));
         reply.set("settings", settings);
     } else if (mode == "backup" &&
@@ -834,6 +849,24 @@ int main(int argc, char **argv) {
         points.add(second);
         reply.set("returnValue", Json::flag(true));
         reply.set("launchPoints", points);
+    } else if (mode == "emulator" &&
+               (uri == "com.webos.applicationManager/listLaunchPoints" ||
+                uri == "com.webos.applicationManager/listApps")) {
+        // scripts/emulate-tv.js: the apps it installed, [{"id", "title"}], in the environment.
+        const bool points = uri == "com.webos.applicationManager/listLaunchPoints";
+        Json list = Json::array();
+        for (const Json &app : Json::parse(environment("NATIVETV_FAKE_LUNA_APPS")).items()) {
+            Json entry = Json::object();
+            entry.set("id", app["id"]);
+            entry.set("title", app["title"]);
+            entry.set("launchPointId", app["id"]);
+            entry.set("visible", Json::flag(true));
+            entry.set("systemApp", Json::flag(true));
+            entry.set("removable", Json::flag(false));
+            list.add(entry);
+        }
+        reply.set("returnValue", Json::flag(true));
+        reply.set(points ? "launchPoints" : "apps", list);
     } else if (mode == "sam-rescan" &&
                uri == "com.webos.applicationManager/launch") {
         reply.set("returnValue", Json::flag(true));

@@ -7,6 +7,7 @@
 #include "daemon/app_tile_manager.hpp"
 #include "daemon/backup_restore.hpp"
 #include "core/json.hpp"
+#include "core/themes.hpp"
 #include "daemon/child_process.hpp"
 #include "daemon/devtools_firewall.hpp"
 #include "daemon/event_loop.hpp"
@@ -34,6 +35,7 @@
 #include "daemon/logger.hpp"
 #include "daemon/mqtt_setup.hpp"
 #include "daemon/screen_time_enforcer.hpp"
+#include "daemon/volume_ceiling_enforcer.hpp"
 #include "daemon/state_subscriptions.hpp"
 #include "domain/names.hpp"
 #include "domain/say.hpp"
@@ -61,7 +63,9 @@
 #include "service/config_settings.hpp"
 #include "service/remote_input.hpp"
 #include "service/remote_keys.hpp"
+#include "service/keyboard.hpp"
 #include "service/screen_time.hpp"
+#include "service/volume_ceiling.hpp"
 #include "service/oled_care.hpp"
 #include "service/privacy_consent.hpp"
 #include "service/privacy_service.hpp"
@@ -393,12 +397,12 @@ void sendAdminJson(HttpExchange &exchange, int status, const Json &body,
 }
 
 // A small JSON body from any client, which an admin route takes (readSetupPayload is the TV's own).
-bool readAdminPayload(HttpExchange &exchange, Json &payload) {
+bool readAdminPayload(HttpExchange &exchange, Json &payload, size_t maximumBytes = 256) {
     if (!setupJsonContentType(exchange.request())) {
         sendSetupError(exchange, 415, "Content-Type must be application/json");
         return false;
     }
-    if (!exchange.setBodyLimit(256)) {
+    if (!exchange.setBodyLimit(maximumBytes)) {
         sendSetupError(exchange, 413, "request body too large", true);
         return false;
     }
@@ -1256,7 +1260,8 @@ bool isSetupDemo(const ServerConfig &config, const HttpRequest &request) {
 
 bool setupRead(HttpExchange &exchange, const ServerConfig &config, const std::string &dataRoot,
                LunaClient &luna, const HttpProxy &proxy,
-               const std::string &nativeHandoffUrl, const std::string &model) {
+               const std::string &nativeHandoffUrl, const std::string &model,
+               const std::string &tvTheme) {
     const HttpRequest &request = exchange.request();
     const bool demo = isSetupDemo(config, request);
     if (!isLoopbackPeer(request.remoteAddress) && !demo) {
@@ -1294,6 +1299,8 @@ bool setupRead(HttpExchange &exchange, const ServerConfig &config, const std::st
     state.set("hostname", context["hostname"]);
     // What the TV is: the first setup step names it after the series.
     state.set("model", Json::text(model));
+    // The TV theme, for the row in Settings.
+    state.set("tvTheme", Json::text(tvTheme));
 
     const Json mqtt = config.document["mqtt"];
     Json homeAssistant = Json::object();
@@ -1670,67 +1677,11 @@ bool containsJavascriptSuffix(const std::string &path) {
     return path.size() >= 3 && path.compare(path.size() - 3, 3, ".js") == 0;
 }
 
-Json stampHomeRecentHistoryFile(HomeRecentHistoryState &history,
-                                const std::string &row, const std::string &id,
-                                int64_t timestamp) {
-    std::lock_guard<std::mutex> lock(history.mutex);
-    JsonFile file(history.path, 512 * 1024);
-    const JsonFileResult stored = file.load();
-    if (!stored.error.empty() && !stored.found)
-        return stored.value.isObject() ? stored.value : Json::object();
-    const Json current = stored.found ? stored.value : Json::object();
-    const Json recent = service::stampHomeRecentHistory(current, row, id, timestamp);
-    std::string error;
-    if (!file.save(recent, &error)) return current;
-    return recent;
-}
-
-void clearHomeRecentHistoryRows(HomeRecentHistoryState &history,
-                                const Json &rows) {
-    if (!rows.isArray() || rows.size() == 0) return;
-    std::lock_guard<std::mutex> lock(history.mutex);
-    JsonFile file(history.path, 512 * 1024);
-    const JsonFileResult stored = file.load();
-    if (!stored.error.empty() && !stored.found) return;
-    const Json current = stored.found ? stored.value : Json::object();
-    const Json cleared = service::mergeHomeRecentHistory(
-        current, Json::object(), rows);
-    std::string error;
-    (void)file.save(cleared, &error);
-}
-
 bool homeReservedApp(const std::string &appId) {
     return appId.empty() || appId == "com.tvweb.home" ||
            appId == kHomeClientApp || appId == "com.webos.app.home";
 }
 
-bool homeInputApp(const std::string &appId) {
-    if (appId == "com.webos.app.livetv") return true;
-    const char *prefixes[] = {"com.webos.app.hdmi", "com.webos.app.av",
-                              "com.webos.app.comp"};
-    for (const char *prefix : prefixes) {
-        const std::string value(prefix);
-        if (appId.size() == value.size() + 1 &&
-            appId.compare(0, value.size(), value) == 0 &&
-            appId[value.size()] >= '0' && appId[value.size()] <= '9')
-            return true;
-    }
-    return false;
-}
-
-std::string homeDeviceRecentId(const std::string &appId) {
-    static const std::string prefix = "com.webos.app.hdmi";
-    if (appId.size() != prefix.size() + 1 ||
-        appId.compare(0, prefix.size(), prefix) != 0 ||
-        appId[prefix.size()] < '0' || appId[prefix.size()] > '9')
-        return std::string();
-    return "hdmi" + appId.substr(prefix.size());
-}
-
-int64_t homeNowMilliseconds() {
-    return std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::system_clock::now().time_since_epoch()).count();
-}
 } // namespace
 
 HttpFrontDoor::HttpFrontDoor(ServerConfig config, std::string version, std::string dataRoot,
@@ -1752,7 +1703,8 @@ HttpFrontDoor::HttpFrontDoor(ServerConfig config, std::string version, std::stri
                              service::AppCatalogFetcher appCatalogFetcher,
                              service::AppPackageDownload appPackageFetcher,
                              HomeTakeoverLifecycleManager *homeTakeoverLifecycleManager,
-                             EventLoop *eventLoop)
+                             EventLoop *eventLoop,
+                             VolumeCeilingEnforcer *volumeCeilingEnforcer)
     : config_(std::move(config)), screenTimeSettings_(config_.document["screenTime"]),
       version_(std::move(version)), appCatalogRepos_(config_.document["apps"]["repos"]),
       appCatalog_(version_, std::move(appCatalogFetcher)),
@@ -1781,6 +1733,7 @@ HttpFrontDoor::HttpFrontDoor(ServerConfig config, std::string version, std::stri
       samRescanManager_(samRescanManager),
       appTileManager_(appTileManager),
       eventLoop_(eventLoop),
+      volumeCeilingEnforcer_(volumeCeilingEnforcer),
       assetsRoot_(assetsRoot), staticAssets_(std::move(assetsRoot), version_),
       procRoot_(std::move(procRoot)),
       systemRoot_(std::move(systemRoot)), cpuWindowMs_(cpuWindowMs) {
@@ -1821,20 +1774,12 @@ HttpFrontDoor::HttpFrontDoor(ServerConfig config, std::string version, std::stri
     homeNowState_.reset(new HomeNowTrackingState());
     homeRecentHistoryState_.reset(new HomeRecentHistoryState());
     homeRecentHistoryState_->path = dataFilePath(dataRoot_, "home-recent.json");
-    homeTileInputState_.reset(new HomeTileInputState());
     homeEscapeActive_.reset(new std::atomic<bool>(false));
     homeEscapeReturnPending_.reset(new std::atomic<bool>(false));
     if (stateSubscriptions_) {
         const std::weak_ptr<HomeNowTrackingState> weakNowState = homeNowState_;
-        const std::shared_ptr<HomeRecentHistoryState> recentState =
-            homeRecentHistoryState_;
-        const std::shared_ptr<HomeTileInputState> tileState =
-            homeTileInputState_;
-        const std::string homeConfigPath = dataFilePath(dataRoot_, "home.json");
-        LunaClient *const luna = &luna_;
         stateSubscriptions_->cache().onChange(
-            [this, weakNowState, recentState, tileState,
-             homeConfigPath, luna](const state::Event &event) {
+            [this, weakNowState](const state::Event &event) {
             if (event.group != "application" || event.key != "app_id" ||
                 !event.value.isString())
                 return;
@@ -1844,73 +1789,13 @@ HttpFrontDoor::HttpFrontDoor(ServerConfig config, std::string version, std::stri
                 queueHomeForegroundReturn(appId);
             const std::shared_ptr<HomeNowTrackingState> nowState = weakNowState.lock();
             if (!nowState) return;
-            std::string previousAppId;
             {
                 std::lock_guard<std::mutex> lock(nowState->mutex);
-                previousAppId = nowState->observedAppId;
                 nowState->observedAppId = appId;
                 if (!homeReservedApp(appId)) {
                     nowState->appId = appId;
                     nowState->since = event.sourceTime;
                 }
-            }
-
-            std::string row;
-            std::string id;
-            const std::string deviceId = homeDeviceRecentId(appId);
-            if (!homeReservedApp(appId) && !deviceId.empty()) {
-                row = "dev";
-                id = deviceId;
-            } else if (!homeReservedApp(appId) && !homeInputApp(appId)) {
-                row = "app";
-                id = appId;
-            }
-            const bool leftLiveTv = previousAppId == "com.webos.app.livetv" &&
-                                    appId != "com.webos.app.livetv";
-            if (row.empty() && !leftLiveTv) return;
-
-            std::ifstream homeFile(homeConfigPath.c_str(),
-                                   std::ios::in | std::ios::binary);
-            std::string homeContents;
-            if (homeFile) {
-                const size_t maximumBytes = 8 * 1024 * 1024;
-                char buffer[4096];
-                while (homeFile) {
-                    homeFile.read(buffer, sizeof(buffer));
-                    const std::streamsize count = homeFile.gcount();
-                    if (count <= 0) break;
-                    if (homeContents.size() + static_cast<size_t>(count) > maximumBytes) {
-                        homeContents.clear();
-                        break;
-                    }
-                    homeContents.append(buffer, static_cast<size_t>(count));
-                }
-            }
-            const Json home = service::normalizeHomeDocument(
-                homeContents.empty() ? Json() : Json::parse(homeContents));
-            if (!home["enabled"].boolean()) return;
-            bool fromTile = false;
-            if (row == "dev") {
-                std::lock_guard<std::mutex> tileLock(tileState->mutex);
-                fromTile = tileState->appId == appId &&
-                           service::homeTileInputFresh(homeNowMilliseconds(),
-                                                       tileState->at);
-                tileState->appId.clear();
-                tileState->at = 0;
-            }
-            if (!fromTile && !row.empty() &&
-                home["sort"][row].string() == "recent")
-                (void)stampHomeRecentHistoryFile(*recentState, row, id,
-                                                 event.sourceTime);
-            if (leftLiveTv && home["sort"]["ch"].string() == "recent") {
-                (void)luna->call(
-                    "com.webos.service.utp.boot/getLastChannelId", Json::object(),
-                    [recentState](const LunaReply &reply) {
-                        const std::string channelId = reply.response["channelId"].string();
-                        if (!channelId.empty())
-                            (void)stampHomeRecentHistoryFile(
-                                *recentState, "ch", channelId, homeNowMilliseconds());
-                    });
             }
         });
     }
@@ -2404,6 +2289,27 @@ Json HttpFrontDoor::currentConfigDocument() const {
     return config_.document;
 }
 
+std::string HttpFrontDoor::tvThemeId(const Json &document) {
+    const Json value = document["tvTheme"]["id"];
+    return value.isString() && findTheme(value.string()) ? value.string()
+                                                          : std::string(kDefaultTheme);
+}
+
+bool HttpFrontDoor::suggestTvTheme(const Json &document) const {
+    if (document["tvTheme"]["suggested"].boolean() || tvThemeId(document) != kDefaultTheme)
+        return false;
+    // The same three signs the OLED Care tab goes by, without asking the TV again: a panel set in
+    // the config, the panel type marker, then the model the stats collector has already read.
+    const Json forced = service::javascriptTruthy(document["panel"]) ? document["panel"]
+                                                                     : document["device"]["panel"];
+    if (service::javascriptTruthy(forced))
+        return service::oledModel(service::javascriptString(forced));
+    if (service::hasOledPanelTypeMarker(systemRoot_))
+        return true;
+    const std::string model = statsCollector() ? statsCollector()->deviceModel() : std::string();
+    return service::oledModel(model) || service::hasOledPanelRecords(systemRoot_);
+}
+
 // The shared server-status response: the Server tab's switches and the
 // daemon's own vitals. Node assembled the same document from its modules.
 Json HttpFrontDoor::serverStatus() const {
@@ -2411,6 +2317,16 @@ Json HttpFrontDoor::serverStatus() const {
     Json status = Json::object();
     status.set("ok", Json::flag(true));
     status.set("writable", Json::flag(config_.allowControl));
+    status.set("tvTheme", Json::text(tvThemeId(document)));
+    Json themeChoices = Json::array();
+    for (const ThemeChoice &choice : kThemeChoices) {
+        Json item = Json::object();
+        item.set("id", Json::text(choice.id));
+        item.set("name", Json::text(choice.name));
+        item.set("summary", Json::text(choice.summary));
+        themeChoices.add(item);
+    }
+    status.set("tvThemes", themeChoices);
 
     service::AdBlockStore fallbackStore(dataRoot_, systemRoot_);
     const service::AdBlockStore &adBlockStore = adBlockManager_
@@ -2562,6 +2478,16 @@ bool HttpFrontDoor::serverSettingControl(const std::string &action, const Json &
     if (action == "setPrometheusEnabled") {
         patch.set("enabled", Json::flag(on));
         return saveSection("prometheus", patch) ? answer() : true;
+    }
+    if (action == "setTvTheme" || action == "dismissTvThemeSuggestion") {
+        if (action == "setTvTheme") {
+            if (!value.isString() || !findTheme(value.string()))
+                return fail(say::msg("srv.tvTheme.unknown", "That theme does not exist"));
+            patch.set("id", value);
+        }
+        // Choosing a theme, or saying no thanks, ends the one-time suggestion for good.
+        patch.set("suggested", Json::flag(true));
+        return saveSection("tvTheme", patch) ? answer() : true;
     }
     if (action == "setReleaseCheck") {
         // "update" is the key backups already carry for it.
@@ -7534,7 +7460,6 @@ void HttpFrontDoor::handleHomeLayoutPost(HttpExchange &exchange) const {
     }
 
     Json response;
-    Json replaceRows = Json::array();
     std::string saveError;
     bool saved = false;
     {
@@ -7549,14 +7474,8 @@ void HttpFrontDoor::handleHomeLayoutPost(HttpExchange &exchange) const {
             const service::HomeDocumentUpdate update =
                 service::updateHomeLayout(current, body);
             response = update.response;
-            if (response["ok"].boolean()) {
+            if (response["ok"].boolean())
                 saved = file.save(update.document, &saveError);
-                if (saved) {
-                    for (const char *row : {"app", "dev", "ch"})
-                        if (update.document["sort"][row].string() != "recent")
-                            replaceRows.add(Json::text(row));
-                }
-            }
         }
     }
     if (!saveError.empty() || (!response.valid() && !saved)) {
@@ -7585,8 +7504,6 @@ void HttpFrontDoor::handleHomeLayoutPost(HttpExchange &exchange) const {
     }
     response.set("layoutVersion", Json::text(std::to_string(layoutVersion)));
     ensureHomePictureTracking();
-    if (homeRecentHistoryState_)
-        clearHomeRecentHistoryRows(*homeRecentHistoryState_, replaceRows);
     respond(200, response);
 }
 
@@ -10655,6 +10572,8 @@ void HttpFrontDoor::setRemoteKey(HttpExchange &exchange) const {
     }
 
     service::RemoteKeysReadState state;
+    state.allowControl = config_.allowControl;
+    state.allowPower = config_.allowPower;
     state.systemRoot = systemRoot_;
     state.dataRoot = dataRoot_;
     state.filterChain = replies[0].response["configs"][
@@ -11283,7 +11202,7 @@ bool HttpFrontDoor::createBackup(Json &backup, const Json *settingsContext) cons
     }
 
     const std::vector<std::string> sections = {
-        "promotions", "sound", "devices", "hdmi"
+        "promotions", "sound", "devices", "hdmi", "display"
     };
     const Json data = collectLgSettingsData(sections);
     const Json lg = service::lgSettingsResponse(
@@ -11335,6 +11254,7 @@ bool HttpFrontDoor::createBackup(Json &backup, const Json *settingsContext) cons
         fill("screenTime", "{\"action\":\"off\",\"appAction\":\"home\",\"apps\":{},"
                            "\"bedtimeEnd\":\"\",\"bedtimeStart\":\"\",\"dailyMinutes\":0,"
                            "\"enabled\":false,\"idleMinutes\":0}");
+        fill("volumeCeiling", service::volumeCeilingSettings(Json::object()).dump().c_str());
         fill("syslog", "{\"port\":514,\"redact\":true,\"server\":\"\","
                        "\"sources\":[\"system\",\"nativetv\"]}");
     }
@@ -12871,13 +12791,6 @@ void HttpFrontDoor::setControl(HttpExchange &exchange) const {
                             {"Cache-Control", "no-store"},
                             {"X-Content-Type-Options", "nosniff"}},
                            response.dump());
-}
-
-Json HttpFrontDoor::recordHomeRecent(const std::string &row,
-                                     const std::string &id) const {
-    if (!homeRecentHistoryState_) return Json::object();
-    return stampHomeRecentHistoryFile(*homeRecentHistoryState_, row, id,
-                                      homeNowMilliseconds());
 }
 
 void HttpFrontDoor::clearAdCookiesControl(HttpExchange &exchange) const {
@@ -15224,7 +15137,7 @@ void HttpFrontDoor::restoreNativeBackupLg(HttpExchange &exchange) const {
     }
 
     const std::vector<std::string> sections = {
-        "promotions", "sound", "devices", "hdmi"
+        "promotions", "sound", "devices", "hdmi", "display"
     };
     const Json data = collectLgSettingsData(sections);
     const Json current = service::lgSettingsResponse(
@@ -15919,7 +15832,6 @@ Json HttpFrontDoor::homeCatalogueDevicesSnapshot() const {
 }
 
 Json HttpFrontDoor::homeCatalogueResponse(bool view) const {
-    std::string liveChannelToRecord;
     Json rawHome;
     std::ifstream homeFile(dataFilePath(dataRoot_, "home.json").c_str(),
                            std::ios::in | std::ios::binary);
@@ -15942,24 +15854,6 @@ Json HttpFrontDoor::homeCatalogueResponse(bool view) const {
     }
     const Json document = service::normalizeHomeDocument(rawHome);
     const bool channelsRequested = !view || document["showLive"].boolean();
-    if (channelsRequested && document["enabled"].boolean() &&
-        document["sort"]["ch"].string() == "recent") {
-        std::string foreground = stateSubscriptions_
-            ? stateSubscriptions_->snapshot()["application"]["app_id"].string()
-            : std::string();
-        if (foreground.empty()) {
-            LunaReply current;
-            if (waitForLuna(luna_, "com.webos.applicationManager/getForegroundAppInfo",
-                            Json::object(), current))
-                foreground = current.response["appId"].string();
-        }
-        if (foreground == "com.webos.app.livetv") {
-            LunaReply lastChannel;
-            if (waitForLuna(luna_, "com.webos.service.utp.boot/getLastChannelId",
-                            Json::object(), lastChannel))
-                liveChannelToRecord = lastChannel.response["channelId"].string();
-        }
-    }
 
     const Json apps = homeCatalogueAppsSnapshot();
     const Json devices = homeCatalogueDevicesSnapshot();
@@ -15978,11 +15872,8 @@ Json HttpFrontDoor::homeCatalogueResponse(bool view) const {
     bool tunerAvailable = false;
     const Json channels = channelsRequested
         ? homeChannelSnapshot(tunerAvailable) : Json::parse("null");
-    const Json recent = liveChannelToRecord.empty()
-        ? service::readHomeRecent(dataRoot_)
-        : recordHomeRecent("ch", liveChannelToRecord);
     const Json catalogue = service::homeCatalogue(
-        document, apps, devices, channels, channelsRequested, recent,
+        document, apps, devices, channels, channelsRequested,
         historyTotals, historyEnabled);
     Json response = catalogue;
     response.set("ok", Json::flag(true));
@@ -16007,6 +15898,12 @@ Json HttpFrontDoor::homeCatalogueResponse(bool view) const {
 #endif
     }
     response.set("layoutVersion", Json::text(std::to_string(layoutVersion)));
+    // The theme is the TV's, not a profile's. The catalogue is what the client keeps asking for, so
+    // a change made from the phone or the dashboard reaches an open client through it.
+    const Json settings = currentConfigDocument();
+    response.set("tvTheme", Json::text(tvThemeId(settings)));
+    if (suggestTvTheme(settings))
+        response.set("suggestTvTheme", Json::flag(true));
     return response;
 }
 
@@ -17338,15 +17235,6 @@ void HttpFrontDoor::handleHomeOpenPost(HttpExchange &exchange) const {
         return;
     }
 
-    // A device tile marks its input first: the input arriving in front is the
-    // tile, not the remote, and a refused tile must not consume the next
-    // input switch from the remote.
-    const bool deviceTile = resolved.action == "launch" && resolved.row == "dev";
-    if (deviceTile) {
-        std::lock_guard<std::mutex> lock(homeTileInputState_->mutex);
-        homeTileInputState_->appId = resolved.appId;
-        homeTileInputState_->at = homeNowMilliseconds();
-    }
     if (resolved.action == "launch") {
         Json launchPayload = Json::object();
         launchPayload.set("id", Json::text(resolved.appId));
@@ -17356,11 +17244,6 @@ void HttpFrontDoor::handleHomeOpenPost(HttpExchange &exchange) const {
         if (!waitForLuna(luna_, "com.webos.applicationManager/launch",
                          launchPayload, launchReply) ||
             !service::javascriptTruthy(launchReply.response["returnValue"])) {
-            if (deviceTile) {
-                std::lock_guard<std::mutex> lock(homeTileInputState_->mutex);
-                homeTileInputState_->appId.clear();
-                homeTileInputState_->at = 0;
-            }
             fail(say::msg("srv.home.launchRefused", "the TV would not open it"));
             return;
         }
@@ -17375,14 +17258,6 @@ void HttpFrontDoor::handleHomeOpenPost(HttpExchange &exchange) const {
             return;
         }
     }
-
-    // Recorded only for a row set to Last opened, and only while Native Tv
-    // Home is on.
-    JsonFile homeFile(dataFilePath(dataRoot_, "home.json"));
-    const Json document =
-        service::normalizeHomeDocument(homeFile.load().value);
-    if (service::homeOpenStampWanted(document, resolved.row))
-        (void)recordHomeRecent(resolved.row, resolved.rowId);
 
     Json success = Json::object();
     success.set("ok", Json::flag(true));
@@ -17469,6 +17344,8 @@ void HttpFrontDoor::sendApps(HttpExchange &exchange) const {
         replies[remoteKeysCall].error.empty() &&
         replies[remoteKeysCall].response.isObject()) {
         service::RemoteKeysReadState remoteKeysState;
+        remoteKeysState.allowControl = config_.allowControl;
+        remoteKeysState.allowPower = config_.allowPower;
         remoteKeysState.systemRoot = systemRoot_;
         remoteKeysState.dataRoot = dataRoot_;
         remoteKeysState.filterChain = replies[remoteKeysCall].response["configs"]
@@ -18161,8 +18038,10 @@ void HttpFrontDoor::dispatch(HttpExchange &exchange) const {
         return;
     }
     if (request.uri == "/api/caps") {
-        const Json caps = nativeCapabilities(config_, version_, dataRoot_, request.remoteAddress,
-                                             localIpv4Address());
+        Json caps = nativeCapabilities(config_, version_, dataRoot_, request.remoteAddress,
+                                       localIpv4Address());
+        // The client draws its first frame in this theme, before the catalogue has answered.
+        caps.set("tvTheme", Json::text(tvThemeId(currentConfigDocument())));
         (void)exchange.respond(200,
                                {{"Content-Type", "application/json"},
                                 {"Cache-Control", "no-store"},
@@ -18626,6 +18505,109 @@ void HttpFrontDoor::dispatch(HttpExchange &exchange) const {
                                response.dump());
         return;
     }
+    if (request.uri == "/api/volumelimit") {
+        const auto respond = [&exchange](int status, const Json &body) {
+            (void)exchange.respond(status,
+                                   {{"Content-Type", "application/json"},
+                                    {"Cache-Control", "no-store"},
+                                    {"X-Content-Type-Options", "nosniff"}},
+                                   body.dump());
+        };
+        const auto fail = [&respond](int status, const std::string &message) {
+            Json failure = Json::object();
+            failure.set("ok", Json::flag(false));
+            failure.set("error", Json::text(message));
+            respond(status, failure);
+        };
+        const auto settingsResponse = [this, &respond](const Json &stored) {
+            Json document = Json::object();
+            document.set("volumeCeiling", stored);
+            Json response = Json::object();
+            response.set("ok", Json::flag(true));
+            response.set("writable", Json::flag(config_.allowControl));
+            response.set("settings", service::volumeCeilingSettings(document));
+            respond(200, response);
+        };
+        if (request.method != "POST") {
+            settingsResponse(currentConfigDocument()["volumeCeiling"]);
+            return;
+        }
+        if (!config_.allowControl) {
+            sendSetupError(exchange, 403, say::msg("srv.controlsOff", "controls disabled in config"));
+            return;
+        }
+        if (rejectCrossSitePost(exchange))
+            return;
+        Json patch;
+        if (!readAdminPayload(exchange, patch))
+            return;
+        Json validated;
+        std::string error;
+        if (!service::validateVolumeCeilingPatch(patch, validated, error)) {
+            fail(400, error);
+            return;
+        }
+        Json saved;
+        if (!ConfigStore(configPath_).patchObjectSection("volumeCeiling", validated, &saved,
+                                                         &error)) {
+            fail(500, "could not save setting: " + error);
+            return;
+        }
+        if (volumeCeilingEnforcer_) {
+            Json document = Json::object();
+            document.set("volumeCeiling", saved);
+            if (!volumeCeilingEnforcer_->apply(service::volumeCeilingSettings(document), &error)) {
+                fail(500, error.empty() ? "could not apply the volume ceiling" : error);
+                return;
+            }
+        }
+        settingsResponse(saved);
+        return;
+    }
+    if (request.uri == "/api/keyboard") {
+        if (request.method != "POST") {
+            sendSetupError(exchange, 405, "method not allowed");
+            return;
+        }
+        if (!config_.allowControl) {
+            sendSetupError(exchange, 403, say::msg("srv.controlsOff", "controls disabled in config"));
+            return;
+        }
+        if (rejectCrossSitePost(exchange))
+            return;
+        Json body;
+        if (!readAdminPayload(exchange, body, 4096))
+            return;
+        service::KeyboardCall call;
+        std::string error;
+        Json answer = Json::object();
+        if (!service::keyboardCall(body, call, error)) {
+            answer.set("ok", Json::flag(false));
+            answer.set("error", Json::text(error));
+            (void)exchange.respond(400, {{"Content-Type", "application/json"},
+                                         {"Cache-Control", "no-store"},
+                                         {"X-Content-Type-Options", "nosniff"}},
+                                   answer.dump());
+            return;
+        }
+        // The TV answers for itself, and says when no text field is open.
+        LunaReply reply;
+        const bool sent = waitForCommandPolicyLuna(
+            luna_, commandPolicy_, controlPolicyContext(config_), "keyboard." + call.action,
+            call.uri, call.payload, "ime-keyboard", false, reply);
+        const bool taken = sent && reply.response["returnValue"].boolean();
+        answer.set("ok", Json::flag(taken));
+        if (!taken) {
+            std::string why = reply.response["errorText"].string();
+            if (why.empty()) why = reply.error;
+            answer.set("error", Json::text(why.empty() ? "the TV did not take it" : why));
+        }
+        (void)exchange.respond(200, {{"Content-Type", "application/json"},
+                                     {"Cache-Control", "no-store"},
+                                     {"X-Content-Type-Options", "nosniff"}},
+                               answer.dump());
+        return;
+    }
     if (request.uri == "/api/preload/toggle" && request.method == "POST") {
         // Match the Node controls-off response, including its localization,
         // without reading or applying a mutation.
@@ -18640,7 +18622,8 @@ void HttpFrontDoor::dispatch(HttpExchange &exchange) const {
     }
     if (request.uri == "/api/setup" && request.method == "GET") {
         (void)setupRead(exchange, config_, dataRoot_, luna_, proxy_, activeHandoffUrl(),
-                        statsCollector() ? statsCollector()->deviceModel() : std::string());
+                        statsCollector() ? statsCollector()->deviceModel() : std::string(),
+                        tvThemeId(currentConfigDocument()));
         return;
     }
     if (request.uri == "/api/setup" && request.method == "POST") {
@@ -18765,6 +18748,32 @@ void HttpFrontDoor::dispatch(HttpExchange &exchange) const {
     }
     if (request.uri == "/api/remotekeys" && request.method == "POST") {
         setRemoteKey(exchange);
+        return;
+    }
+    if (request.uri == "/api/adblock/export") {
+        if (request.method != "GET" && request.method != "HEAD") {
+            sendSetupError(exchange, 405, "method not allowed");
+            return;
+        }
+        std::string format;
+        std::string tier;
+        (void)queryParameter(request.query, "format", format);
+        (void)queryParameter(request.query, "tier", tier);
+        service::AdBlockStore fallbackStore(dataRoot_, systemRoot_);
+        const service::AdBlockStore &store = adBlockManager_ ? adBlockManager_->store()
+                                                             : fallbackStore;
+        const std::string text = store.exportList(format, tier);
+        if (text.empty()) {
+            sendSetupError(exchange, 400, "format must be hosts, pihole or adguard");
+            return;
+        }
+        (void)exchange.respond(200,
+                               {{"Content-Type", "text/plain; charset=utf-8"},
+                                {"Content-Disposition",
+                                 "attachment; filename=\"nativetv-blocklist-" + format + ".txt\""},
+                                {"Cache-Control", "no-store"},
+                                {"X-Content-Type-Options", "nosniff"}},
+                               text);
         return;
     }
     if (request.uri == "/api/adblock/custom" && request.method == "POST") {

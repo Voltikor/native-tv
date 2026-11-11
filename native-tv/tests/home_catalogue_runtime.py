@@ -63,15 +63,10 @@ def main():
         home_file.write_text(json.dumps({
             "enabled": True, "showLive": False,
             "channels": ["channel-1"],
-            "sort": {"app": "recent", "dev": "recent", "ch": "custom"},
             "profiles": [{"id": "p1", "name": "Kids", "color": "#f2b8b5"}],
             "profile": "p1"
         }))
         original_home = home_file.read_text()
-        (root / "home-recent.json").write_text(json.dumps({
-            "app": {"com.webos.app.netflix": 100, "com.webos.app.youtube": 200},
-            "dev": {"hdmi2": 1, "hdmi2:game-console": 2}
-        }))
         details = root / "luna-details.jsonl"
         heartbeat = root / "tvweb.beat"
         environment = os.environ.copy()
@@ -111,10 +106,11 @@ def main():
             assert [device["id"] for device in catalogue["devices"]] == [
                 "hdmi1", "hdmi2:av-receiver", "hdmi2:game-console"]
             assert catalogue["order"]["app"][:3] == [
-                "com.webos.app.youtube", "com.webos.app.netflix",
+                "com.webos.app.netflix", "com.webos.app.youtube",
                 "com.webos.app.notificationcenter"]
             assert catalogue["order"]["dev"] == [
-                "hdmi2:game-console", "hdmi2:av-receiver", "hdmi1"]
+                "hdmi1", "hdmi2:av-receiver", "hdmi2:game-console"]
+            assert len(catalogue["kinds"]) == 7 and "sort" not in catalogue["layout"]
             assert catalogue["channels"] == []
             assert catalogue["sources"] == {
                 "apps": True, "devices": True, "channels": None}
@@ -133,6 +129,35 @@ def main():
             assert calls.count("com.webos.applicationManager/getAppInfo") == 2
             assert calls.count("com.webos.service.eim/getAllInputStatus") == 1
             assert "com.webos.service.apiadapter/tv/getChannelList" not in calls
+
+            # The TV theme rides in the catalogue, the read an open client repeats, and in caps for its
+            # first frame. An OLED panel on the default theme is offered OLED Care once.
+            def control(action, value=None):
+                request = Request("http://127.0.0.1:%d/api/control" % port,
+                                  data=json.dumps({"action": action, "value": value}).encode(),
+                                  method="POST",
+                                  headers={"Authorization": "Bearer " + token,
+                                           "Content-Type": "application/json"})
+                with urlopen(request, timeout=5) as response:
+                    return json.loads(response.read().decode("utf-8"))
+
+            assert catalogue["tvTheme"] == "n-google-tv" and "suggestTvTheme" not in catalogue
+            settings = json.loads(config.read_text())
+            settings["panel"] = "OLED65B3PUA"
+            config.write_text(json.dumps(settings))
+            assert get_json(port, "/api/home/catalogue?view=1", token)[1]["suggestTvTheme"] is True
+            assert control("dismissTvThemeSuggestion")["ok"] is True
+            offered = get_json(port, "/api/home/catalogue?view=1", token)[1]
+            assert "suggestTvTheme" not in offered and offered["tvTheme"] == "n-google-tv"
+            assert json.loads(config.read_text())["tvTheme"]["suggested"] is True
+            assert control("setTvTheme", "n-oled-care")["tvTheme"] == "n-oled-care"
+            assert get_json(port, "/api/home/catalogue?view=1", token)[1]["tvTheme"] == "n-oled-care"
+            assert get_json(port, "/api/caps", token)[1]["tvTheme"] == "n-oled-care"
+            # Once it is not the default there is nothing to suggest, whatever the panel.
+            settings = json.loads(config.read_text())
+            settings["tvTheme"]["suggested"] = False
+            config.write_text(json.dumps(settings))
+            assert "suggestTvTheme" not in get_json(port, "/api/home/catalogue?view=1", token)[1]
         finally:
             if process.poll() is None:
                 process.send_signal(signal.SIGTERM)

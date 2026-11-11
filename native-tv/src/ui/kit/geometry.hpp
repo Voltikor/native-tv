@@ -1,6 +1,7 @@
 #pragma once
 #include "ui/kit/focus.hpp"
 #include <algorithm>
+#include <cmath>
 #include <string>
 #include <vector>
 
@@ -12,6 +13,19 @@ namespace kit {
 namespace geometry {
 constexpr float clamp(float value, float low, float high) {
     return value < low ? low : value > high ? high : value;
+}
+
+// Where a theme with drift sits its whole scene, in whole pixels, at a minute of the day: an orbit
+// of the given radii whose axes have periods of 20 and 13 minutes, so the path does not close and
+// no edge rests on one pixel row for long. Whole pixels keep text sharp; the fastest axis moves
+// at most 3 px between two minutes. Radii of 0 give no drift.
+struct Drift {
+    float x, y;
+};
+inline Drift driftAt(int minuteOfDay, float radiusX, float radiusY) {
+    const double turn = 6.283185307179586;
+    return {static_cast<float>(std::round(radiusX * std::sin(turn * minuteOfDay / 20.0))),
+            static_cast<float>(std::round(radiusY * std::sin(turn * minuteOfDay / 13.0)))};
 }
 
 // Top bar.
@@ -39,8 +53,13 @@ inline std::vector<Rect> tabRects(const std::vector<float> &textWidths) {
 constexpr Rect pill(float left, float right) {
     return {left, layout::navTop, right - left, layout::navH};
 }
+constexpr Rect brand() {
+    return {canvas::width - canvas::safeX - layout::brandW,
+            layout::navTop + (layout::navH - type::labelL.line) / 2, layout::brandW,
+            type::labelL.line};
+}
 constexpr Rect clock() {
-    return {canvas::width - canvas::safeX - layout::clockW,
+    return {brand().x - layout::brandGap - layout::clockW,
             layout::navTop + (layout::navH - type::clock.line) / 2, layout::clockW,
             type::clock.line};
 }
@@ -73,23 +92,25 @@ constexpr Rect dotSlot(int index, int count = layout::dotSlots) {
 }
 
 // Home rows: label, then items 36 px below, 212 px per row.
-constexpr float rowLabelY(int row) {
-    return layout::rowsTop + layout::rowPitch * row;
+// The first row sits at the theme's look::homeTop: under the hero (layout::rowsTop) for a theme with
+// a feed, near the top for one without.
+inline float rowLabelY(int row) {
+    return look::homeTop + layout::rowPitch * row;
 }
-constexpr float rowItemsY(int row) {
+inline float rowItemsY(int row) {
     return rowLabelY(row) + layout::rowLabelH + layout::rowLabelGap;
 }
-constexpr Rect rowLabel(int row) {
+inline Rect rowLabel(int row) {
     return {canvas::safeX, rowLabelY(row), canvas::width - canvas::safeX, layout::rowLabelH};
 }
-constexpr Rect card(int row, int index) {
+inline Rect card(int row, int index) {
     return {canvas::safeX + index * (layout::cardW + layout::cardGap), rowItemsY(row),
             layout::cardW, layout::cardH};
 }
-constexpr Rect inputTile(int row, int index) {
+inline Rect inputTile(int row, int index) {
     return card(row, index);
 }
-constexpr Rect appCircle(int row, int index) {
+inline Rect appCircle(int row, int index) {
     return {canvas::safeX + index * (layout::appD + layout::appGap), rowItemsY(row), layout::appD,
             layout::appD};
 }

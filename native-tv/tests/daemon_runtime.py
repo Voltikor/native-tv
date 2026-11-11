@@ -24,7 +24,9 @@ from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 import unittest
 
-PROJECT_VERSION = (Path(__file__).resolve().parents[1] / "VERSION").read_text().strip()
+# The version the daemon is built with, so a release bump does not touch the tests.
+BUILT_VERSION = (Path(__file__).resolve().parents[1] / "VERSION").read_text().strip()
+
 
 def unused_port_pair(excluded=()):
     excluded = set(excluded)
@@ -5202,6 +5204,8 @@ class DaemonRuntimeTests(unittest.TestCase):
                     "nativetv": (Path(__file__).resolve().parents[1] / "VERSION").read_text().strip()})
                 self.assertEqual(backup["lg"]["homePromotion"], False)
                 self.assertEqual(backup["lg"]["soundMode"], "movie")
+                self.assertEqual(backup["lg"]["lgLogo"], True,
+                                 "the Control tab's LG logo switch is part of a backup")
                 # Settings no module was given are saved at their defaults.
                 self.assertEqual(backup["nativetv"], {
                     "history": {"enabled": False},
@@ -5213,6 +5217,8 @@ class DaemonRuntimeTests(unittest.TestCase):
                     "screenTime": {"action": "off", "appAction": "home", "apps": {},
                                    "bedtimeEnd": "", "bedtimeStart": "",
                                    "enabled": True, "dailyMinutes": 90, "idleMinutes": 0},
+                    "volumeCeiling": {"enabled": False, "maxVolume": 100, "nightMaxVolume": 100,
+                                      "nightStart": "", "nightEnd": "", "startupVolume": -1},
                     "update": {"check": False}
                 })
                 # The Home layout is the daemon's own reading of home.json now.
@@ -5807,7 +5813,8 @@ class DaemonRuntimeTests(unittest.TestCase):
 
                 backup = {
                     "format": "nativetv-backup", "version": 1,
-                    "lg": {"homePromotion": True, "soundMode": "movie", "bogus": 1},
+                    "lg": {"homePromotion": True, "soundMode": "movie", "bogus": 1,
+                           "lgLogo": False},
                     "apps": [{"id": "com.example.alpha", "title": "Alpha"},
                              {"id": "com.example.zed", "title": "Zed"}],
                     "home": {"rows": ["ch", "app", "dev"], "picture": False},
@@ -5818,7 +5825,7 @@ class DaemonRuntimeTests(unittest.TestCase):
                 status, body = post(backup)
                 self.assertEqual(status, 200, body)
                 self.assertEqual(body["lg"], {
-                    "applied": ["homePromotion"], "unchanged": 1,
+                    "applied": ["homePromotion", "lgLogo"], "unchanged": 1,
                     "skipped": [{"id": "bogus", "reason": "absent"}], "failed": []})
                 self.assertEqual(sorted(body["nativetv"]), ["backup.daily", "ntp.server"])
                 self.assertTrue(body["restart"])
@@ -5842,8 +5849,10 @@ class DaemonRuntimeTests(unittest.TestCase):
                 calls = [json.loads(line) for line in details.read_text().splitlines()]
                 written = [call for call in calls if call["uri"] ==
                            "com.webos.service.settings/setSystemSettings"]
-                self.assertEqual(len(written), 1, written)
-                self.assertEqual(written[0]["payload"]["settings"], {"homePromotion": "on"})
+                self.assertEqual([(call["payload"]["category"], call["payload"]["settings"])
+                                  for call in written],
+                                 [("general", {"homePromotion": "on"}),
+                                  ("other", {"lgLogoDisplay": "off"})], written)
                 deadline = time.monotonic() + 5
                 while time.monotonic() < deadline and not restarted.exists():
                     time.sleep(0.05)
@@ -5856,8 +5865,8 @@ class DaemonRuntimeTests(unittest.TestCase):
                 self.assertEqual(status, 200, body)
                 self.assertEqual(body["nativetv"], [])
                 self.assertFalse(body["restart"])
-                # The stand-in TV keeps homePromotion off, so it is written again.
-                self.assertEqual(body["lg"]["applied"], ["homePromotion"])
+                # The stand-in TV keeps homePromotion off and the logo on, so both are written again.
+                self.assertEqual(body["lg"]["applied"], ["homePromotion", "lgLogo"])
                 self.assertEqual(body["lg"]["unchanged"], 1)
                 time.sleep(1)
                 self.assertFalse(restarted.exists())
@@ -6058,11 +6067,14 @@ class DaemonRuntimeTests(unittest.TestCase):
             upstreamPort = unused_port_pair((port, port + 1))
             capture = root / "luna-call.json"
             fakeLuna = root / "fake-luna-send"
+            # The ad blocker reads the country code about a second after the daemon starts;
+            # that is not a setup action, and on a busy host it can land before the assertion.
             fakeLuna.write_text(
                 "#!/usr/bin/env python3\n"
                 "import json, os, sys\n"
-                "with open(os.environ['TVWEB_LUNA_CAPTURE'], 'w') as output:\n"
-                "    json.dump(sys.argv[1:], output)\n"
+                "if 'smartServiceCountryCode2' not in ' '.join(sys.argv):\n"
+                "    with open(os.environ['TVWEB_LUNA_CAPTURE'], 'w') as output:\n"
+                "        json.dump(sys.argv[1:], output)\n"
                 "print('{\"returnValue\":true}')\n")
             fakeLuna.chmod(0o700)
             config.write_text(json.dumps({"host": "127.0.0.1", "port": port,
@@ -6432,6 +6444,7 @@ class DaemonRuntimeTests(unittest.TestCase):
             }))
             assetsRoot = root / "assets"
             shutil.copytree(str(sourceAssets), str(assetsRoot))
+            shutil.copytree(str(sourceAssets.parent / "assets" / "pwa"), str(assetsRoot / "pwa"))
             outside = root / "outside.js"
             outside.write_text("must not be served through an assets symlink")
             (assetsRoot / "ui" / "escape.js").symlink_to(outside)
@@ -6550,7 +6563,7 @@ class DaemonRuntimeTests(unittest.TestCase):
                 self.assertEqual(caps["allowControl"], False)
                 self.assertEqual(caps["allowPower"], True)
                 self.assertIsNone(caps["origin"], "loopback-only config must not publish a LAN origin")
-                self.assertEqual(caps["version"], PROJECT_VERSION)
+                self.assertEqual(caps["version"], BUILT_VERSION)
                 self.assertTrue(caps["fromHomebrewChannel"])
                 self.assertTrue(caps["setupNeeded"])
                 self.assertEqual(caps["key"], "front-door-token",
@@ -6879,6 +6892,27 @@ class DaemonRuntimeTests(unittest.TestCase):
                 self.assertEqual(response.read(), b"")
                 self.assertGreater(int(response.headers.get("Content-Length", "0")), 0)
 
+                # The installable app: the manifest is not kept for a day, and the service worker,
+                # which sits under /assets/pwa/, may control the dashboard at /.
+                response = urlopen("http://127.0.0.1:%d/assets/pwa/manifest.webmanifest" % port, timeout=3)
+                manifest = json.loads(response.read().decode("utf-8"))
+                self.assertEqual(response.headers.get("Content-Type"),
+                                 "application/manifest+json; charset=utf-8")
+                self.assertEqual(response.headers.get("Cache-Control"), "no-cache")
+                self.assertEqual(manifest["start_url"], "/")
+                for icon in manifest["icons"]:
+                    response = urlopen("http://127.0.0.1:%d%s" % (port, icon["src"]), timeout=3)
+                    self.assertEqual(response.headers.get("Content-Type"), "image/png")
+                    self.assertTrue(response.read().startswith(b"\x89PNG"), icon["src"])
+                response = urlopen("http://127.0.0.1:%d/assets/pwa/sw.js" % port, timeout=3)
+                self.assertEqual(response.headers.get("Service-Worker-Allowed"), "/")
+                self.assertEqual(response.headers.get("Content-Type"), "application/javascript")
+                self.assertIn("addEventListener('fetch'", response.read().decode("utf-8"))
+                response = urlopen("http://127.0.0.1:%d/assets/ui/core.js" % port, timeout=3)
+                response.read()
+                self.assertIsNone(response.headers.get("Service-Worker-Allowed"),
+                                  "only the service worker may widen its scope")
+
                 connection = http.client.HTTPConnection("127.0.0.1", port, timeout=3)
                 connection.request("GET", "/assets/dashboard.html?tab=apps")
                 response = connection.getresponse()
@@ -7011,7 +7045,7 @@ class DaemonRuntimeTests(unittest.TestCase):
                                  "text/plain; version=0.0.4; charset=utf-8")
                 self.assertIn("# HELP nativetv_info", prometheus)
                 self.assertIn('nativetv_info{model="Test TV"', prometheus)
-                self.assertIn('version="' + PROJECT_VERSION + '"', prometheus)
+                self.assertIn('version="%s"' % BUILT_VERSION, prometheus)
                 self.assertEqual(observed[-1]["path"], "/_internal/native-stats")
                 self.assertEqual(observed[-1]["peer"], "")
                 self.assertEqual(observed[-1]["secret"], secret)
@@ -10950,6 +10984,30 @@ class DaemonRuntimeTests(unittest.TestCase):
                 self.assertFalse(control("setReleaseCheck", False)[1]["releaseCheck"])
                 self.assertEqual(saved()["update"], {"check": False})
 
+                # TV theme: the default until one is chosen; only a theme that exists is saved, and the
+                # client's first frame (caps) and its settings row (setup) name the saved one.
+                fresh = control("setReleaseCheck", False)[1]
+                self.assertEqual(fresh["tvTheme"], "n-google-tv")
+                self.assertEqual([theme["id"] for theme in fresh["tvThemes"]], ["n-google-tv", "n-oled-care"])
+                self.assertEqual(fresh["tvThemes"][1]["name"], "OLED Care")
+                for bad in ("n-nope", "", 7, None):
+                    self.assertEqual(control("setTvTheme", bad)[1]["error"], "That theme does not exist")
+                self.assertNotIn("tvTheme", saved())
+                result = control("setTvTheme", "n-oled-care")[1]
+                self.assertTrue(result["ok"])
+                self.assertEqual(result["tvTheme"], "n-oled-care")
+                self.assertEqual(saved()["tvTheme"], {"id": "n-oled-care", "suggested": True})  # choosing ends the one-time suggestion
+                self.assertEqual(saved()["mqtt"], {"host": "keep.example"})
+                with urlopen(Request("http://127.0.0.1:%d/api/caps" % publicPort), timeout=5) as reply:
+                    self.assertEqual(json.loads(reply.read())["tvTheme"], "n-oled-care")
+                # A name the file holds but no theme has falls back to the default, not to nothing.
+                broken = saved()
+                broken["tvTheme"]["id"] = "n-gone"
+                config.write_text(json.dumps(broken))
+                self.assertEqual(control("setReleaseCheck", False)[1]["tvTheme"], "n-google-tv")
+                self.assertEqual(control("setTvTheme", "n-google-tv")[1]["tvTheme"], "n-google-tv")
+                self.assertEqual(saved()["tvTheme"]["id"], "n-google-tv")
+
                 result = control("setBackupDaily", True)[1]
                 self.assertEqual(result["backupDaily"], {"enabled": True})
                 self.assertEqual(saved()["backup"], {"daily": True})
@@ -11592,6 +11650,12 @@ class DaemonRuntimeTests(unittest.TestCase):
                               [choice["id"] for choice in result["remoteKeys"]["choices"]])
                 self.assertIn("Fixture HDMI 1",
                               [choice["title"] for choice in result["remoteKeys"]["choices"]])
+                # The server's switches are on here, so the key actions are offered.
+                actionChoices = {choice["id"]: choice for choice in result["remoteKeys"]["choices"]
+                                 if choice["kind"] == "action"}
+                self.assertEqual(sorted(actionChoices), ["action:powerOff", "action:screenOff"])
+                self.assertEqual(actionChoices["action:screenOff"]["title"], "Screen off")
+                self.assertEqual(actionChoices["action:powerOff"]["title"], "Power off")
                 self.assertEqual([app["id"] for app in result["installed"]], [
                     "org.example.store", "org.example.youtube"])
                 self.assertEqual(result["installed"][1]["size"], 42455683)
@@ -12528,7 +12592,7 @@ class DaemonRuntimeTests(unittest.TestCase):
                                                   message[1] and '"time":' in message[1] and
                                                   message[2])
                     nativeTelemetry = json.loads(nativeTelemetryMessage[1])
-                    self.assertEqual(nativeTelemetry["tvwebVersion"], PROJECT_VERSION)
+                    self.assertEqual(nativeTelemetry["tvwebVersion"], BUILT_VERSION)
                     self.assertEqual(nativeTelemetry["device"]["name"],
                                      "Migration Fixture")
                     self.assertEqual(nativeTelemetry["app_id"],
@@ -15620,6 +15684,357 @@ class DaemonRuntimeTests(unittest.TestCase):
                 if process is not None and process.poll() is None:
                     process.kill()
                     process.communicate(timeout=5)
+
+    def _volume_ceiling_daemon(self, root, volume_ceiling, allow_control=True,
+                               mode="state-groups"):
+        """The daemon with no Node, on the stand-in TV (whose volume is 22) with its call log.
+        The log's path is process.details, and the stand-in answers as `mode` says."""
+        binary = Path(sys.argv[1]).resolve()
+        fakeLuna = binary.parent / "native-fake-luna-send"
+        publicPort = unused_port_pair()
+        token = "volume-ceiling-token"
+        assets = root / "assets"
+        data = root / "data"
+        (assets / "screensavers").mkdir(parents=True)
+        (root / "proc/net").mkdir(parents=True)
+        (root / "system").mkdir()
+        data.mkdir()
+        details = root / "luna-details.jsonl"
+        config = root / "config.json"
+        document = {"host": "127.0.0.1", "port": publicPort, "token": token,
+                    "allowControl": allow_control}
+        if volume_ceiling is not None:
+            document["volumeCeiling"] = volume_ceiling
+        config.write_text(json.dumps(document))
+        environment = os.environ.copy()
+        environment.pop("TVWEB_PROXY_SECRET", None)
+        environment["TVWEB_NODE_FREE"] = "1"
+        environment["TVWEB_LUNA_SEND"] = str(fakeLuna)
+        environment["TVWEB_DATA_DIR"] = str(data)
+        environment["NATIVETV_FAKE_LUNA_MODE"] = mode
+        environment["NATIVETV_FAKE_LUNA_DETAILS"] = str(details)
+        process = subprocess.Popen(
+            [str(binary), "--config", str(config), "--heartbeat", str(root / "tvweb.beat"),
+             "--workers", "4", "--listen", "--assets-root", str(assets),
+             "--proc-root", str(root / "proc"), "--system-root", str(root / "system")],
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, env=environment)
+        process.details = details
+
+        def request(path, method="GET", payload=None, headers=None, raw=None):
+            sent = {"Authorization": "Bearer " + token, "Content-Type": "application/json"}
+            sent.update(headers or {})
+            body = raw if raw is not None else (None if payload is None else json.dumps(payload).encode())
+            req = Request("http://127.0.0.1:%d%s" % (publicPort, path), method=method,
+                          data=body, headers=sent)
+            try:
+                with urlopen(req, timeout=20) as response:
+                    return response.status, response.read()
+            except HTTPError as error:
+                with error:
+                    return error.code, error.read()
+
+        deadline = time.monotonic() + 8
+        while time.monotonic() < deadline and process.poll() is None:
+            try:
+                if request("/api/caps")[0] == 200:
+                    break
+            except (OSError, URLError):
+                time.sleep(0.03)
+        self.assertIsNone(process.poll(), "daemon exited early")
+
+        def volumes():
+            if not details.exists():
+                return []
+            calls = [json.loads(line) for line in details.read_text().splitlines() if line.strip()]
+            return [call["payload"]["volume"] for call in calls
+                    if call["uri"] == "com.webos.audio/setVolume"]
+
+        def stop():
+            if process.poll() is None:
+                process.send_signal(signal.SIGTERM)
+            try:
+                return process.communicate(timeout=8)[0]
+            except subprocess.TimeoutExpired:
+                process.kill()
+                return process.communicate(timeout=3)[0]
+
+        return process, request, volumes, stop, config
+
+    def test_native_volume_ceiling_holds_the_volume_and_serves_its_route(self):
+        with tempfile.TemporaryDirectory(prefix="nativetv-volume-ceiling-") as folder:
+            root = Path(folder)
+            process, request, volumes, stop, config = self._volume_ceiling_daemon(
+                root, {"enabled": True, "maxVolume": 10})
+            output = ""
+            try:
+                # The stand-in TV is at 22: over the ceiling the config holds at start.
+                deadline = time.monotonic() + 8
+                while time.monotonic() < deadline and not volumes():
+                    time.sleep(0.05)
+                self.assertEqual(volumes()[:1], [10], "a volume over the ceiling is set back at start")
+
+                status, body = request("/api/volumelimit")
+                self.assertEqual(status, 200, body)
+                reply = json.loads(body)
+                self.assertTrue(reply["ok"] and reply["writable"])
+                self.assertEqual(reply["settings"], {
+                    "enabled": True, "maxVolume": 10, "nightMaxVolume": 100,
+                    "nightStart": "", "nightEnd": "", "startupVolume": -1})
+
+                # A change is saved to the config's own section and applied at once.
+                before = len(volumes())
+                status, body = request("/api/volumelimit", "POST", {"maxVolume": 15})
+                self.assertEqual(status, 200, body)
+                self.assertEqual(json.loads(body)["settings"]["maxVolume"], 15)
+                self.assertTrue(json.loads(body)["settings"]["enabled"], "a partial patch keeps the rest")
+                saved = json.loads(config.read_text())
+                self.assertEqual(saved["volumeCeiling"]["maxVolume"], 15)
+                self.assertTrue(saved["volumeCeiling"]["enabled"])
+                self.assertEqual(saved["token"], "volume-ceiling-token", "the rest of the config is kept")
+                deadline = time.monotonic() + 8
+                while time.monotonic() < deadline and len(volumes()) == before:
+                    time.sleep(0.05)
+                self.assertEqual(volumes()[-1], 15, "the new ceiling is applied without a restart")
+
+                status, body = request("/api/volumelimit", "POST", {
+                    "nightMaxVolume": 5, "nightStart": "22:00", "nightEnd": "07:00", "startupVolume": 12})
+                self.assertEqual(status, 200, body)
+                night = json.loads(body)["settings"]
+                self.assertEqual((night["nightMaxVolume"], night["nightStart"], night["nightEnd"],
+                                  night["startupVolume"]), (5, "22:00", "07:00", 12))
+
+                # Switching it off stops it holding the volume.
+                status, body = request("/api/volumelimit", "POST", {"enabled": False})
+                self.assertEqual(status, 200, body)
+                time.sleep(0.3)
+                held = len(volumes())
+                time.sleep(0.7)
+                self.assertEqual(len(volumes()), held, "a ceiling that is off sets nothing")
+
+                # What is refused, and what is not saved.
+                for payload, error in (({"maxVolume": 101}, "invalid maxVolume"),
+                                       ({"maxVolume": "loud"}, "invalid maxVolume"),
+                                       ({"nightStart": "25:00"}, "invalid nightStart"),
+                                       ({"startupVolume": -2}, "invalid startupVolume"),
+                                       ({"volume": 5}, "unknown setting: volume")):
+                    status, body = request("/api/volumelimit", "POST", payload)
+                    self.assertEqual(status, 400, (payload, body))
+                    self.assertEqual(json.loads(body), {"ok": False, "error": error})
+                status, body = request("/api/volumelimit", "POST", raw=b"not json")
+                self.assertEqual(status, 400, body)
+                status, body = request("/api/volumelimit", "POST", [1, 2])
+                self.assertEqual(status, 400, body)
+                status, body = request("/api/volumelimit", "POST", {"maxVolume": 20},
+                                       headers={"Content-Type": "text/plain"})
+                self.assertEqual(status, 415, body)
+                status, body = request("/api/volumelimit", "POST", {"maxVolume": 20},
+                                       headers={"Origin": "http://evil.example"})
+                self.assertEqual(status, 403, body)
+                status, body = request("/api/volumelimit", "POST", raw=b"{" + b" " * 300 + b"}")
+                self.assertEqual(status, 413, body)
+                self.assertEqual(json.loads(config.read_text())["volumeCeiling"]["maxVolume"], 15,
+                                 "a refused change is not saved")
+                self.assertEqual(request("/api/volumelimit", "HEAD")[0], 200)
+            finally:
+                output = stop()
+            self.assertEqual(process.returncode, 0, "shutdown was not clean:\n" + output)
+            self.assertIn("volumelimit: ceiling on", output)
+
+    def test_native_volume_ceiling_is_idle_until_set_and_refuses_with_controls_off(self):
+        # No section in the config: the defaults, and no call to set the volume.
+        with tempfile.TemporaryDirectory(prefix="nativetv-volume-ceiling-idle-") as folder:
+            root = Path(folder)
+            process, request, volumes, stop, config = self._volume_ceiling_daemon(root, None)
+            try:
+                status, body = request("/api/volumelimit")
+                self.assertEqual(status, 200, body)
+                self.assertFalse(json.loads(body)["settings"]["enabled"])
+                self.assertEqual(json.loads(body)["settings"]["maxVolume"], 100)
+                time.sleep(1.0)
+                self.assertEqual(volumes(), [], "nothing is set without a ceiling")
+                self.assertNotIn("volumeCeiling", json.loads(config.read_text()),
+                                 "reading the settings does not write them")
+            finally:
+                output = stop()
+            self.assertEqual(process.returncode, 0, output)
+        # Controls off in the config: the settings can be read, not changed or held.
+        with tempfile.TemporaryDirectory(prefix="nativetv-volume-ceiling-off-") as folder:
+            root = Path(folder)
+            process, request, volumes, stop, config = self._volume_ceiling_daemon(
+                root, {"enabled": True, "maxVolume": 10}, allow_control=False)
+            try:
+                status, body = request("/api/volumelimit")
+                self.assertEqual(status, 200, body)
+                reply = json.loads(body)
+                self.assertFalse(reply["writable"])
+                self.assertEqual(reply["settings"]["maxVolume"], 10)
+                status, body = request("/api/volumelimit", "POST", {"maxVolume": 50})
+                self.assertEqual(status, 403, body)
+                self.assertEqual(json.loads(config.read_text())["volumeCeiling"]["maxVolume"], 10)
+                time.sleep(1.0)
+                self.assertEqual(volumes(), [], "with controls off the volume is not set")
+            finally:
+                output = stop()
+            self.assertEqual(process.returncode, 0, output)
+            self.assertIn("controls are off", output)
+
+    @staticmethod
+    def _ime_calls(process):
+        if not process.details.exists():
+            return []
+        calls = [json.loads(line) for line in process.details.read_text().splitlines() if line.strip()]
+        return [(call["uri"].rsplit("/", 1)[-1], call["payload"]) for call in calls
+                if call["uri"].startswith("com.webos.service.ime/")]
+
+    def test_native_keyboard_types_into_the_tv_and_refuses_what_is_not_valid(self):
+        with tempfile.TemporaryDirectory(prefix="nativetv-keyboard-") as folder:
+            root = Path(folder)
+            process, request, _volumes, stop, _config = self._volume_ceiling_daemon(
+                root, None, mode="keyboard")
+            try:
+                def post(payload, **options):
+                    status, body = request("/api/keyboard", "POST", payload, **options)
+                    return status, json.loads(body) if body else None
+
+                status, reply = post({"action": "text", "text": "stranger things"})
+                self.assertEqual((status, reply), (200, {"ok": True}))
+                status, reply = post({"action": "text", "text": "caf\u00e9 \U0001F600", "replace": True})
+                self.assertEqual((status, reply), (200, {"ok": True}))
+                status, reply = post({"action": "delete", "count": 3})
+                self.assertEqual((status, reply), (200, {"ok": True}))
+                status, reply = post({"action": "delete"})
+                self.assertEqual((status, reply), (200, {"ok": True}))
+                status, reply = post({"action": "enter"})
+                self.assertEqual((status, reply), (200, {"ok": True}))
+                self.assertEqual(self._ime_calls(process), [
+                    ("insertText", {"text": "stranger things", "replace": False}),
+                    ("insertText", {"text": "caf\u00e9 \U0001F600", "replace": True}),
+                    ("deleteCharacters", {"count": 3}),
+                    ("deleteCharacters", {"count": 1}),
+                    ("sendEnterKey", {})])
+
+                sent = len(self._ime_calls(process))
+                for payload, error in (
+                        ({"action": "text", "text": ""}, "invalid text"),
+                        ({"action": "text", "text": "two\nlines"}, "invalid text"),
+                        ({"action": "text", "text": "x" * 257}, "invalid text"),
+                        ({"action": "text", "text": "x", "replace": 1}, "invalid replace"),
+                        ({"action": "delete", "count": 0}, "invalid count"),
+                        ({"action": "delete", "count": 101}, "invalid count"),
+                        ({"action": "type"}, "unknown action: type"),
+                        ({}, "no action")):
+                    status, reply = post(payload)
+                    self.assertEqual(status, 400, (payload, reply))
+                    self.assertEqual(reply, {"ok": False, "error": error})
+                status, body = request("/api/keyboard", "POST", raw=b"not json")
+                self.assertEqual(status, 400, body)
+                status, body = request("/api/keyboard", "POST", {"action": "enter"},
+                                       headers={"Content-Type": "text/plain"})
+                self.assertEqual(status, 415, body)
+                status, body = request("/api/keyboard", "POST", {"action": "enter"},
+                                       headers={"Origin": "http://evil.example"})
+                self.assertEqual(status, 403, body)
+                status, body = request("/api/keyboard", "POST",
+                                       {"action": "text", "text": "x", "pad": "y" * 5000})
+                self.assertEqual(status, 413, body)
+                status, body = request("/api/keyboard")
+                self.assertEqual(status, 405, body)
+                time.sleep(0.3)
+                self.assertEqual(len(self._ime_calls(process)), sent,
+                                 "nothing refused reaches the TV")
+            finally:
+                output = stop()
+            self.assertEqual(process.returncode, 0, "shutdown was not clean:\n" + output)
+
+    def test_native_keyboard_reports_what_the_tv_refuses_and_respects_controls_off(self):
+        with tempfile.TemporaryDirectory(prefix="nativetv-keyboard-refused-") as folder:
+            root = Path(folder)
+            process, request, _volumes, stop, _config = self._volume_ceiling_daemon(
+                root, None, mode="keyboard-refused")
+            try:
+                status, body = request("/api/keyboard", "POST", {"action": "text", "text": "hi"})
+                self.assertEqual(status, 200, body)
+                self.assertEqual(json.loads(body), {"ok": False, "error": "No text field is open"})
+                self.assertEqual(self._ime_calls(process), [("insertText", {"text": "hi", "replace": False})])
+            finally:
+                output = stop()
+            self.assertEqual(process.returncode, 0, output)
+        with tempfile.TemporaryDirectory(prefix="nativetv-keyboard-off-") as folder:
+            root = Path(folder)
+            process, request, _volumes, stop, _config = self._volume_ceiling_daemon(
+                root, None, allow_control=False, mode="keyboard")
+            try:
+                status, body = request("/api/keyboard", "POST", {"action": "text", "text": "hi"})
+                self.assertEqual(status, 403, body)
+                time.sleep(0.3)
+                self.assertEqual(self._ime_calls(process), [], "with controls off nothing is typed")
+            finally:
+                output = stop()
+            self.assertEqual(process.returncode, 0, output)
+
+    def test_native_block_list_export_downloads_what_the_ad_blocker_blocks(self):
+        with tempfile.TemporaryDirectory(prefix="nativetv-blocklist-export-") as folder:
+            root = Path(folder)
+            process, request, _volumes, stop, _config = self._volume_ceiling_daemon(root, None)
+            port = json.loads((root / "config.json").read_text())["port"]
+            try:
+                def download(query, method="GET"):
+                    req = Request("http://127.0.0.1:%d/api/adblock/export%s" % (port, query),
+                                  method=method, headers={"Authorization": "Bearer volume-ceiling-token"})
+                    try:
+                        with urlopen(req, timeout=20) as response:
+                            return response.status, dict(response.headers), response.read().decode()
+                    except HTTPError as error:
+                        with error:
+                            return error.code, dict(error.headers), error.read().decode()
+
+                # The ad blocker is off, so the ads level is what is exported.
+                status, headers, text = download("?format=hosts")
+                self.assertEqual(status, 200, text)
+                self.assertTrue(headers["Content-Type"].startswith("text/plain"), headers)
+                self.assertEqual(headers["Content-Disposition"],
+                                 'attachment; filename="nativetv-blocklist-hosts.txt"')
+                lines = text.splitlines()
+                names = [line[len("0.0.0.0 "):] for line in lines[1:]]
+                self.assertEqual(lines[0], "# Native Tv block list: %d names" % len(names))
+                self.assertTrue(all(line.startswith("0.0.0.0 ") for line in lines[1:]), text[:300])
+                self.assertEqual(len(set(names)), len(names), "no name twice")
+                self.assertIn("ad.doubleclick.net", names)
+                self.assertNotIn("lgtviot.com", names, "the ads level has no platform hosts")
+                self.assertNotIn("snu.lge.com", names, "updates are not blocked, so not exported")
+
+                status, _, text = download("?format=hosts&tier=full")
+                self.assertEqual(status, 200, text)
+                full = [line[len("0.0.0.0 "):] for line in text.splitlines()[1:]]
+                self.assertIn("lgtviot.com", full)
+                self.assertGreater(len(full), len(names))
+                self.assertLessEqual(set(names), set(full))
+
+                status, headers, text = download("?format=pihole")
+                self.assertEqual(status, 200, text)
+                self.assertEqual(headers["Content-Disposition"],
+                                 'attachment; filename="nativetv-blocklist-pihole.txt"')
+                self.assertEqual(text.splitlines()[1:], names)
+                status, _, text = download("?format=adguard")
+                self.assertEqual(status, 200, text)
+                self.assertTrue(text.startswith("! Native Tv block list: "), text[:80])
+                self.assertEqual(text.splitlines()[1:], ["||%s^" % name for name in names])
+
+                for query in ("?format=csv", "?format=", "", "?tier=full"):
+                    status, _, text = download(query)
+                    self.assertEqual(status, 400, (query, text))
+                    self.assertIn("format must be hosts, pihole or adguard", text)
+                status, _, text = download("?format=hosts&tier=nonsense")
+                self.assertEqual(status, 200, "an unknown tier means the current level")
+                self.assertEqual(len(text.splitlines()) - 1, len(names))
+                status, headers, text = download("?format=hosts", "HEAD")
+                self.assertEqual(status, 200)
+                self.assertEqual(text, "")
+                status, body = request("/api/adblock/export?format=hosts", "POST", {})
+                self.assertEqual(status, 405, body)
+            finally:
+                output = stop()
+            self.assertEqual(process.returncode, 0, "shutdown was not clean:\n" + output)
 
 
 if __name__ == "__main__":

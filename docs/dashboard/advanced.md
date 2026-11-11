@@ -1,5 +1,5 @@
 ---
-description: "Advanced controls for an LG webOS TV: stay connected while the TV is off, power and standby settings, switch off when idle, and system settings LG places several menus deep."
+description: "Advanced controls for an LG webOS TV: stay connected while the TV is off, power and standby settings, switch off when idle, a volume ceiling, and system settings LG places several menus deep."
 ---
 
 # Advanced Controls
@@ -60,6 +60,18 @@ The TV shows a toast five minutes before a limit and another when it is reached.
 
 The limits are counted by [watch time](metrics.md#watch-time), so they apply only while it is on in the Server tab, and once the TV's clock is set. Time with the screen off or LG's screen saver showing is not counted, and nothing is done while it is off. Switching the TV off needs `allowPower`, which is on unless `config.json` turns it off. A limit set in `config.json` (`screenTime`) that is not in a list is kept and shown.
 
+## Volume ceiling
+
+**Advanced &rarr; Volume ceiling** keeps the TV's volume at or under a maximum, whoever sets it: the remote's volume keys, an app, the dashboard or Home Assistant. When the volume goes over, the server sets it back to the maximum within a moment.
+
+* **Maximum volume:** 5 to 100 in steps of 5 on the page, and any whole number from 0 to 100 in `config.json`; 100 is no limit.
+* **Night limit:** a lower maximum (0, silent, to 100) between two times on the TV's clock. A window that ends earlier than it starts runs past midnight, and clearing either time turns it off. It applies once the TV's clock is set, and the lower of the two limits holds.
+* **Start-up volume:** a volume set when the TV is switched on, or when the server starts with the TV. It never goes over the maximum, and it is left alone by default.
+
+A restart of the server alone, on a TV that has been on for some time, does not change the volume. The ceiling cannot hold a volume the TV does not set itself: with sound on an external device, such as optical or an HDMI ARC receiver that sets its own level, LG refuses a set volume, and the server stops asking for five minutes after each refusal. It needs `allowControl`, which is on unless `config.json` turns it off (see [Security](../administration/security.md)); without it the settings can be read but not changed.
+
+The settings are the `volumeCeiling` section of `config.json`: `enabled`, `maxVolume`, `nightMaxVolume`, `nightStart`, `nightEnd` and `startupVolume` (-1 for none). A [settings backup](server.md) carries them. A change made through the volume slider on the Overview still takes effect, then is set back if it is over the maximum.
+
 ## System updates
 
 * **Block TV software updates:** Stops the TV installing LG's system updates, which can take away the access Native Tv runs with. Homebrew app catalog updates are unaffected.
@@ -87,4 +99,8 @@ Per-port settings for HDMI Deep Colour (extended bandwidth for 4K HDR) and audio
 ## Front lights
 
 * **Standby light:** Toggles the red standby indicator LED located on the front bezel of the TV.
+
+![Advanced tab: Power & standby, System updates with Block TV software updates, Switch off when idle, and Screen time with its daily limit and bedtime](../screenshots/advanced.png)
+
+*The top of the Advanced tab; the sound, HDMI, device and light settings follow below it.*
 

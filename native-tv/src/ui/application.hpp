@@ -34,20 +34,28 @@ struct HeroText {
                description == other.description && image == other.image && hint == other.hint;
     }
 };
+// What a page without art washes in: the Apps page uses it rather than the last hero's tint, which
+// made the same page olive or red depending on the title seen before it.
+// It is the theme's: teal for n-google-tv, black for n-oled-care.
+inline Color neutralWash() {
+    return kit::color::wash;
+}
 struct HeroArt {
     std::string image[2];
     float artAlpha[2] = {1, 1}; // a focused app keeps the pick's picture, dimmed, under its tint
-    Color tint[2] = {{0.07f, 0.19f, 0.24f, 1}, {0.07f, 0.19f, 0.24f, 1}};
+    Color tint[2] = {neutralWash(), neutralWash()};
     int newest = 0;       // the layer that took the latest picture
     std::string shownId;  // card the layers are showing
     HeroText text;        // the lines on screen; changes after the old ones have left
-    Color wallTint = {0.07f, 0.19f, 0.24f, 1}; // what pages without art wash in
+    Color wallTint = neutralWash(); // what pages without art wash in
 };
 struct HomeState {
     size_t tab = 0, row = 0, column = 0, nav = 0;
     bool navigation = false;
-    bool grid = false; // the Apps tab as one grid; false while its apps are grouped in rows by kind
-    bool arranging = false; // a row of apps is lifted to be moved among the kinds
+    bool arranging = false; // a kind's row is lifted as a card: its apps are edited, the card moved
+    bool carrying = false;     // ... and the focused app on it is picked up: Left and Right move it
+    bool carryingKind = false; // ... or the card is picked up: Up and Down move it
+    int arrangeFocus = 0;      // 0 the card's apps; 1 Hide, 2 Move kind, 3 Done, the buttons above them
     // Editing the apps (a long press on an app): the arrows swap it with its neighbour, OK or Back
     // saves, Up from the first row reaches the button that hides it (`editHide`; Show on Home for
     // an app that was hidden) and Red does the same. Home's row lists the hidden apps, dimmed, last.
@@ -56,6 +64,7 @@ struct HomeState {
     std::vector<CardRow> rows;
     Card hero;                 // the card the hero is showing or about to show
     std::vector<Card> spotlight; // the top picks the hero cycles through
+    bool picksTaken = false;     // the spotlight is out of the top picks row (homeData)
     size_t spotIndex = 0;
     HeroArt art;
     Json picture;
@@ -92,6 +101,11 @@ struct ViewState {
     bool installRoot = false, installReplace = false;
     int hour = 0, minute = 0, weekday = 0, day = 1, month = 0;
     Json catalogue, discover, guide, stats, caps, setup, menuData, catalog, install;
+    // Title search needs a TMDB key and a theme with a feed: a client that read the feed under one
+    // theme keeps it when it switches to a theme without one.
+    bool titleSearch() const {
+        return kit::look::discover && discover["titlesEnabled"].boolean();
+    }
 };
 // What a view reads to draw a frame: the state the controllers keep and the animated values the
 // motion engine owns. Views never change either.
@@ -116,6 +130,10 @@ class Application : private ScreenHost {
     // question is asked again every two seconds, and the client's own first frames stay behind the
     // ink cover for at most 2.5 s so the page that is about to be replaced is not seen.
     bool capsAnswered_ = false, holdForCaps_ = false;
+    // The one-time offer of OLED Care was opened this run; the server stops sending it once answered.
+    bool themeOffered_ = false;
+    const char *shownTheme_ = nullptr; // the theme the Home art's wash was last reset for
+    const char *refreshedTheme_ = nullptr; // the theme Home's data was last asked for under
     uint32_t capsAt_ = 0;
     std::string initial_;
     unsigned recentSnapshot_ = 0;
@@ -202,6 +220,15 @@ class Application : private ScreenHost {
     void resolvePictures();
     void buildFrame();
     void askCaps();
+    // Shows the theme the server names (caps, then every catalogue answer), unless a change of the
+    // person's is still being saved, and opens the one-time offer of OLED Care when the server sends it.
+    void followTheme(const Json &data);
+    // The theme in use is not the one the Home art and rows were built for: rebuild them, and read what
+    // the theme's Home needs.
+    void themeChanged();
+    // Home's rows for a tab: with a feed, the catalogue's and the feed's; without one (look::discover
+    // off) Home is the apps, the inputs and the panel's cards.
+    std::vector<CardRow> homeRowsFor(const std::string &tab) const;
     bool coveredForCaps() const;
     void rebuildHome();
     void rebuildMenu();
@@ -222,7 +249,13 @@ class Application : private ScreenHost {
     void back();
     void screenKey(Key key);
     void homeArrange(Key key);
-    void homeArrangeCancel();
+    void homeArrangeHide();
+    void homeArrangeMoveKind(Key key);
+    void homeArrangeButtons(Key key);
+    void homeKindEditStart();
+    void homeArrangeDone();
+    void saveApps(const std::string &list, const std::vector<std::string> &shown, bool moved,
+                  bool hiddenChanged, const Json &hiddenNow, const Json &kinds);
     std::string editedList() const;
     void homeEditStart();
     void homeEditKey(Key key);

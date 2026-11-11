@@ -1,3 +1,4 @@
+#include "core/themes.hpp"
 #include "ui/application.hpp"
 #include "ui/kit/components.hpp"
 #include "ui/kit/focus.hpp"
@@ -7,7 +8,9 @@
 #include "ui/kit/widgets.hpp"
 #include <cmath>
 #include <cstdio>
+#include <set>
 #include <stdexcept>
+#include <utility>
 
 using namespace nativetv;
 namespace {
@@ -89,6 +92,52 @@ void tokens() {
               sameColor(kit::color::focusFill, kit::rgb(0xF1EEF4)) &&
               sameColor(kit::alpha::outline, kit::rgb(0xF1EEF4, .12f)),
           "Colour tokens come from tokens.json");
+    // Themes: the names the screens read follow the palette in use, and the look values with it.
+    check(std::string(kit::themeId()) == "n-google-tv" && kit::look::pictures && !kit::look::ringFocus &&
+              kit::look::wall == 1 && kit::look::restBrightness == 1 && kit::look::discover &&
+              kit::look::homeTop == kit::layout::rowsTop,
+          "The default theme is n-google-tv, with its pictures, wash and filled pill");
+    check(kit::useTheme("n-oled-care") && std::string(kit::themeId()) == "n-oled-care" &&
+              sameColor(kit::color::ink, kit::rgb(0x000000)) &&
+              sameColor(kit::color::accent, kit::rgb(0x27B45E)) &&
+              sameColor(kit::alpha::outline, kit::rgb(0xD9D9D9, 0)) && !kit::look::pictures &&
+              kit::look::ringFocus && kit::look::wall == 0 && near(kit::look::restBrightness, .62f, 1e-6f) &&
+              !kit::look::discover && kit::look::homeTop == 196,
+          "n-oled-care is black, green, outline-free, with no pictures and a ring for focus");
+    check(!kit::useTheme("n-nope") && !kit::useTheme("") &&
+              std::string(kit::themeId()) == "n-oled-care",
+          "An unknown theme changes nothing");
+    check(kit::useTheme("n-google-tv") && sameColor(kit::color::ink, kit::rgb(0x0C0B0E)) &&
+              kit::look::pictures,
+          "A theme can be switched back");
+    {
+        bool same = kit::themeCount == kThemeChoiceCount;
+        for (int i = 0; same && i < kit::themeCount; ++i)
+            same = std::string(kit::themes[i].id) == kThemeChoices[i].id &&
+                   std::string(kit::themes[i].name) == kThemeChoices[i].name;
+        check(same && std::string(kThemeChoices[0].id) == kDefaultTheme,
+              "The server's theme list and the client's palettes name the same themes");
+    }
+    // The drift: whole pixels inside the radii, never more than 3 px between two minutes, and an
+    // orbit that does not close within a day. No radii, no drift.
+    {
+        bool whole = true, inside = true, slow = true, still = true;
+        std::set<std::pair<int, int>> positions;
+        kit::geometry::Drift before = kit::geometry::driftAt(0, 8, 6);
+        for (int minute = 0; minute < 1440; ++minute) {
+            const kit::geometry::Drift now = kit::geometry::driftAt(minute, 8, 6);
+            whole = whole && now.x == std::round(now.x) && now.y == std::round(now.y);
+            inside = inside && std::fabs(now.x) <= 8 && std::fabs(now.y) <= 6;
+            slow = slow && std::fabs(now.x - before.x) <= 3 && std::fabs(now.y - before.y) <= 3;
+            positions.insert({static_cast<int>(now.x), static_cast<int>(now.y)});
+            still = still && kit::geometry::driftAt(minute, 0, 0).x == 0 &&
+                    kit::geometry::driftAt(minute, 0, 0).y == 0;
+            before = now;
+        }
+        check(whole && inside && slow, "The drift moves in whole pixels, within its radii, at most 3 px a minute");
+        check(positions.size() >= 90, "The drift visits at least 90 different positions in a day");
+        check(still, "A theme without drift radii does not drift");
+    }
     check(kit::type::display.px == 72 && kit::type::display.line == 88 &&
               kit::type::display.weight == 400 && near(kit::type::display.tracking, -.01f, 1e-6f) &&
               kit::type::key.px == 32,
@@ -460,22 +509,19 @@ void barAndHero() {
           "The top bar offers the avatar, each tab and the settings button");
     const Node *pill = &bar.scene.nodes[0];
     check(sameRect(pill->rect, {tabs[0].x, 60, tabs[0].w, 72}) && pill->radius == 36 &&
-              sameColor(pill->color, kit::color::pillRest),
-          "The pill rests on the selected tab in the opaque rest colour");
+              sameColor(pill->color, kit::color::focusFill),
+          "The pill is the light focus fill on the selected tab");
     check(textAt(bar.scene, "10:11") &&
               sameRect(textAt(bar.scene, "10:11")->rect, kit::metrics::home::clock) &&
               textAt(bar.scene, "10:11")->align == Node::Align::Right &&
-              sameColor(textAt(bar.scene, "Home")->color, kit::color::onSurface) &&
+              textAt(bar.scene, "Native Tv") &&
+              sameRect(textAt(bar.scene, "Native Tv")->rect, kit::metrics::home::brand) &&
+              sameColor(textAt(bar.scene, "Home")->color, kit::color::onFocus) &&
               sameColor(textAt(bar.scene, "Apps")->color, kit::color::onSurface2),
-          "The clock is right-aligned at 1840; the selected tab reads brighter");
+          "The clock is right-aligned before the brand name at the margin; the selected tab reads dark on the pill");
     Fixture hot;
-    top.pillHot = 1;
     top.avatarFocus = 1;
     kit::topBar(hot.paint(), top);
-    check(sameColor(hot.scene.nodes[0].color, kit::color::focusFill) &&
-              sameColor(textAt(hot.scene, "Home")->color, kit::color::onFocus) &&
-              sameColor(textAt(hot.scene, "Apps")->color, kit::color::onSurface2),
-          "With focus on the bar the pill turns light and the selected tab dark");
     check(near(hot.scene.nodes[1].group.sx, 1.12f, 1e-5f), "A focused round button grows 12%");
     Fixture gone;
     top.pillAlpha = 0;
