@@ -446,7 +446,8 @@ class QuickScreen final : public ScreenView {
         if (row.id == "appShape") {
             const std::string shape = host.optimistic().text("layout.appShape",
                 host.view().catalogue["layout"]["appShape"].string("round"));
-            return shape == "square" ? msg("launcher.shape.square", "Square")
+            return shape == "squircle" ? msg("launcher.shape.squircle", "Squircle")
+                 : shape == "square" ? msg("launcher.shape.square", "Rounded square")
                  : shape == "rectangle" ? msg("launcher.shape.rectangle", "Rectangle")
                                         : msg("launcher.shape.round", "Round");
         }
@@ -886,7 +887,7 @@ class QuickScreen final : public ScreenView {
             const std::string before = host.view().catalogue["layout"]["appShape"].string("round");
             const std::string shown = host.optimistic().text("layout.appShape", before);
             host.optimistic().set("layout.appShape",
-                Json::text(shown == "round" ? "square" : shown == "square" ? "rectangle" : "round"),
+                Json::text(shown == "round" ? "square" : shown == "square" ? "squircle" : shown == "squircle" ? "rectangle" : "round"),
                 Json::text(before), layoutWrite("appShape"));
             host.invalidate();
             return;

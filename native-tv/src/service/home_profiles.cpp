@@ -342,7 +342,7 @@ Json normalizeHomeDocument(const Json &raw) {
     result.set("picture", Json::flag(raw["picture"].boolean()));
     result.set("appNames", Json::flag(!raw["appNames"].valid() || raw["appNames"].boolean(true)));
     const std::string shape = raw["appShape"].string();
-    result.set("appShape", Json::text(shape == "square" || shape == "rectangle" ? shape : "round"));
+    result.set("appShape", Json::text(shape == "square" || shape == "squircle" || shape == "rectangle" ? shape : "round"));
     result.set("clockFormat", Json::text(raw["clockFormat"].string() == "12h" ? "12h" : "24h"));
     const std::string language = raw["language"].string();
     result.set("language", Json::text(language == "en" || language == "pt-BR" ? language : "auto"));
@@ -478,7 +478,7 @@ HomeDocumentUpdate updateHomeLayout(const Json &input, const Json &body) {
         body["clockFormat"].string() == "24h" ? body["clockFormat"].string()
                                                : current["clockFormat"].string()));
     if (body.has("appShape") && (!body["appShape"].isString() ||
-        (body["appShape"].string() != "round" && body["appShape"].string() != "square" &&
+        (body["appShape"].string() != "round" && body["appShape"].string() != "square" && body["appShape"].string() != "squircle" &&
          body["appShape"].string() != "rectangle"))) {
         update.response = errorResponse("unsupported app shape");
         return update;

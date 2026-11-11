@@ -225,6 +225,7 @@ void rows(kit::Paint paint, const Frame &frame, float top = 0) {
                 kit::AppCircle circle;
                 circle.rest = rest;
                 circle.round = row.appShape == "round";
+                circle.squircle = row.appShape == "squircle";
                 circle.id = id;
                 circle.name = namedApps ? card.title : "";
                 circle.icon = card.id == "lg-home" ? "home" : "apps";

@@ -49,7 +49,7 @@ downloads; the app uses the committed pack offline.
 
 ## Tile shapes and wide artwork
 
-Quick settings → Home settings → App tile shape cycles Round, Square and Rectangle.
+Quick settings → Home settings → App tile shape cycles Round, Rounded square, Squircle and Rectangle.
 Round remains the default; the choice is stored in the active profile's layout.
 Square tiles have rounded corners. Rectangles use a 16:9 frame and retain the
 same height, with row spacing, scrolling and pointer targets using the wider size.
@@ -69,3 +69,10 @@ The best source for the remaining commercial banners is their original Android
 TV package resource or a publisher-provided banner. We do not substitute fan-made
 art or label mobile store feature graphics as TV launcher banners. No Google TV
 device was available to verify the banners against its installed app versions.
+
+Squircle uses a continuous exponent-4 superellipse for its background, artwork
+mask and focus ring. Rounded square keeps the standard circular corner arcs.
+Existing saved `square` preferences remain rounded squares; `squircle` is a
+separate per-profile value. The renderer reuses its existing vertex layout and
+render passes, with a flat interior and the curve evaluated around the edge.
+TV GPU timing remains to be measured.

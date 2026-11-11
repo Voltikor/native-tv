@@ -5262,11 +5262,15 @@
     "text": "Redondo"
   },
   "launcher.shape.square": {
-    "from": "Square",
-    "text": "Quadrado"
+    "from": "Rounded square",
+    "text": "Quadrado arredondado"
   },
   "launcher.shape.rectangle": {
     "from": "Rectangle",
     "text": "Retangular"
+  },
+  "launcher.shape.squircle": {
+    "from": "Squircle",
+    "text": "Squircle"
   }
 }

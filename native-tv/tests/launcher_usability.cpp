@@ -9,11 +9,17 @@ std::string apps() {
 }
 
 void shapeChecks() {
-    for (const char *shape : {"round", "square", "rectangle"}) {
+    for (const char *shape : {"round", "square", "squircle", "rectangle"}) {
         Json catalogue = Json::parse(apps());
         catalogue["layout"].set("appShape", Json::text(shape));
         CardRow row = appsRow(catalogue, Json::object(), false);
         check(row.appShape == shape, "The saved app shape reaches Home's row model");
+        World world(catalogue.dump().c_str());
+        world.settle(600);
+        size_t curved = 0;
+        for (const Node &node : world.app.scene().nodes) if (node.squircle) ++curved;
+        check((curved > 0) == (std::string(shape) == "squircle"),
+              "Only Squircle selects the continuous curve on the actual scene nodes");
         const Rect first = home::item(row, 0, 0, true), second = home::item(row, 0, 1, true);
         const bool wide = std::string(shape) == "rectangle";
         check(std::fabs(first.w / first.h - (wide ? 16.f / 9 : 1.f)) < .001f,

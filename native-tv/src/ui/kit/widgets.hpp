@@ -156,6 +156,7 @@ void card(Paint paint, const PosterCard &card);
 
 struct AppCircle {
     bool round = true;
+    bool squircle = false;
     Rect rest;
     std::string id, name;
     std::string icon;  // glyph on the circle

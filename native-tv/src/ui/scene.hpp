@@ -144,6 +144,7 @@ struct Node {
     // Application::resolvePictures hides it once an opaque picture is on show, where it would
     // only tint the picture's edge and its fade.
     bool backing = false;
+    bool squircle = false; // exponent-4 superellipse, shared by fill, image mask and ring
     // SCENE-V2
     Corners corners;            // overrides `radius` when any corner is set
     Gradient gradient;

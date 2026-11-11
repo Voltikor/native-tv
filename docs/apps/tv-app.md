@@ -165,6 +165,13 @@ The app can be added or removed at any time:
 ### App tile shape
 
 Open **Quick settings → Home settings → App tile shape** and press OK to cycle
-**Round**, **Square** and **Rectangle**. The choice belongs to the active profile;
+**Round**, **Rounded square**, **Squircle** and **Rectangle**. The choice belongs to the active profile;
 Round is the default. Rectangle uses 16:9 artwork where available, and otherwise
 centers the complete square icon without stretching or cropping it.
+
+Squircle uses a continuous exponent-4 superellipse for its background, artwork
+mask and focus ring. Rounded square keeps the standard circular corner arcs.
+Existing saved `square` preferences remain rounded squares; `squircle` is a
+separate per-profile value. The renderer reuses its existing vertex layout and
+render passes, with a flat interior and the curve evaluated around the edge.
+TV GPU timing remains to be measured.
