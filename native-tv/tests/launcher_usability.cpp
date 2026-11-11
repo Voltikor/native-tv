@@ -179,6 +179,32 @@ void scrollingBarChecks() {
               "Returning to the navigation row brings it back into view");
     }
 }
+
+void homeResumeChecks() {
+    for (const char *target : {"tab:0", "tab:1", "tool:1", "tool:2", "tool:0"}) {
+        World world;
+        check(world.app.activate(target), "The starting page is reachable");
+        world.settle(900);
+        const std::string before = world.screen();
+        const double nav = world.snapshot()["nav"].number();
+        world.app.active(true);
+        check(world.screen() == before && world.snapshot()["nav"].number() == nav,
+              "An already-active notification keeps the current page");
+        world.app.active(false);
+        world.app.active(true);
+        check(std::fabs(world.motion("pgx")) < .001 &&
+                  std::fabs(world.motion("ER:0")) < .001,
+              "Home returns without blanking the page or restarting its entrance animation");
+        world.settle(900);
+        check(world.screen() == "home" && world.snapshot()["tab"].string() == "home" &&
+                  world.snapshot()["navigation"].boolean() && world.snapshot()["nav"].number() == 0 &&
+                  std::fabs(world.motion("sy")) < .5,
+              "Returning through Home selects Inicio and brings its navigation into view");
+        world.press(Key::Down, 900);
+        check(world.snapshot()["tab"].string() == "home",
+              "The next input stays on Inicio after Home resumes the app");
+    }
+}
 }
 
 int main() {
@@ -189,6 +215,7 @@ int main() {
         barBackChecks();
         tabBackChecks();
         scrollingBarChecks();
+        homeResumeChecks();
         carriedAppChecks();
         std::printf("%d launcher usability checks passed\n", checkCount());
         return 0;
