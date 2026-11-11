@@ -36,11 +36,11 @@ jobs:
       # Here only: the daemon and its tests need none of it. The runner's own
       # Chrome is used, so no browser is downloaded.
       - name: Build the daemon with its fake luna-send
+        timeout-minutes: 15
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends cmake ninja-build g++ pkg-config libjson-c-dev libcurl4-openssl-dev
+          bash scripts/ci-install-deps.sh cmake ninja-build g++ pkg-config libjson-c-dev libcurl4-openssl-dev
           python3 native-tv/build.py --service-only
-      - run: npm install --no-save playwright-core
+      - run: timeout 180s npm install --no-save playwright-core --fetch-retries=1 --fetch-timeout=30000
       - run: node scripts/check-dashboards.js
         env:
           BROWSER_CHANNEL: chrome

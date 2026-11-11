@@ -2,17 +2,39 @@
 # cross-compiled with the webOSbrew SDK, whose only Linux build is arm64, so
 # the job that uses this runs on an Arm runner.
 name: Build the Homebrew Channel package
+description: Build the ARM runtime and package it for the Homebrew Channel
 runs:
   using: composite
   steps:
+    - name: Install build dependencies
+      shell: bash
+      run: timeout 480s bash scripts/ci-install-deps.sh ccache cmake ninja-build pkg-config
+    - name: Cache the pinned SDK archive
+      uses: actions/cache@v6
+      with:
+        path: ${{ runner.temp }}/webos-sdk.tar.bz2
+        key: webos-sdk-${{ runner.os }}-${{ runner.arch }}-d7ed7ee.6
+    - name: Cache cross-compiler output
+      uses: actions/cache@v6
+      with:
+        path: .ccache-webos
+        key: ccache-webos-${{ runner.os }}-${{ runner.arch }}-d7ed7ee.6-${{ github.sha }}
+        restore-keys: ccache-webos-${{ runner.os }}-${{ runner.arch }}-d7ed7ee.6-
     # Pinned, so a new SDK cannot change a build or the glibc symbols it needs.
     - name: install the webOSbrew SDK
       shell: bash
       run: |
-        sudo apt-get update
-        sudo apt-get install -y --no-install-recommends cmake ninja-build pkg-config
-        curl -fsSL https://github.com/webosbrew/native-toolchain/releases/download/webos-d7ed7ee.6/arm-webos-linux-gnueabi_sdk-buildroot_linux-aarch64.tar.bz2 | tar -xj -C "$RUNNER_TEMP"
+        if [ ! -s "$RUNNER_TEMP/webos-sdk.tar.bz2" ]; then
+          curl -fSL --connect-timeout 10 --max-time 180 --retry 1 --retry-all-errors --retry-max-time 200 \
+            https://github.com/webosbrew/native-toolchain/releases/download/webos-d7ed7ee.6/arm-webos-linux-gnueabi_sdk-buildroot_linux-aarch64.tar.bz2 \
+            -o "$RUNNER_TEMP/webos-sdk.tar.bz2.part"
+          mv "$RUNNER_TEMP/webos-sdk.tar.bz2.part" "$RUNNER_TEMP/webos-sdk.tar.bz2"
+        fi
+        tar -xjf "$RUNNER_TEMP/webos-sdk.tar.bz2" -C "$RUNNER_TEMP"
         "$RUNNER_TEMP/arm-webos-linux-gnueabi_sdk-buildroot/relocate-sdk.sh"
+        echo "CCACHE_DIR=$GITHUB_WORKSPACE/.ccache-webos" >> "$GITHUB_ENV"
+        echo "CCACHE_MAXSIZE=500M" >> "$GITHUB_ENV"
+        echo "CCACHE_COMPILERCHECK=content" >> "$GITHUB_ENV"
 
     - name: build the ARM runtime and the TV client
       shell: bash
@@ -24,4 +46,4 @@ runs:
     # run where the SDK was installed.
     - name: package
       shell: bash
-      run: npm install -g @webos-tools/cli@3.2.6 && python3 scripts/build-ipk.py
+      run: timeout 180s npm install -g @webos-tools/cli@3.2.6 --fetch-retries=1 --fetch-timeout=30000 && python3 scripts/build-ipk.py

@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Dependency installer fallback checks (offline)
+        run: python3 scripts/test-ci-install-deps.py
+
       - name: dashboard reaches for no missing element
         run: ./scripts/check-ui-ids.py
 
@@ -38,7 +41,7 @@ jobs:
 
       # Preinstalled on ubuntu-latest.
       - name: shell scripts
-        run: shellcheck native-tv/lifecycle/deploy.sh native-tv/lifecycle/tvwebctl native-tv/lifecycle/50-tvweb.sh hbc/install.sh scripts/tvstats.sh
+        run: shellcheck native-tv/lifecycle/deploy.sh native-tv/lifecycle/tvwebctl native-tv/lifecycle/50-tvweb.sh hbc/install.sh scripts/tvstats.sh scripts/ci-install-deps.sh
 
       - name: entity templates resolve against fixture
         run: ./scripts/check-entities.py --stats native-tv/tests/fixtures/tv/stats-b8-webos4.json
