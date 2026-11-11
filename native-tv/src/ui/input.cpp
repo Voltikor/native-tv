@@ -206,6 +206,11 @@ void Application::click(float x, float y) {
                 if (state_.home.editing)
                     homeEditDone(true);
             } else if (type == "card") {
+                if (state_.home.arranging && (state_.home.carrying || state_.home.carryingKind)) {
+                    // A click puts down the carried item; it must not select a different app first.
+                    key(Key::Ok);
+                    return;
+                }
                 state_.home.navigation = false;
                 state_.home.row = index;
                 state_.home.column =

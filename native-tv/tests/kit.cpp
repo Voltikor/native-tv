@@ -516,11 +516,10 @@ void barAndHero() {
     check(textAt(bar.scene, "10:11") &&
               sameRect(textAt(bar.scene, "10:11")->rect, kit::metrics::home::clock) &&
               textAt(bar.scene, "10:11")->align == Node::Align::Right &&
-              textAt(bar.scene, "Native Tv") &&
-              sameRect(textAt(bar.scene, "Native Tv")->rect, kit::metrics::home::brand) &&
+              !textAt(bar.scene, "Native Tv") &&
               sameColor(textAt(bar.scene, "Home")->color, kit::color::onFocus) &&
               sameColor(textAt(bar.scene, "Apps")->color, kit::color::onSurface2),
-          "The clock is right-aligned before the brand name at the margin; the selected tab reads dark on the pill");
+          "The clock uses the right margin without branding; the selected tab reads dark on the pill");
     Fixture hot;
     top.avatarFocus = 1;
     kit::topBar(hot.paint(), top);

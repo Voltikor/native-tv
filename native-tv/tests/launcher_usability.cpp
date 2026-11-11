@@ -76,6 +76,8 @@ void carriedAppChecks() {
     world.reply("catalogue", apps());
     check(world.snapshot()["arranging"].boolean() && world.snapshot()["focusCard"].string() == "a",
           "A refresh preserves the app being carried");
+    world.app.activate("card:0:0");
+    check(world.snapshot()["focusCard"].string() == "a", "A pointer click puts the app down without selecting its neighbour");
 }
 }
 
