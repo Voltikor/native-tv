@@ -1,0 +1,569 @@
+{
+  "retrieved": "2026-11-11",
+  "description": "Official developer-published Google Play artwork. TV-specific listings are preferred; shared/standard Android listings are used when no separate TV listing is available. Exact on-device adaptive composition has not been verified.",
+  "apps": {
+    "applemusic": {
+      "package": "com.apple.android.music",
+      "title": "Apple Music - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.apple.android.music&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/KvngbEdIpmKyn-6C1pKfZBBs_3mwS1lUfvZf6LxOg2p4ZLqAdKy9WTGSUIUR5DT4LdMkdwvqzng2rxNpLa5c=s0-br30",
+      "file": "official/applemusic.png",
+      "sha256": "967a55bdeba6dd995c41d672a0a968c37ff9aa2340b2655c9a9a8ffc70faf81d",
+      "keys": [
+        "applemusic",
+        "com.apple.android.music"
+      ],
+      "publisher": "Apple"
+    },
+    "appletv": {
+      "package": "com.apple.atve.androidtv.appletv",
+      "title": "Apple TV: Shows, Movies & More - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.apple.atve.androidtv.appletv&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/T5tmhzEpX3GPMVcQpOsSLuOz3WRjOdmvJaZ5Rs-6jDZKBGv5qGWdqfTK3Pvz9YZXUmLpBbhUzt2XBvBrnekuDw=s0-br30",
+      "file": "official/appletv.png",
+      "sha256": "c0cf06496ca59f51db7fc439de3724b5967a1eb332b093184582084099b7fa31",
+      "keys": [
+        "appletv",
+        "appletvplus",
+        "com.apple.atve.androidtv.appletv"
+      ],
+      "publisher": "Apple"
+    },
+    "bandplay": {
+      "package": "br.com.band.guiatv",
+      "title": "Bandplay: Band, filmes e mais - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=br.com.band.guiatv&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/t5uiZynZxH4EagTMAaUUWLe_EwizhIR3blMkBm2KENwuKbqEhdq5zK01YJNOa9UsOY8Hsc-4kh2bfkv_JxxeOCA=s0-br30",
+      "file": "official/bandplay.png",
+      "sha256": "cfd9e568c9f5a3f7f04f89278d03162de4ec7851a59d838ab71588776d702df2",
+      "keys": [
+        "bandplay",
+        "br.com.band.guiatv"
+      ],
+      "publisher": "Band apps"
+    },
+    "clarotvplus": {
+      "package": "br.com.claro.now.smarttvclient",
+      "title": "Claro tv+ - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=br.com.claro.now.smarttvclient&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/loAZtQbpVckTFpscsanyKh976w_kC-xef1J7EaebfMD9W5MV3g5GLBYuW_nWhAs0nKjoIoM1Ya5zb4wLs4vfig=s0-br30",
+      "file": "official/clarotvplus.png",
+      "sha256": "bf247f54858ba5871b9bff2d07d01d21e4d990627a341112687a283f1e52b1d4",
+      "keys": [
+        "br.com.claro.now.smarttvclient",
+        "br.com.netcombo.now",
+        "clarotvmais",
+        "clarotvplus",
+        "now"
+      ],
+      "publisher": "Claro Brasil"
+    },
+    "crunchyroll": {
+      "package": "com.crunchyroll.crunchyroid",
+      "title": "Crunchyroll: Anime Streaming - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.crunchyroll.crunchyroid&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/FUEOotGzxEZqItvGGov0YBiOhZBCACxCM6kF37OtpWrCG9H6EyxSeY2G8PDXQGueLxlxtL3Xr0fbkvXaQ67NLg=s0-br30",
+      "file": "official/crunchyroll.png",
+      "sha256": "c359a643be96cbc3b527fa33b55acd4c82f8eced67879e2a2a8b95780634d76e",
+      "keys": [
+        "com.crunchyroll.crunchyroid",
+        "com.crunchyroll.stream.app",
+        "com.crunchyroll.webos",
+        "crunchyroll"
+      ],
+      "publisher": "Crunchyroll, LLC"
+    },
+    "dazn": {
+      "package": "com.dazn",
+      "title": "DAZN - Watch Live Sports - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.dazn&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/2m6bTc0_zIgzimPNQo_ZfZkhGHEjBXJIPbIs3_wliCXm4VTNkLW31yMMUqmB7Vpn51Fed62sUv91YtC1kRcZAQ=s0-br30",
+      "file": "official/dazn.png",
+      "sha256": "c57237bc9a8af477eec4146657d56c470fca340a40cbb718b3fca2b1d072a227",
+      "keys": [
+        "com.dazn",
+        "dazn"
+      ],
+      "publisher": "DAZN"
+    },
+    "deezer": {
+      "package": "deezer.android.app",
+      "title": "Deezer: Music & Podcast Player - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=deezer.android.app&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/RFBXn4V0H8Zmi3_jViu73GTpQOmGmrvG7mdM1ynStAAYEd2aOLo5G0v9AHSUMwia1lQGI-c5oXMzZJCq0RMlJA=s0-br30",
+      "file": "official/deezer.png",
+      "sha256": "a620380c49b34426a144c353a5a169034bd83aaa371d74bb0e4744ba92c7b28e",
+      "keys": [
+        "deezer",
+        "deezer.android.app"
+      ],
+      "publisher": "Deezer Music"
+    },
+    "disney-plus": {
+      "package": "com.disney.disneyplus",
+      "title": "Disney+ - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.disney.disneyplus&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/AEX_3Bk5_SEZfR4fUcJsWiyqW_RRVcLED9AM2HMUVHAPVTZhZHfP2q3M35mRe4LtCXlb712DtkKwkZa_nJ-0=s0-br30",
+      "file": "official/disney-plus.png",
+      "sha256": "988ba94c5c4b8585dec8be2a78f134973eab8a2e153a621b9a4bebdcbad956cc",
+      "keys": [
+        "com.disney.disneyplus",
+        "disneyplus"
+      ],
+      "publisher": "Disney"
+    },
+    "emby": {
+      "package": "tv.emby.embyatv",
+      "title": "Emby for Android TV - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=tv.emby.embyatv&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/GPjxBzpqqRBIjqmoSFfgdc_kJX3xOfut4_9W3ZIH1nozQ8M2Eg1JJZNRrydPlWP0hLMdaf-t62WLWNxjBR0o=s0-br30",
+      "file": "official/emby.png",
+      "sha256": "fec88d4c43cd877ff67fb76e16ea0c3ab7d5bd7e24f125794de2fc09b4d1a73c",
+      "keys": [
+        "emby",
+        "tv.emby.embyatv"
+      ],
+      "publisher": "Emby Media"
+    },
+    "globoplay": {
+      "package": "com.globo.globotv",
+      "title": "Globoplay: Assistir Online - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.globo.globotv&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/oe0prB2LYO-ekBaN1ehPO808ASFoDnoOHmXpVKkrYYllc5Yfbkdcg9NgMEbYkDJ6OHVSa-m3a00DBa0YrvqxWQ=s0-br30",
+      "file": "official/globoplay.png",
+      "sha256": "c2bd89ed1d72529a5468d825c53aa29d579a3c6706ae102c4e6475b2a1bd972f",
+      "keys": [
+        "astronav",
+        "com.globo.globoplay",
+        "com.globo.globotv",
+        "globoplay",
+        "globoplayinternacional",
+        "globosatplay",
+        "globotv"
+      ],
+      "publisher": "Globo Comunicação e Participações S.A."
+    },
+    "hbomax": {
+      "package": "com.wbd.stream",
+      "title": "HBO Max: Stream TV & Movies - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.wbd.stream&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/wKJ5hN5CmSBWXPBVYYuRENzcEVb7FB6NyibjKqPT4SB0eoZ7Fww2jq-OhUDCxEPGALrSekQaazrHLSBwVb6T4A=s0-br30",
+      "file": "official/hbomax.png",
+      "sha256": "5a3daa49f8bb017fb2a9da3818e9823f640bfd3b077347aa533f90bcedc828cd",
+      "keys": [
+        "com.wbd.stream",
+        "hbo",
+        "hbogola",
+        "hbomax",
+        "max"
+      ],
+      "publisher": "WarnerMedia Global Digital Services, LLC"
+    },
+    "hulu": {
+      "package": "com.hulu.livingroomplus",
+      "title": "Hulu for Android TV - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.hulu.livingroomplus&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/x-b0Dt61tgA4qii40Nmj0QMabrv2LtmZcn51Yu866Cb4dAL98BuyOG7fYtPSoT302LKaBh7fnHdhCqFLc_pjvQ=s0-br30",
+      "file": "official/hulu.png",
+      "sha256": "443c5f529f99637c38298d8aec75509d3a9680822cc56efcd5e089edba31f2fb",
+      "keys": [
+        "com.hulu.livingroomplus",
+        "hulu"
+      ],
+      "publisher": "Disney"
+    },
+    "jellyfin": {
+      "package": "org.jellyfin.androidtv",
+      "title": "Jellyfin for Android TV - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=org.jellyfin.androidtv&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/XgiPOkdSUqB34EI3FFMSC67SCaJ3Dv5ePkBPoHnB9J-3gwpY2VvQv5dx2e7gDJ-Z12MGbBwaestu8coKYAM1ZqU=s0-br30",
+      "file": "official/jellyfin.png",
+      "sha256": "3e70d473b35f487d43f5e81134f29d3cd5945c7dcee01606c73ee18dc1f04a85",
+      "keys": [
+        "jellyfin",
+        "org.jellyfin.androidtv",
+        "org.jellyfin.webos"
+      ],
+      "publisher": "Jellyfin"
+    },
+    "kodi": {
+      "package": "org.xbmc.kodi",
+      "title": "Kodi - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=org.xbmc.kodi&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/-6H51wRiflGv_2wk-YIDtdzTV6t7ZqD9D4xLy7c3EDeaWWYoezZvPMkYNfCUuGU5Ae8XDOKQNfVkq-4t6tY0UA=s0-br30",
+      "file": "official/kodi.png",
+      "sha256": "c2ae6bbc083d41ae9bbe2f00b0388c59ac03815e82896bbe563b682305ca1857",
+      "keys": [
+        "kodi",
+        "org.xbmc.kodi"
+      ],
+      "publisher": "Kodi Foundation"
+    },
+    "looke": {
+      "package": "br.com.encripta.looke",
+      "title": "Looke - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=br.com.encripta.looke&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/L0OdrUKFoSwg2Y1vy281HUFE_nz4I1Lf4O6W25WViIvfOXBkVjOVcc1PxlE_Q9sEVTrXF78P30liJAqbWj_-XA=s0-br30",
+      "file": "official/looke.png",
+      "sha256": "d3056791e715091e98443af3e82bd4fe25a52b9fac9436f09b72c96370f2245c",
+      "keys": [
+        "br.com.encripta.looke",
+        "looke"
+      ],
+      "publisher": "LOOKE"
+    },
+    "mubi": {
+      "package": "com.mubi",
+      "title": "MUBI: Curated Cinema - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.mubi&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/f7UN9R1kr-o-rTI1-TQqTGfRTho4L0vpzchlCNtx6czDYF6xfD7GeYR0hU5eh-Kt56prlw6tHOKQUcb9-FPC21I=s0-br30",
+      "file": "official/mubi.png",
+      "sha256": "fee6642a56d8997c8da570583c149b7cc50d1db0d234b5f5b887418b36c19a88",
+      "keys": [
+        "com.mubi",
+        "mubi"
+      ],
+      "publisher": "MUBI"
+    },
+    "netflix": {
+      "package": "com.netflix.ninja",
+      "title": "Netflix - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.netflix.ninja&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/ndMigyoaH5k4aZ5GyIHj5ZNXEJQ_YTkcCByrX-m-IZE1xGJYfQZ9Hr3u1rFDK3EByo4VcDtBohg0Aqp3d3SW0Jo=s0-br30",
+      "file": "official/netflix.png",
+      "sha256": "c0c232de4448a59e12e7cad3c901794bae62978af85cceb58ea2473c96a7005d",
+      "keys": [
+        "com.netflix.ninja",
+        "netflix"
+      ],
+      "publisher": "Netflix, Inc."
+    },
+    "paramountplus": {
+      "package": "com.cbs.ott",
+      "title": "Paramount+ - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.cbs.ott&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/O5QHZxy2pkxwHrjU3Omd_1jdIYk_pZQexy2VVEDBDhaXgNhvZV7wjhfN_0kLUrQfCKFsaGbQbVm8usyrc-yBGhI=s0-br30",
+      "file": "official/paramountplus.png",
+      "sha256": "91388de4722bc30e37a3ea7a531ca23c1a959207e3d9242b442e2d04b925b997",
+      "keys": [
+        "com.cbs.ott",
+        "paramountplus"
+      ],
+      "publisher": "CBS Interactive, Inc."
+    },
+    "peacock": {
+      "package": "com.peacocktv.peacockandroid",
+      "title": "Peacock TV: Stream TV & Movies - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.peacocktv.peacockandroid&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/FdlQY6tEE0p3FsJT9EbxB0BzKdXB1U84nNzAUl_YCC9HxRO1J82i8-XWuN_BD1zReblXht3-cvUreuogHrPk-A=s0-br30",
+      "file": "official/peacock.png",
+      "sha256": "71884888501e2fe3bc561586a94be8fa07202204220a7dea512dedf0ebcf7579",
+      "keys": [
+        "com.peacock.tv",
+        "com.peacocktv.peacockandroid",
+        "peacock"
+      ],
+      "publisher": "Peacock TV LLC"
+    },
+    "playplus": {
+      "package": "com.mobilus.recordplay.tv",
+      "title": "RecordPlus - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.mobilus.recordplay.tv&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/_MIKnTLDj_gSkwkUfsYZynnQVzBC66SzLhHHxFNOmFRg6jfgV05v4e46sio8d8c8uh7NIjG2SmgAvWCES9AG2g=s0-br30",
+      "file": "official/playplus.png",
+      "sha256": "2e8f3ec5749a4a3718de31d27246e1e6aec419218a365d73703a6deec82f6ac2",
+      "source_sha256": "fb8fe2d56a2cef357cb2d1175175f816c730f7bcacbab60200fa82ae9de5f126",
+      "conversion": "JPEG decoded to PNG; pixels unchanged",
+      "keys": [
+        "com.mobilus.recordplay",
+        "com.mobilus.recordplay.tv",
+        "playplus",
+        "recordplus"
+      ],
+      "publisher": "Rádio e Televisão Record S.A."
+    },
+    "plex": {
+      "package": "com.plexapp.android",
+      "title": "Plex: Find Movies & TV Shows - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.plexapp.android&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/0-rSvTIYVEveysANiSS5FITkkD-kpe6TG91nJRy7ht2J0BHlPWXiGaMcDRYUOwTVuZsE4-HyI-qSL0KkNEvQ=s0-br30",
+      "file": "official/plex.png",
+      "sha256": "8572305cffbc2cdd96aed4ff08891af7987b20e5e045fde922b8942ed791e30b",
+      "keys": [
+        "com.plexapp.android",
+        "plex"
+      ],
+      "publisher": "Plex, Inc."
+    },
+    "plutotv": {
+      "package": "tv.pluto.android",
+      "title": "Pluto TV: Watch Free Movies/TV - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=tv.pluto.android&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/O6MtMEvYNmr-I_cntqWT2Lq8L5Y5bG01V5udGLT8-8LcpNzeeOCDjgaX-mQEushfwrLjT74nVJMlmSgeIxtP=s0-br30",
+      "file": "official/plutotv.png",
+      "sha256": "665ef52dcf36d26cae639edff66facb5bb710d2b10959f5f0aa98bd390b16ab2",
+      "keys": [
+        "plutotv",
+        "plutotvgratuita",
+        "tv.pluto.android"
+      ],
+      "publisher": "Pluto, Inc."
+    },
+    "premiere": {
+      "package": "br.tv.horizonte.android.premierefc",
+      "title": "Premiere: Jogos ao vivo - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=br.tv.horizonte.android.premierefc&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/c8oUmNDOyl_DLj3DhoYOwZDLv9lBdW-apRzacrgFttoNi712E1DdpCxKh3pcl6GoAutW6qSWAhF-FaSSFmOoRA=s0-br30",
+      "file": "official/premiere.png",
+      "sha256": "5d88c5e6d54b806bbe69b0090ea351f8c2f316e39eae2eea705dcf6d71f976a5",
+      "keys": [
+        "br.tv.horizonte.android.premierefc",
+        "premiere",
+        "premiereplay"
+      ],
+      "publisher": "Globo Comunicação e Participações S.A."
+    },
+    "prime-video-alt": {
+      "package": "com.amazon.amazonvideo.livingroom",
+      "title": "Prime Video - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.amazon.amazonvideo.livingroom&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/qyXqjzPggunbifX0ODhCehdy4ei0F90u0N3f4pPk8NhgCZD75dH8bdQYPROGRVlTVOs8B8JAT58X6ImMZv5ugHg=s0-br30",
+      "file": "official/prime-video-alt.png",
+      "sha256": "134a477a21e807e6efe7c2aa4d5ee745e5dbc2d5960a122d55f31d937577f80f",
+      "keys": [
+        "amazon",
+        "amazonprimevideo",
+        "com.amazon.amazonvideo.livingroom",
+        "primevideo",
+        "primevideoalt"
+      ],
+      "publisher": "Amazon Mobile LLC"
+    },
+    "sbtplus": {
+      "package": "br.com.sbt.mais",
+      "title": "+SBT - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=br.com.sbt.mais&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/Q2Vy3erzYouCyeLwsKkTZjipVkJaw3in_aMbCved0S3bJW5pRgWuvyW0XYEqmwf5AGAvr7__rJA8Fcn-48rE=s0-br30",
+      "file": "official/sbtplus.png",
+      "sha256": "9e890510c949964e049d6304998458675df72492a87db0a6aab011417ec57ab5",
+      "keys": [
+        "br.com.sbt.mais",
+        "maissbt",
+        "plussbt",
+        "sbtplus",
+        "sbtvideos"
+      ],
+      "publisher": "TV SBT Canal 4 de São Paulo S/A"
+    },
+    "skyplus": {
+      "package": "com.directv.dtvlatam",
+      "title": "DGO - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.directv.dtvlatam&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/gcQqB2y7aR3frGuFW5baCKr9KpVMj2Yca8eFSwO-HzghaxTZOsncLwGAd1wzRO7QwGGHnZFZKUJRmhhyzGCJ174=s0-br30",
+      "file": "official/skyplus.png",
+      "sha256": "1a7cae303cea176b2987ad419391d1dcbb039293db1916cd7cbd64b92714f7e5",
+      "keys": [
+        "com.directv.dtvlatam",
+        "dgo",
+        "directvgo",
+        "skyplus"
+      ],
+      "publisher": "VRIO CORP."
+    },
+    "soundcloud": {
+      "package": "com.soundcloud.android",
+      "title": "SoundCloud: Discover Music - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.soundcloud.android&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/rfmCNUApzYntPTdAVmor5vpaOGxIUJWNlpED2pwKcDuCTUaf_2vJlOALNzX1PiejSgZIuAT8k0F5xIBU58JG3g=s0-br30",
+      "file": "official/soundcloud.png",
+      "sha256": "ad7f1d8d42133da2df2421f00d7676d60a5531ef1738d5a759df918762b77518",
+      "keys": [
+        "com.soundcloud.android",
+        "soundcloud"
+      ],
+      "publisher": "SoundCloud"
+    },
+    "spotify": {
+      "package": "com.spotify.tv.android",
+      "title": "Spotify: Music & Podcasts - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.spotify.tv.android&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/7ghCqs4kKYrQpTECddnejlSeAXgpdiiKlIghuDR869MpF5msXdPsd3gqjC6lstD_NfJkmP0LAUJTty7UACcrLw=s0-br30",
+      "file": "official/spotify.png",
+      "sha256": "cb07fd18a80ed2df38dc2d357ef3f90a5af327a44fa296e31876a835a045fd25",
+      "keys": [
+        "com.spotify.tv.android",
+        "spotify"
+      ],
+      "publisher": "Spotify AB"
+    },
+    "stremio": {
+      "package": "com.stremio.one",
+      "title": "Stremio - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.stremio.one&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/OvTwEXzvUbeyfqdXd1vZiTfbBOTdMAA6EWw5TV00PiSirn7C1iz__HVD6PfXCHkN9quH_XdoPwCIT3GhB1Ukmw=s0-br30",
+      "file": "official/stremio.png",
+      "sha256": "1837acbf05c2613ae27bb76a375baef7d6cef05fc9cbf9373ea7556200400a61",
+      "keys": [
+        "com.stremio.one",
+        "stremio"
+      ],
+      "publisher": "Stremio"
+    },
+    "tidal": {
+      "package": "com.aspiro.tidal",
+      "title": "TIDAL Music: HiFi sound - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.aspiro.tidal&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/_ktGwooWwh0h_MCi0T2YmFQB-pj6o5AGFDvdI302bdnNWtcQniOHy3pf4WRVs6rzjMtdl01J7-Qfw88xtYrWn6w=s0-br30",
+      "file": "official/tidal.png",
+      "sha256": "51268c85629dc8e9de8bcce6b448616ebff3b8986d0255ad3bad4eded14f4aa6",
+      "source_sha256": "dce13a8ae219f5a88aa178a5310a8fc38302558ce479f462f3120a86c804708e",
+      "conversion": "JPEG decoded to PNG; pixels unchanged",
+      "keys": [
+        "com.aspiro.tidal",
+        "tidal"
+      ],
+      "publisher": "TIDAL"
+    },
+    "tiktok": {
+      "package": "com.zhiliaoapp.musically",
+      "title": "TikTok - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.zhiliaoapp.musically&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/2o7iuqPe-0msP3DvNhzoOgNo4eZ6GkL_RtGVeKyBn5UBQAW5cw-GW5V3wDOHB1yTQuqWzrFLFOv2u4_5ea1uhg=s0-br30",
+      "file": "official/tiktok.png",
+      "sha256": "1abb5e7f0be9f2d3d732d326b77ac11c28507b36089d9a5238e847bd6ae7dd6c",
+      "keys": [
+        "com.zhiliaoapp.musically",
+        "tiktok"
+      ],
+      "publisher": "TikTok Pte. Ltd."
+    },
+    "twitch": {
+      "package": "tv.twitch.android.app",
+      "title": "Twitch: Live Streaming - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=tv.twitch.android.app&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/JHCM4AIyomRp6Lo2-5ugoznlGdsZmNnejVN8DLvtWFHShcz8YRgUE170f1CyOfrleYbtFL2g8tQ3VqlQNAgqoA=s0-br30",
+      "file": "official/twitch.png",
+      "sha256": "21ca584f73f7a3f1f5858c13dd311049530b5a91b3362810f2586a17f3d3807f",
+      "keys": [
+        "tv.twitch.android.app",
+        "twitch"
+      ],
+      "publisher": "Twitch Interactive, Inc."
+    },
+    "viki": {
+      "package": "com.viki.android",
+      "title": "Viki: Asian Dramas & Movies - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.viki.android&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/UEsYcM2VWWJOW1GfrzMPVVReav7gf2TKQVYPr_H-rAKc8FPv0DrxVYGAk-4M3aQ_BXrwg0gRaoFK6dT_BOU_tQ=s0-br30",
+      "file": "official/viki.png",
+      "sha256": "11c8c3398cd8e24ceaad2e9f6d06064d140252b276601e8b3a0b22fee4ddb34e",
+      "keys": [
+        "com.viki.android",
+        "rakutenviki",
+        "viki"
+      ],
+      "publisher": "Viki, Inc"
+    },
+    "vix": {
+      "package": "com.univision.prendetv",
+      "title": "ViX: TV, Deportes y Noticias - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.univision.prendetv&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/633te87O6OwdbHCgPfkE1atdsYLHNDwL6jdgx5-pFPQ29gbfLxBXXaJ7Ejvl5ec4BlOC62l3MedNwJ7asrvdug=s0-br30",
+      "file": "official/vix.png",
+      "sha256": "5b5d0865a3b7661f2caa82f48b845b9b708f4c6cd0db34cafe5e33cf8b688c22",
+      "keys": [
+        "com.univision.prendetv",
+        "vix",
+        "vixplus"
+      ],
+      "publisher": "Univision Communications Inc."
+    },
+    "wetv": {
+      "package": "com.tencent.qqlivei18n",
+      "title": "WeTV: Asian & Local Drama - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.tencent.qqlivei18n&hl=en_US&gl=BR",
+      "url": "https://play-lh.googleusercontent.com/5JLdeSShdqWgjwNk1Abeof3jjlSQghP3BM_5W-y0WBMtMI0AZYe2GnXwKVFUWqdX2ZwlQ4LkRAnWbnRM7Dcg=s0-br30",
+      "file": "official/wetv.png",
+      "sha256": "2841196d47e614aa8b00c8695212537ce970d1bf1298075b77b441fb4c3fcc8e",
+      "keys": [
+        "com.tencent.qqlivei18n",
+        "wetv"
+      ],
+      "publisher": "Image Future"
+    },
+    "youtube": {
+      "package": "com.google.android.youtube.tv",
+      "title": "YouTube for Android TV - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.google.android.youtube.tv&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/OzCC2CEwKggMTTeFt_uAZ4Hp9W6b5_cGy29Pk36V-gAgh_w2ldR_2dVzo4B-7nClDUxo_mvkMG6LJ9o--ccvIw=s0-br30",
+      "file": "official/youtube.png",
+      "sha256": "901036e6e3cf16b7fce07658510b4c6c51c3f15a9b2ccf0b470e3e78adc29cfd",
+      "keys": [
+        "com.google.android.youtube.tv",
+        "youtube",
+        "youtube.leanback.v4"
+      ],
+      "publisher": "Google LLC"
+    },
+    "youtube-tv": {
+      "package": "com.google.android.youtube.tvunplugged",
+      "title": "YouTube TV: Live TV & more - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.google.android.youtube.tvunplugged&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/BdXa_K7GYXJwsbMbGBVCkGqE6K-2eM_jKEfUN37U0RKeOZV5NmYNYYiaHBHeABTlEHQgnhBzQP_nSoe9ofTy=s0-br30",
+      "file": "official/youtube-tv.png",
+      "sha256": "cf85617bb9599724e0a21824eec52a58e746e7185d871ebadcc0616b58a7df7c",
+      "keys": [
+        "com.google.android.youtube.tvunplugged",
+        "youtubetv"
+      ],
+      "publisher": "Google LLC"
+    },
+    "youtubekids": {
+      "package": "com.google.android.apps.youtube.kids",
+      "title": "YouTube Kids - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.google.android.apps.youtube.kids&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/XmNSJLiwxfeoGwofbTZ37le-jDNAdZmHbVo7un7y2g-d-A3iD0LKUm1FMAgdURw8PFEiFh4Vv14u7q_nvET-=s0-br30",
+      "file": "official/youtubekids.png",
+      "sha256": "582a910a8b97fe2d749d617fe25ac0085df387d6377cc7b874d788e4aeb63802",
+      "keys": [
+        "com.google.android.apps.youtube.kids",
+        "youtubekids"
+      ],
+      "publisher": "Google LLC"
+    },
+    "youtubemusic": {
+      "package": "com.google.android.apps.youtube.music",
+      "title": "YouTube Music - Apps on Google Play",
+      "listing": "https://play.google.com/store/apps/details?id=com.google.android.apps.youtube.music&hl=en_US&gl=US",
+      "url": "https://play-lh.googleusercontent.com/MyptZXmcCyF59phIWPsNCfHq6zSO_ojEdw_4rMYYWPOGdikSjqeOXcoszBZ053VYpINe5K7ZR9KV1nkFWgxdOw=s0-br30",
+      "file": "official/youtubemusic.png",
+      "sha256": "81dd788edf30212874858f10261bc859a803a7452a7b59618b51430dd84ca6cf",
+      "keys": [
+        "com.google.android.apps.youtube.music",
+        "youtubemusic"
+      ],
+      "publisher": "Google LLC"
+    }
+  },
+  "fallbacks": {
+    "com.animemania.app": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "com.beb.plxnative": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "com.biliwebos.app": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "com.breezyfin.app": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "com.cheerchen.decotv": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "com.ocenfin.app": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "com.webos.app.lgchannels": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "com.webos.app.lifeonscreen": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "com.webos.app.livetv": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "com.webos.app.mediadiscovery": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "com.webos.app.newandhot": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "com.webos.app.totalmusic": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "org.litefin.app": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "org.moonfin.webos": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "org.webosbrew.cccbib": "webOS-only app/client; retain its own artwork or the existing coloured fallback",
+    "telecine": "Standalone Telecine app retired; retain its own legacy artwork. Telecine viewing now uses Globoplay."
+  },
+  "fallbackSources": {
+    "telecine": "https://ajuda.globo/google/amp/globoplay/app/telecine/faq/assino-o-telecine-via-desktop-tv-como-faco-para-acessar-apos-a-mudanca.ghtml"
+  }
+}

@@ -281,30 +281,32 @@ letters and digits, `+` as `plus`), and serves the app's own icon only when the
 pack has neither. Every route that serves an icon goes through it: the
 dashboard, Native Tv Home and the shared `/icons/<appId>.png` addresses.
 
-The pack is built by `native-tv/tools/gen_app_icons.py` from
-`native-tv/design/app-icons.json`. Every icon sits on one dark rounded-square
-tile with the same size and padding, so the apps read as a set on the TV's dark
-UI. A brand's logo is drawn as its owner publishes it, in its own colours, and
-is never recoloured: Dashboard Icons (Apache-2.0, pinned commit) supplies it,
-and where the plain logo is dark (X, Apple TV, Prime Video, TikTok, Peacock,
-Tidal, SoundCloud) the file names the brand's own variant for dark surfaces
-(`name` in `brands`). LG's apps, whose glyphs come from `assets/icons/material/`,
-get the glyph in the kit's accent colour on the same tile. The tiles have
-square corners: the dashboard rounds them to 8 px at 38 px, and Native Tv Home
-to 10 px at 44 px.
+The pack is built by `native-tv/tools/gen_app_icons.py`. Official developer-published
+artwork pinned in `native-tv/design/app-icons/official.json` takes precedence for
+streaming services. Original square images are kept beside the manifest, which
+records their Google Play listings, exact image URLs, hashes and app aliases.
+TV-specific listings are preferred; shared or standard Android icons are used
+where a separate TV listing is unavailable. Each complete image is scaled to
+192 pixels without recolouring, cropping the logo or replacing its background.
+The launcher keeps its round tiles and focus effects.
+Transparent areas retain the existing TV app background.
 
-A logo drawn on a tile of its own takes a `mask` (`light` keeps its white marks,
-the brand's reversed logo), and a wordmark a larger `fill`, so it stays readable
-at 44 px. To cover another app, add its id or normalised title to `logos` (and
-its brand to `brands`, if new) or `glyphs`, run
-`uv run native-tv/tools/gen_app_icons.py` and commit the pack. Title keys catch
-store apps whose ids differ between regions; an id key is exact. The pack is
-about 340 KB and installs with the other assets (`deploy.sh` lists it).
+`native-tv/design/app-icons.json` retains the coloured fallback design: pinned
+Dashboard Icons brand logos and Material Design glyphs for LG's own apps, on
+category-coloured gradients. Apps with no official replacement keep that artwork;
+apps absent from both sets use their own installed icon. The official manifest
+accounts for every recognized video/music alias and documents webOS-only and
+retired-app exceptions. `python3 native-tv/tests/app_icon_artwork.py` checks the
+source hashes, pack bounds, aliases and streaming coverage offline.
 
-The themed icons are for the dashboard, Home Assistant and Home's round row. The
-Apps tab on the TV shows each app's own art instead (`/api/home/icon?id=...&own=1`
-skips the pack): a flat tile in the colour the app declares, the art large in the
-middle, so a brand's art is never redrawn.
+To update the pack, run `uv run native-tv/tools/gen_app_icons.py` and commit it
+with the changed sources and manifest. `--fallback-only --output /tmp/app-icons-coloured.pack`
+reproduces the complete coloured set separately. Title keys catch regional app
+ids; an id key is exact. The committed pack and publisher notice install with the
+other assets (`deploy.sh` lists them); no runtime artwork downloads are needed.
+An explicit `/api/home/icon?id=...&own=1` request still skips the pack and serves
+the installed app's own art. See `native-tv/design/app-icons/README.md` for the
+source and fallback policy.
 
 No set covers every app: Dashboard Icons lacks LG's apps and most regional
 broadcasters. LG's apps therefore get Material glyphs, and anything unmatched

@@ -1,0 +1,17 @@
+Official app artwork
+
+The app icon pack includes developer-published artwork copied from the apps'
+official Google Play listings. TV-specific listings are preferred; where a
+separate TV listing is unavailable, the publisher's shared or standard Android
+listing supplies the artwork. These are app publisher assets, not a Google icon
+library. Each image keeps its publisher's colours and background and is scaled
+as a complete square for the launcher.
+
+The artwork, logos and trademarks belong to their respective app publishers.
+They are used to identify the apps and are not covered by Native Tv's MIT
+licence or the fallback Dashboard Icons Apache-2.0 licence. No affiliation or
+endorsement is implied.
+
+The source listings, exact image URLs, retrieval date, file hashes and fallback
+coverage are recorded in native-tv/design/app-icons/official.json in the source
+repository. Original source images are kept beside that record under official/.

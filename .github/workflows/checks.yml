@@ -29,6 +29,9 @@ jobs:
       - name: strings keyed and translations current
         run: python3 scripts/check-strings.py && python3 scripts/check-launcher-strings.py
 
+      - name: official app artwork integrity and streaming coverage
+        run: python3 native-tv/tests/app_icon_artwork.py
+
       - name: screen saver QML matches its declared QtQuick version
         run: ./scripts/check-screensavers.py
 
