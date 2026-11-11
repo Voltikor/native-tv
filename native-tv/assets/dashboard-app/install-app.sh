@@ -57,7 +57,8 @@ ported() { sed "s/\(var PORT = \)[0-9]*\(; *\/\/ tvweb:port\)/\1$PORT\2/" "$1"; 
 # Set when the server was put in place by the app the Homebrew Channel installs.
 # That app is then the tile, so this one is retired rather than offered.
 HBC_MARK=/var/lib/tvweb/.from-homebrew-channel
-from_hbc() { [ "$ID" = com.tvweb.dashboard ] && [ -f "$HBC_MARK" ]; }
+# The native Home stub requires com.tvweb.dashboard even with an HBC wrapper.
+from_hbc() { [ "$TYPE" != native ] && [ "$ID" = com.tvweb.dashboard ] && [ -f "$HBC_MARK" ]; }
 
 # Take this tile away now the Homebrew Channel app replaces it - but never
 # while it is running. Closing an open app from outside made a webOS 4 TV
@@ -67,6 +68,10 @@ from_hbc() { [ "$ID" = com.tvweb.dashboard ] && [ -f "$HBC_MARK" ]; }
 # service removes it: deleting the files behind the app manager's back leaves
 # it confused until a reboot.
 if [ "$ACTION" = retire ]; then
+  if [ "$ID" = com.tvweb.dashboard ] && [ "$TYPE" = native ]; then
+    echo '{"ok":true,"retired":false,"reason":"native-home-client"}'
+    exit 0
+  fi
   installed || { echo '{"ok":true,"retired":false,"reason":"absent"}'; exit 0; }
   RUN=$(luna-send -n 1 -w 5000 luna://com.webos.applicationManager/running '{}' 2>/dev/null)
   # No answer means no way to know it is closed, so leave it alone.

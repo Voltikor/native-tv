@@ -183,3 +183,12 @@ Sound output, Input, Sleep timer, Screen off, Recent apps, Profile and Full sett
 Language is in Full settings → Settings. Home settings there holds the launcher
 layout, tile shape and idle dimming options. Screensaver controls remain in the
 Screen Saver section of full Settings.
+
+### Native Home client with an IPK installation
+
+The native Home stub launches `com.tvweb.dashboard`. The IPK wrapper therefore
+keeps this native client installed alongside its own tile, rather than retiring
+it as if it were the older web dashboard. The installer retains the client at
+boot and registers it when the IPK adopts the server. Preview remains a separate
+app. The Home readiness gate still requires registration and a successful native
+probe before enabling takeover.

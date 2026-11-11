@@ -93,6 +93,13 @@ class InstallAppTests(unittest.TestCase):
     def installed(self, identifier):
         return self.apps / "applications" / identifier
 
+    def test_native_home_client_is_not_retired(self):
+        self.put(self.installed("com.tvweb.dashboard") / "appinfo.json", "{}")
+        result = json.loads(self.run_script("retire"))
+        self.assertFalse(result["retired"])
+        self.assertEqual(result["reason"], "native-home-client")
+        self.assertTrue(self.installed("com.tvweb.dashboard").exists())
+
     def test_status_needs_the_client_executable(self):
         self.assertEqual(json.loads(self.run_script("status")),
                          {"ok": True, "supported": True, "installed": False})

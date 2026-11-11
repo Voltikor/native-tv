@@ -41,7 +41,12 @@ result() {   # action; also whether the dashboard is off, and the old tile's fat
 adopt() {
   # Records where the app lives, so the server can tell when it is uninstalled.
   dirname "$HERE" > "$D/.from-homebrew-channel"
-  OLD_TILE=$(sh "$D/assets/dashboard-app/install-app.sh" retire 2>/dev/null | tail -1)
+  if grep -q '"type"[[:space:]]*:[[:space:]]*"native"' "$D/assets/dashboard-app/appinfo.json"; then
+    sh "$D/assets/dashboard-app/install-app.sh" install >/dev/null 2>&1
+    OLD_TILE='{"ok":true,"retired":false,"reason":"native-home-client"}'
+  else
+    OLD_TILE=$(sh "$D/assets/dashboard-app/install-app.sh" retire 2>/dev/null | tail -1)
+  fi
   case "$OLD_TILE" in "{"*) ;; *) OLD_TILE=null ;; esac
 }
 # A link into this app rather than a copy, as the Homebrew Channel asks: once
