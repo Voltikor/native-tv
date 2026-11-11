@@ -29,7 +29,7 @@ import tempfile
 import urllib.request
 from pathlib import Path
 
-from PIL import Image, ImageChops
+from PIL import Image, ImageChops, ImageDraw
 import resvg_py
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -105,7 +105,20 @@ def official_icon(entry, size):
         if image.format != "PNG" or image.width != image.height or not size <= image.width <= 2048:
             raise ValueError("Official artwork must be a square PNG: " + str(path))
         art = image.convert("RGBA")
-        art.thumbnail((size, size), Image.LANCZOS)
+        fit = entry.get("fit", 1)
+        if not 0 < fit <= 1:
+            raise ValueError("Official artwork fit must be between zero and one")
+        side = max(1, round(size * fit))
+        art.thumbnail((side, side), Image.LANCZOS)
+        if fit < 1:
+            canvas = Image.new("RGBA", (size, size))
+            canvas.alpha_composite(art, ((size - art.width) // 2, (size - art.height) // 2))
+            art = canvas
+            mask = Image.new("L", (size, size))
+            ImageDraw.Draw(mask).ellipse((0, 0, size - 1, size - 1), fill=255)
+            outside = ImageChops.multiply(art.getchannel("A"), ImageChops.invert(mask))
+            if outside.getextrema()[1] > 16:
+                raise ValueError("Fitted official artwork still extends outside the round tile")
         out = io.BytesIO()
         art.save(out, "PNG", optimize=True)
         return out.getvalue()

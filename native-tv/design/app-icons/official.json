@@ -123,7 +123,8 @@
         "emby",
         "tv.emby.embyatv"
       ],
-      "publisher": "Emby Media"
+      "publisher": "Emby Media",
+      "fit": 0.76
     },
     "globoplay": {
       "package": "com.globo.globotv",

@@ -12,6 +12,8 @@ cropping the logo, replacing the background or adding a gradient. The existing
 launcher applies its round mask and focus effects. No layout change is needed.
 Transparency is preserved; the TV app's existing background shows through those
 regions, so a store icon alone does not establish an adaptive icon's background.
+Emby's complete icon is fitted to 76% of the square, with transparent padding,
+to keep its ANDROID TV caption inside the circular mask. Its source is unchanged.
 
 Coverage includes every video/music alias in `src/service/app_kinds.cpp`, plus
 additional streaming services including Bandplay, Claro tv+, DAZN, Looke, MUBI,
