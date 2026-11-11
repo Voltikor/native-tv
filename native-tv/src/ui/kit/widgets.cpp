@@ -506,7 +506,8 @@ void appCircle(Paint paint, const AppCircle &circle) {
     Scene &scene = paint.scene;
     Transform scale = focus::transformAt(circle.rest, look.scale);
     Group group(scene, circle.enter, look.scale != 1 ? &scale : nullptr);
-    float rounding = circle.round ? circle.rest.h / 2 : radius::md;
+    float rounding = circle.round ? circle.rest.h / 2
+                     : circle.rest.w > circle.rest.h ? circle.rest.h * .27f : radius::md;
     // The ring and the shadow belong to the circle, not to its fill, which is hidden once an
     // opaque picture covers it (Node::backing).
     if (look.ringAlpha > 0)

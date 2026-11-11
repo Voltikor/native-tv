@@ -53,6 +53,8 @@ Quick settings → Home settings → App tile shape cycles Round, Square and Rec
 Round remains the default; the choice is stored in the active profile's layout.
 Square tiles have rounded corners. Rectangles use a 16:9 frame and retain the
 same height, with row spacing, scrolling and pointer targets using the wider size.
+Rectangles have soft corners with a radius of 27% of their height (about 30 px
+at Home's 112 px tile height); square tiles retain the smaller standard radius.
 
 Banner source priority is the publisher's Android TV app resources first, then
 verified publisher/Google-hosted TV artwork. Jellyfin and Kodi use their actual
