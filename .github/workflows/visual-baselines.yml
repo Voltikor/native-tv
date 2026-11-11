@@ -1,6 +1,9 @@
 name: Visual baselines
 
 on:
+  push:
+    branches: [feat/translations]
+    paths: ['.github/workflows/visual-baselines.yml']
   workflow_dispatch:
 
 jobs:
