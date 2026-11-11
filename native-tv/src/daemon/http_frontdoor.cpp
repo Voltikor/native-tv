@@ -2298,6 +2298,10 @@ std::string HttpFrontDoor::tvThemeId(const Json &document) {
 bool HttpFrontDoor::suggestTvTheme(const Json &document) const {
     if (document["tvTheme"]["suggested"].boolean() || tvThemeId(document) != kDefaultTheme)
         return false;
+    return hasOledPanel(document);
+}
+
+bool HttpFrontDoor::hasOledPanel(const Json &document) const {
     // The same three signs the OLED Care tab goes by, without asking the TV again: a panel set in
     // the config, the panel type marker, then the model the stats collector has already read.
     const Json forced = service::javascriptTruthy(document["panel"]) ? document["panel"]
@@ -15902,6 +15906,7 @@ Json HttpFrontDoor::homeCatalogueResponse(bool view) const {
     // a change made from the phone or the dashboard reaches an open client through it.
     const Json settings = currentConfigDocument();
     response.set("tvTheme", Json::text(tvThemeId(settings)));
+    response.set("oledPanel", Json::flag(hasOledPanel(settings)));
     if (suggestTvTheme(settings))
         response.set("suggestTvTheme", Json::flag(true));
     return response;

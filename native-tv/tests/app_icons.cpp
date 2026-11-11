@@ -123,6 +123,9 @@ int main() {
 
     // Kinds: by id, by the title's pack key, by LG's prefixes, else other.
     require(service::appKind("netflix", "Netflix") == "video", "netflix is a video app by id");
+    require(service::appKind("astronav", "Globoplay") == "video", "Globoplay's LG app id is a streaming app");
+    require(service::appKind("br.unknown.player", "Globoplay") == "video", "Globoplay also matches by its normalized title");
+    require(service::appKind("br.unknown.sbt", "SBT+") == "video", "Regional streaming apps match their titles");
     require(service::appKind("com.disney.app", "Disney+") == "video",
             "an unknown id is placed by its title's key");
     require(service::appKind("com.webos.app.camera", "Camera") == "tv",

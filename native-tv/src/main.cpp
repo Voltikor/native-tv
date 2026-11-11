@@ -557,12 +557,13 @@ int main(int argc, char **argv) {
                                     okAt = now;
                                 }
                             } else if (key == Key::Back) {
-                                // Only Home tells a tap from a hold (the recent apps); everywhere else Back
+                                // Only Home's rows tell a tap from a hold (the recent apps); elsewhere Back
                                 // acts on the press, so a remote that sends no release never loses it.
                                 if (event.key.repeat) {
-                                } else if (app.screenName() != "home")
+                                } else if (!app.canOpenRecents()) {
+                                    backDown = backHeld = false;
                                     app.key(Key::Back);
-                                else if (!backDown) {
+                                } else if (!backDown) {
                                     backDown = true;
                                     backHeld = false;
                                     backAt = now;

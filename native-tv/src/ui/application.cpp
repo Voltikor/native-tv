@@ -197,10 +197,21 @@ bool Application::update(uint32_t now) {
     return draw;
 }
 // ---- Idle dimming -----------------------------------------------------------------------------
-// The panel is an OLED, so no screen may sit still at full brightness: after ms::idleAfter
-// without a key or click every screen but the splash falls to two thirds black over ms::idleDim.
+// Auto dims only when the daemon identifies an OLED panel. This is a launcher overlay,
+// independent of LG's panel protections and screen saver.
 // The first input afterwards only wakes it. Home's hero advance and the beat read `idle` too.
 void Application::idleUpdate() {
+    const std::string mode = optimistic_.text("layout.idleDimming",
+        state_.catalogue["layout"]["idleDimming"].string("auto"));
+    const bool enabled = mode == "on" || (mode == "auto" && state_.catalogue["oledPanel"].boolean());
+    if (!enabled) {
+        if (flow_.idle) {
+            flow_.idle = false;
+            motion_.tween("dim", 0, kit::motion::ms::idleWake, kit::easing(kit::motion::ease::out));
+            dirty_ = true;
+        }
+        return;
+    }
     const uint32_t idleAt = flow_.lastKeyAt + static_cast<uint32_t>(kit::motion::ms::idleAfter);
     if (!flow_.idle && static_cast<int32_t>(now_ - idleAt) >= 0) {
         flow_.idle = true;

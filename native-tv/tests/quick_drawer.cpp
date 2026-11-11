@@ -112,7 +112,7 @@ void openChecks() {
     world.reply("quick:now", R"({"ok":true,"kind":"input","port":1})");
     world.settle(300);
     check(world.snapshot()["volume"].number() == 24 && world.snapshot()["light"].number() == 70 &&
-              world.snapshot()["rows"].number() == 13 && world.snapshot()["focus"].string() == "Volume",
+              world.snapshot()["rows"].number() == 14 && world.snapshot()["focus"].string() == "Volume",
           "The drawer shows the volume and light the TV reported");
     check(world.app.shows("Picture mode") && world.app.shows("Cinema") && world.app.shows("OLED light") &&
               world.app.shows("Console"),
@@ -502,6 +502,20 @@ void fullSettingsChecks() {
     check(!world.app.shows("Native Tv"), "The Home bar has no Native Tv label");
 }
 
+void dimmingOptionChecks() {
+    Quick world;
+    world.focusRow(13);
+    check(world.snapshot()["focus"].string() == "Idle dimming" && world.app.shows("Auto (OLED only)"),
+          "Quick settings exposes automatic panel-aware dimming");
+    world.press(Key::Ok, 250);
+    check(world.on("w:layout.idleDimming").back().body["idleDimming"].string() == "on", "OK changes Auto to On");
+    world.press(Key::Ok, 250);
+    check(world.on("w:layout.idleDimming").back().body["idleDimming"].string() == "off", "OK changes On to Off");
+    world.answer(world.on("w:layout.idleDimming").back(), false, "Refused");
+    world.settle(300);
+    check(world.app.shows("Auto (OLED only)"), "A rejected dimming change restores the confirmed mode");
+}
+
 int main() {
     try {
         loadingChecks();
@@ -517,6 +531,7 @@ int main() {
         actionChecks();
         navigationChecks();
         fullSettingsChecks();
+        dimmingOptionChecks();
         std::printf("%d native quick-drawer checks passed\n", checkCount());
         return 0;
     } catch (const std::exception &error) {

@@ -20,7 +20,8 @@ namespace nativetv {
 namespace {
 using kit::easing;
 using say::msg;
-constexpr const char *kStats = "profiles:stats", *kGo = "profiles.go", *kStatsMemory = "quick.stats";
+constexpr const char *kStats = "profiles:stats", *kGo = "profiles.go", *kStatsMemory = "quick.stats",
+                     *kRemoved = "profiles.removed";
 constexpr float kAvatarTop = 380, kGap = 48, kMaxAvatar = 180, kMinAvatar = 120;
 // The avatar colours the server takes (kColors in service/home_profiles.cpp).
 constexpr const char *kColours[] = {"#a8c7fa", "#f2b8b5", "#6dd58c", "#ffb74d", "#7fcfff", "#d0bcff"};
@@ -59,6 +60,7 @@ class ProfilesScreen final : public ScreenView {
         return false;
     }
     void enter(ScreenHost &host) override {
+        host.memory().erase(kRemoved);
         size_t index = 0;
         std::vector<Json> people = host.view().catalogue["profiles"].items();
         for (size_t i = 0; i < people.size(); ++i)
@@ -84,9 +86,26 @@ class ProfilesScreen final : public ScreenView {
     void leave(ScreenHost &host) override {
         host.services().cancel(kStats);
         host.memory().erase(kGo); // a switch still on its way no longer opens Home from here
+        host.memory().erase(kRemoved);
         host.motion().erasePrefix("profiles:");
     }
     bool update(ScreenHost &host) override {
+        const std::string removed = host.memory()[kRemoved].string();
+        if (!removed.empty()) {
+            bool present = false;
+            for (const auto &person : host.view().catalogue["profiles"].items())
+                present = present || person["id"].string() == removed;
+            if (!present && host.view().catalogue["profiles"].size() > 0) {
+                host.open("home");
+                return false;
+            }
+        }
+        if (!removeId_.empty() && (host.nowMs() >= removeUntil_ ||
+            removeId_ != shownActive(host) || host.view().catalogue["profiles"].size() < 2)) {
+            removeId_.clear();
+            host.invalidate();
+        }
+        if (host.view().catalogue["profiles"].size() < 2) onDelete_ = false;
         // The list can change under the focus (a profile removed from a phone): the focus stays on
         // a profile or on Add, and the rename button goes with the active profile.
         const size_t count = host.view().catalogue["profiles"].size();
@@ -95,22 +114,29 @@ class ProfilesScreen final : public ScreenView {
             onButton_ = onButton_ && activeIndex(host) < count;
             focusMoved(host, true);
         }
-        busy_ = host.optimistic().pending("profiles.active") || host.optimistic().pending("profiles.add");
+        busy_ = host.optimistic().pending("profiles.active") || host.optimistic().pending("profiles.add") ||
+                host.optimistic().pending("profiles.remove");
         active_ = shownActive(host);
         return busy_;
     }
     bool key(ScreenHost &host, Key key) override {
+        if (host.optimistic().pending("profiles.remove") || !host.memory()[kRemoved].string().empty()) return true;
+        if (key != Key::Ok) removeId_.clear();
         size_t count = host.view().catalogue["profiles"].size();
         bool hasActive = activeIndex(host) < count;
         switch (key) {
         case Key::Left:
-            if (onColours_)
+            if (onButton_)
+                onDelete_ = false;
+            else if (onColours_)
                 colour_ = colour_ ? colour_ - 1 : 0;
             else if (!onButton_ && selected_)
                 --selected_;
             break;
         case Key::Right:
-            if (onColours_)
+            if (onButton_)
+                onDelete_ = count > 1;
+            else if (onColours_)
                 colour_ = std::min(colour_ + 1, kColourCount - 1);
             else if (!onButton_ && selected_ < count)
                 ++selected_;
@@ -147,6 +173,11 @@ class ProfilesScreen final : public ScreenView {
         return true;
     }
     bool back(ScreenHost &host) override {
+        if (!removeId_.empty()) {
+            removeId_.clear();
+            host.invalidate();
+            return true;
+        }
         leaveFor(host);
         return true;
     }
@@ -155,6 +186,7 @@ class ProfilesScreen final : public ScreenView {
             leaveFor(host);
             return;
         }
+        if (host.optimistic().pending("profiles.remove") || !host.memory()[kRemoved].string().empty()) return;
         if (hit.compare(0, 11, "profiles:c:") == 0) {
             onColours_ = true;
             onButton_ = false;
@@ -164,7 +196,9 @@ class ProfilesScreen final : public ScreenView {
             return;
         }
         onColours_ = false;
-        onButton_ = hit == "profiles:rename";
+        onButton_ = hit == "profiles:rename" || hit == "profiles:delete";
+        onDelete_ = hit == "profiles:delete";
+        if (!onDelete_) removeId_.clear();
         if (hit == "profiles:add")
             selected_ = host.view().catalogue["profiles"].size();
         else if (hit.compare(0, 11, "profiles:p:") == 0)
@@ -240,7 +274,7 @@ class ProfilesScreen final : public ScreenView {
                                   msg("tv.profiles.current", "Watching now"), kit::type::labelM,
                                   kit::color::accent, Node::Align::Center);
             // A change on its way: the avatar turns a spinner where the answer is awaited.
-            if ((active && host.optimistic().pending("profiles.active")) ||
+            if ((active && (host.optimistic().pending("profiles.active") || host.optimistic().pending("profiles.remove"))) ||
                 (add && host.optimistic().pending("profiles.add")))
                 kit::spinner(paint, {rest.x + diameter - 44, rest.y + diameter - 44, 32, 32}, host.nowMs(),
                              kit::color::onSurface);
@@ -271,7 +305,7 @@ class ProfilesScreen final : public ScreenView {
                 scene.hits.push_back({look.rect, "profiles:c:" + std::to_string(i)});
             }
             kit::PillButton rename;
-            rename.rest = {kit::canvas::width / 2 - 170, kAvatarTop + diameter + 196, 340, 64};
+            rename.rest = {kit::canvas::width / 2 - (count > 1 ? 356 : 170), kAvatarTop + diameter + 196, 340, 64};
             rename.id = "profiles:rename";
             rename.label = msg("tv.profiles.rename", "Rename profile");
             rename.icon = "keyboard";
@@ -279,6 +313,16 @@ class ProfilesScreen final : public ScreenView {
             rename.enter = {static_cast<float>(1 - motion.value(id("e", count + 1))),
                             static_cast<float>(28 * motion.value(id("e", count + 1)))};
             kit::pillButton(paint, rename);
+            if (count > 1) {
+                kit::PillButton remove = rename;
+                remove.rest.x = kit::canvas::width / 2 + 16;
+                remove.id = "profiles:delete";
+                remove.icon = "close";
+                remove.label = removeId_.empty() ? msg("launcher.profiles.delete", "Delete profile")
+                                                : msg("launcher.profiles.confirmDelete", "Confirm deletion");
+                remove.focus = static_cast<float>(motion.value("profiles:fd"));
+                kit::pillButton(paint, remove);
+            }
         }
         kit::keyHint(paint, kit::canvas::safeX, 1002, say::msg("launcher.key.back", "Back"), msg("tv.profiles.return", "Return"),
                      "profiles:back");
@@ -287,6 +331,8 @@ class ProfilesScreen final : public ScreenView {
         Json value = Json::object();
         value.set("selected", Json::numeric(static_cast<double>(selected_)));
         value.set("onButton", Json::flag(onButton_));
+        value.set("onDelete", Json::flag(onDelete_));
+        value.set("confirmDelete", Json::flag(!removeId_.empty()));
         value.set("onColours", Json::flag(onColours_));
         value.set("colour", Json::text(kColours[std::min(colour_, kColourCount - 1)]));
         value.set("busy", Json::flag(busy_));
@@ -317,7 +363,8 @@ class ProfilesScreen final : public ScreenView {
             glide(id("f", i), !onButton_ && !onColours_ && i == selected_ ? 1 : 0);
         for (size_t i = 0; i < kColourCount; ++i)
             glide(id("c", i), onColours_ && i == colour_ ? 1 : 0);
-        glide("profiles:fb", onButton_ ? 1 : 0);
+        glide("profiles:fb", onButton_ && !onDelete_ ? 1 : 0);
+        glide("profiles:fd", onButton_ && onDelete_ ? 1 : 0);
         host.invalidate();
     }
     // The colour on screen for a profile: a change that is still on its way shows at once.
@@ -381,7 +428,9 @@ class ProfilesScreen final : public ScreenView {
     }
     void choose(ScreenHost &host) {
         std::vector<Json> people = host.view().catalogue["profiles"].items();
+        if (host.optimistic().pending("profiles.remove")) return;
         if (onButton_) {
+            if (onDelete_) { removeProfile(host); return; }
             host.open("rename");
             return;
         }
@@ -428,8 +477,38 @@ class ProfilesScreen final : public ScreenView {
         host.open(returnRoute(host.cameFrom()));
     }
 
+    void removeProfile(ScreenHost &host) {
+        const auto people = host.view().catalogue["profiles"].items();
+        const size_t at = activeIndex(host);
+        if (people.size() < 2 || at >= people.size() ||
+            host.optimistic().pending("profiles.active") || host.optimistic().pending("profiles.add")) return;
+        const std::string id = people[at]["id"].string();
+        if (removeId_ != id || host.nowMs() >= removeUntil_) {
+            removeId_ = id;
+            removeUntil_ = host.nowMs() + 5000;
+            host.toast(msg("launcher.profiles.deletePrompt", "Press OK again to delete {name}. Back cancels.",
+                fields({{"name", Json::text(shownProfileName(host.optimistic(), people[at], modelOf(host)))}})));
+            host.invalidate();
+            return;
+        }
+        removeId_.clear();
+        const std::string token = "remove:" + id;
+        Write write = profileWrite(host, token);
+        write.body = [id](const Json &) { return fields({{"action", Json::text("remove")}, {"id", Json::text(id)}}); };
+        write.failure = msg("launcher.profiles.deleteFailed", "The profile could not be deleted");
+        write.done = [&host, token, id](bool ok, const Json &) {
+            if (!ok || host.memory()[kGo].string() != token) return;
+            host.memory()[kRemoved] = Json::text(id);
+            host.services().read("catalogue", Operation::HomeCatalogue);
+        };
+        host.optimistic().run("profiles.remove", write);
+        host.invalidate();
+    }
+
     size_t selected_ = 0;
-    bool onButton_ = false, onColours_ = false, busy_ = false;
+    bool onButton_ = false, onColours_ = false, busy_ = false, onDelete_ = false;
+    std::string removeId_;
+    double removeUntil_ = 0;
     size_t colour_ = 0;
     std::string active_; // the profile in use as shown, for the snapshot
     unsigned statsGeneration_ = 0;

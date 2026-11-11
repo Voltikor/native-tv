@@ -5,13 +5,13 @@
 # ///
 """Generate native-tv/assets/app-icons/app-icons.pack from design/app-icons.json.
 
-Every icon sits on one dark rounded-square tile, the same size and padding, so
+Every icon sits on a coloured gradient tile, with the same size and padding, so
 the apps read as a set on the TV's dark UI. A brand's logo is drawn as its
 owner publishes it, in its own colours, never recoloured: where the plain logo
 is dark (X, Apple TV, Prime Video, TikTok, Peacock) the brand's own variant for
 dark surfaces is used. The logos are Dashboard Icons'. LG's own apps get a
-Material Design glyph (assets/icons/material) in the kit's accent colour on the
-same tile. The squares have square corners: the screens that show them round
+Material Design glyph (assets/icons/material) in white on a category-coloured
+tile. The squares have square corners: the screens that show them round
 them. The daemon looks an app up by its id, then by its title, and serves the
 app's own icon when the pack has neither (src/service/app_icons.cpp).
 
@@ -103,10 +103,12 @@ def main():
         folder = cache / brand["source"]
         folder.mkdir(parents=True, exist_ok=True)
         art = render(fetch_logo(source, brand["name"], folder))
-        blobs[("logo", name)] = tile(art, spec, brand.get("fill", spec["fill"]), brand.get("color"), brand.get("mask"))
+        brand_spec = dict(spec, **brand.get("tile", {}))
+        blobs[("logo", name)] = tile(art, brand_spec, brand.get("fill", spec["fill"]), brand.get("color"), brand.get("mask"))
     for name in set(config["glyphs"].values()):
         art = render((GLYPHS / (name + ".svg")).read_text())
-        blobs[("glyph", name)] = tile(art, spec, spec["glyphFill"], spec["glyphColor"])
+        glyph_spec = dict(spec, **config.get("glyphTiles", {}).get(name, {}))
+        blobs[("glyph", name)] = tile(art, glyph_spec, spec["glyphFill"], spec["glyphColor"])
 
     keys = {}
     for kind, table in (("logo", config["logos"]), ("glyph", config["glyphs"])):

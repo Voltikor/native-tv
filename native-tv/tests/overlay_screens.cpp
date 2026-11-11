@@ -604,6 +604,45 @@ void renameChecks() {
     check(limit.snapshot()["query"].string() == "LGTVaaaaaaaaaaaaaaaa", "A name is limited to twenty characters");
 }
 
+void profileDeletionChecks() {
+    World world;
+    world.openProfiles();
+    world.press({Key::Down, Key::Down, Key::Right});
+    world.press(Key::Ok);
+    check(world.snapshot()["confirmDelete"].boolean() && world.on("w:profiles.remove").empty(),
+          "Deleting the active profile asks for confirmation before writing");
+    world.press(Key::Back);
+    check(world.screen() == "profiles" && !world.snapshot()["confirmDelete"].boolean(), "Back cancels deletion");
+    world.press(Key::Ok);
+    world.press(Key::Ok);
+    check(world.on("w:profiles.remove").size() == 1 &&
+          world.on("w:profiles.remove")[0].body["id"].string() == "main", "Only confirmed deletion writes the bound profile id");
+    world.press(Key::Ok);
+    check(world.on("w:profiles.remove").size() == 1, "A pending deletion is not submitted twice");
+    world.answer(world.on("w:profiles.remove")[0], false, "Refused");
+    world.settle(300);
+    check(world.screen() == "profiles" && world.snapshot()["active"].string() == "main", "A refusal keeps the active profile");
+    world.press(Key::Ok);
+    world.press(Key::Ok);
+    world.answer(world.on("w:profiles.remove").back());
+    check(world.screen() == "profiles", "An accepted deletion waits for the surviving profile's catalogue");
+    Json remaining = Json::parse(catalogueJson), guest = Json::parse(R"([{"id":"guest","name":"Guest","active":true}])");
+    remaining.set("profiles", guest);
+    remaining.set("profile", Json::text("guest"));
+    world.reply("catalogue", remaining.dump());
+    world.settle(300);
+    check(world.screen() == "home", "The server's surviving profile is loaded before leaving Profiles");
+    world.openProfiles();
+    check(world.snapshot()["active"].string() == "guest", "Deleting the active profile selects the server's fallback");
+
+    Json single = Json::parse(catalogueJson), people = Json::array();
+    people.add(single["profiles"][size_t(0)]);
+    single.set("profiles", people);
+    World last(single.dump().c_str());
+    last.openProfiles();
+    check(!last.app.shows("Delete profile") && !last.app.activate("profiles:delete"), "The final profile has no delete action");
+}
+
 int main() {
     try {
         kitChecks();
@@ -620,6 +659,7 @@ int main() {
         searchGridChecks();
         keyboardChecks();
         renameChecks();
+        profileDeletionChecks();
         std::printf("%d native overlay-screen checks passed\n", checkCount());
         return 0;
     } catch (const std::exception &error) {

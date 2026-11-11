@@ -169,6 +169,7 @@ Json defaultDocument() {
     document.set("showLive", Json::flag(false));
     document.set("openOnPowerOn", Json::flag(false));
     document.set("colours", Json::parse("null"));
+    document.set("idleDimming", Json::text("auto"));
     document.set("profiles", Json::array());
     document.set("profile", Json::text(kMainProfile));
     document.set("hideLgHomeAtStart", Json::parse("null"));
@@ -286,6 +287,9 @@ std::string normalizeHomeProfileName(const Json &value) {
 Json normalizeHomeDocument(const Json &raw) {
     Json result = defaultDocument();
     if (!raw.isObject()) return result;
+    const std::string dimming = raw["idleDimming"].string();
+    if (dimming == "auto" || dimming == "on" || dimming == "off")
+        result.set("idleDimming", Json::text(dimming));
 
     std::vector<std::string> rows = stringList(raw["rows"]);
     std::vector<std::string> validRows;
@@ -386,6 +390,7 @@ Json normalizeHomeDocument(const Json &raw) {
 Json homeLayout(const Json &document) {
     Json result = Json::object();
     result.set("language", document["language"]);
+    result.set("idleDimming", document["idleDimming"]);
     for (size_t i = 0; i < kLayoutKeyCount; ++i)
         result.set(kLayoutKeys[i], document[kLayoutKeys[i]]);
     return result;
@@ -430,6 +435,13 @@ HomeDocumentUpdate updateHomeLayout(const Json &input, const Json &body) {
         return update;
     }
     Json proposed = Json::object();
+    if (body.has("idleDimming") && (!body["idleDimming"].isString() ||
+        (body["idleDimming"].string() != "auto" && body["idleDimming"].string() != "on" &&
+         body["idleDimming"].string() != "off"))) {
+        update.response = errorResponse("unsupported idle dimming mode");
+        return update;
+    }
+    proposed.set("idleDimming", body.has("idleDimming") ? body["idleDimming"] : current["idleDimming"]);
     proposed.set("language", body.has("language") ? body["language"] : current["language"]);
     const char *preserved[] = {"enabled", "restorePending", "snapshot",
         "hideLgHomeAtStart", "openOnPowerOn", "lgAutoLaunch", "lgAutoLaunchCheck",

@@ -443,6 +443,13 @@ class QuickScreen final : public ScreenView {
     }
     // The text at the right of a row.
     std::string trail(ScreenHost &host, const Row &row) {
+        if (row.id == "idleDimming") {
+            const std::string mode = host.optimistic().text("layout.idleDimming",
+                host.view().catalogue["layout"]["idleDimming"].string("auto"));
+            return mode == "on" ? msg("launcher.dimming.on", "On")
+                 : mode == "off" ? msg("launcher.dimming.off", "Off")
+                                 : msg("launcher.dimming.auto", "Auto (OLED only)");
+        }
         if (row.kind != Row::Kind::Plain)
             return row.trail;
         if (readFailed_ && readsStats(row.id))
@@ -514,6 +521,7 @@ class QuickScreen final : public ScreenView {
             add(Row::Kind::Plain, "layout", "gear", msg("tv.quick.settings", "Home settings"), "", true);
             add(Row::Kind::Plain, "language", "globe", msg("launcher.language.title", "Language"), "", true);
             add(Row::Kind::Plain, "full-settings", "gear", msg("launcher.quick.fullSettings", "Full settings"), "", true);
+            add(Row::Kind::Plain, "idleDimming", "light", msg("launcher.dimming.title", "Idle dimming"));
         } else if (level_ == Level::Picture) {
             for (const auto &mode : s["picture"]["modes"].items())
                 add(Row::Kind::Choice, mode["value"].string(), "picture", mode["label"].string(),
@@ -856,6 +864,14 @@ class QuickScreen final : public ScreenView {
             close(host, "language");
         else if (row.id == "full-settings")
             close(host, "dashboard:settings");
+        else if (row.id == "idleDimming") {
+            const std::string before = host.view().catalogue["layout"]["idleDimming"].string("auto");
+            const std::string shown = host.optimistic().text("layout.idleDimming", before);
+            host.optimistic().set("layout.idleDimming",
+                Json::text(shown == "auto" ? "on" : shown == "on" ? "off" : "auto"),
+                Json::text(before), layoutWrite("idleDimming"));
+            host.invalidate();
+        }
     }
     void choose(ScreenHost &host, const Row &row) {
         if (level_ == Level::Layout) {

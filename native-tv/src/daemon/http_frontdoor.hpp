@@ -286,6 +286,7 @@ class HttpFrontDoor {
     static std::string tvThemeId(const Json &document);
     // Whether to offer OLED Care once: an OLED panel, still on the default theme, never asked.
     bool suggestTvTheme(const Json &document) const;
+    bool hasOledPanel(const Json &document) const;
     void sendOledCare(HttpExchange &exchange) const;
     void sendPrivacyProjection(HttpExchange &exchange) const;
     void setSshKeys(HttpExchange &exchange) const;

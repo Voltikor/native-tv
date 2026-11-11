@@ -222,6 +222,10 @@ CardRow appsRow(const Json &catalogue, const Json &guide, bool withHidden, const
     CardRow apps;
     apps.key = "app";
     apps.title = list == "appsTab" ? say::msg("launcher.apps.title", "Apps" ): say::msg("launcher.home.yourApps", "Your apps");
+    if (list == "app") {
+        apps.cards = catalogueRow("app", catalogue, guide, withHidden, list).cards;
+        return apps;
+    }
     for (const CardRow &row : appRows(catalogue, guide, list))
         apps.cards.insert(apps.cards.end(), row.cards.begin(), row.cards.end());
     if (withHidden)

@@ -235,6 +235,8 @@ void focusMath() {
 void geometryAgainstMetrics() {
     namespace geometry = kit::geometry;
     namespace home = kit::metrics::home;
+    check(geometry::clock().x + geometry::clock().w == kit::canvas::width - kit::canvas::safeX,
+          "The clock uses the right margin left free by the removed brand label");
     check(sameRect(geometry::avatar(), home::avatar) &&
               sameRect(geometry::settingsButton(), home::gear) &&
               sameRect(geometry::clock(), home::clock),

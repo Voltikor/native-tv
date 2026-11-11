@@ -62,6 +62,8 @@ void Application::key(Key key) {
             if (key == Key::Up)
                 home.navigation = true; // nothing to move on: Up reaches the bar
         } else {
+            const size_t previousRow = home.row;
+            rememberHomeFocus();
             if (key == Key::Up) {
                 if (home.row)
                     --home.row;
@@ -70,6 +72,8 @@ void Application::key(Key key) {
             }
             if (key == Key::Down && home.row + 1 < home.rows.size())
                 ++home.row;
+            if (home.row != previousRow)
+                restoreHomeFocus();
             if (key == Key::Left && home.column)
                 --home.column;
             if (key == Key::Right && home.column + 1 < home.rows[home.row].cards.size())
@@ -265,6 +269,10 @@ void Application::longPress() {
 void Application::longBack() {
     if (state_.screen != Screen::Home || state_.home.arranging || state_.home.editing)
         return; // the hold is not a request for the recent apps while rows or apps are moved
+    if (state_.home.navigation) {
+        back();
+        return;
+    }
     route("recents");
 }
 
@@ -320,6 +328,11 @@ void Application::homeEditKey(Key key) {
         home.editHide = true;
         return;
     }
+    if (key == Key::Down) {
+        for (size_t i = 0; i < cards.size(); ++i)
+            if (cards[i].hidden) { home.column = i; break; }
+        return;
+    }
     long target = static_cast<long>(home.column);
     if (key == Key::Left)
         target -= 1;
@@ -328,10 +341,11 @@ void Application::homeEditKey(Key key) {
     if (target < 0 || target >= static_cast<long>(cards.size()) ||
         target == static_cast<long>(home.column))
         return;
-    // Hidden apps only take the focus, and so do apps of another kind (an app stays among its kind);
-    // the others swap places.
+    // A carried app keeps focus at a boundary. Down reaches hidden apps for restoring them.
     const Card &from = cards[home.column], &to = cards[static_cast<size_t>(target)];
-    if (!from.hidden && !to.hidden && kindOf(from) == kindOf(to))
+    if (!from.hidden && (to.hidden || (editedList() == "appsTab" && kindOf(from) != kindOf(to))))
+        return;
+    if (!from.hidden && !to.hidden)
         std::swap(cards[home.column], cards[static_cast<size_t>(target)]);
     home.column = static_cast<size_t>(target);
 }
@@ -437,7 +451,8 @@ void Application::homeKindEditStart() {
         if (row.cards[i].id == focused)
             home.column = i;
     home.arranging = true;
-    home.carrying = home.carryingKind = false;
+    home.carrying = home.column < row.cards.size() && !row.cards[home.column].hidden;
+    home.carryingKind = false;
     home.arrangeFocus = 0;
     homeFocus();
     dirty_ = true;
@@ -510,6 +525,9 @@ void Application::homeArrangeDone() {
         rebuildHome();
         return;
     }
-    saveApps(list, shown, shown != expected, changed, hiddenNow, kindsMoved ? kinds : Json());
+    // Only this kind's apps move: other kinds keep their slots in Home's global order.
+    std::vector<std::string> movedApps = kept;
+    movedApps.insert(movedApps.end(), newlyShown.begin(), newlyShown.end());
+    saveApps(list, movedApps, shown != expected, changed, hiddenNow, kindsMoved ? kinds : Json());
 }
 } // namespace nativetv

@@ -410,7 +410,8 @@ void drawHome(kit::Paint paint, const Frame &frame) {
         const bool onApps = home.tabs[home.tab].key == "apps";
         const std::string label = hidden ? (onApps ? say::msg("launcher.homeview.showOnApps", "Show on Apps" ): say::msg("launcher.homeview.showOnHome", "Show on Home"))
                                          : (onApps ? say::msg("launcher.homeview.hideFromApps", "Hide from Apps" ): say::msg("launcher.homeview.hideFromHome", "Hide from Home"));
-        hintBand(paint, {{"", say::msg("setup.hint.move", "Move")}, {"OK", say::msg("tv.apps.install.dismiss.done", "Done")}, {say::msg("launcher.key.red", "Red"), label}});
+        hintBand(paint, {{"", say::msg("setup.hint.move", "Move")}, {"OK", say::msg("tv.apps.install.dismiss.done", "Done")},
+                         {"Down", say::msg("launcher.edit.hidden", "Hidden apps")}, {say::msg("launcher.key.red", "Red"), label}});
         kit::PillButton hide;
         hide.rest = {kit::canvas::width - kit::canvas::safeX - 380, 136, 380, 56};
         hide.id = "edit:hide";

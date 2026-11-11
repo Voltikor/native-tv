@@ -580,6 +580,7 @@ int main() {
         kinds.longPress();
         check(kinds.snapshot()["arranging"].boolean() && kinds.screenName() == "home",
               "Holding OK on a row lifts it as a card instead of opening the recent apps");
+        kinds.key(Key::Ok);    // put the app down before choosing the card's buttons
         kinds.key(Key::Up);    // the card's buttons: Hide
         kinds.key(Key::Right); // Move kind
         kinds.key(Key::Ok);    // picks the card up
@@ -818,10 +819,12 @@ int main() {
             editable(app, editCatalogue, 0);
             app.key(Key::Right);
             app.key(Key::Right);
-            app.key(Key::Right);
+            app.key(Key::Right); // the carried app stays selected at the hidden boundary
+            check(app.snapshot()["focusCard"].string() == "a", "A hidden neighbour does not steal the carried app's focus");
+            app.key(Key::Down); // explicitly browse the hidden apps
             check(textNode(app.scene(), "Show on Home"), "On a hidden app the button says Show on Home");
             app.key(Key::Left);
-            app.key(Key::Right);
+            app.key(Key::Down);
             app.key(Key::Right);
             check(textNode(app.scene(), "Show on Home") && layoutWrites(transport).empty(),
                   "A hidden app is not swapped into the order, and Right at the end stays on it");
@@ -854,14 +857,14 @@ int main() {
             FakeTransport transport;
             Application app(transport);
             editable(app, kindEdit, 0);
-            app.key(Key::Right); // a and c are both Movies & TV: they swap
-            app.key(Key::Right); // Beta is Music: the focus passes to it, nothing swaps
-            check(app.snapshot()["focusCard"].string() == "b" && app.snapshot()["rowHead"].string() == "c,a,b",
-                  "An app is swapped with the apps of its kind only");
+            app.key(Key::Right);
+            app.key(Key::Right);
+            check(app.snapshot()["focusCard"].string() == "a" && app.snapshot()["rowHead"].string() == "b,c,a",
+                  "Home can move the selected app past apps of other categories without changing selection");
             app.key(Key::Ok);
             const auto writes = layoutWrites(transport);
-            check(writes.size() == 1 && writes[0].dump() == R"({"order":{"app":["c","a","b"]}})",
-                  "A move among the apps of a kind saves their order and keeps the apps by kind");
+            check(writes.size() == 1 && writes[0].dump() == R"({"order":{"app":["b","c","a"]}})",
+                  "The saved Home order permits moves across categories");
         }
         {
             // The Apps page's grid has its own hidden apps: Home hides `h`, the Apps page `b`. While
@@ -896,6 +899,7 @@ int main() {
             app.key(Key::Right);
             app.key(Key::Right);
             app.key(Key::Right);
+            app.key(Key::Down);
             check(textNode(app.scene(), "Show on Apps"), "On an app hidden there the button says Show on Apps");
             app.key(Key::Ok);
             const auto writes = layoutWrites(transport);
@@ -977,6 +981,9 @@ int main() {
         }
 
         // Idle: after thirty quiet seconds the screen dims, and the first key only wakes it.
+        Json dimCatalogue = Json::parse(fullCatalogue);
+        dimCatalogue.set("oledPanel", Json::flag(true));
+        reply(home, "catalogue", dimCatalogue.dump());
         clockMs = run(home, clockMs, 33000);
         check(home.snapshot()["idle"].boolean() && std::fabs(motion.value("dim") - .66) < .01,
               "The screen dims after thirty seconds without a key");

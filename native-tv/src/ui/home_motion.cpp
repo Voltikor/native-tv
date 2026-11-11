@@ -256,6 +256,7 @@ void Application::homeData() {
             flow_.entered = true;
             flow_.waiting = false;
             home.row = defaultRow(home);
+            restoreHomeFocus();
             homePlayEntrance(flow_.rowsEntered);
             homeFocus(true);
         } else if (icons && homeTab && !flow_.rowsEntered && home::isApps(home.rows[0])) {
@@ -384,6 +385,8 @@ void Application::homeFocus(bool jump) {
 }
 
 void Application::homeKeyMoved(Key key) {
+    if (!state_.home.editing && !state_.home.arranging)
+        rememberHomeFocus();
     auto &home = state_.home;
     if (home.navigation && home.nav < home.tabs.size() && home.nav != flow_.shown &&
         (key == Key::Left || key == Key::Right)) {
@@ -543,7 +546,9 @@ void Application::homeUpdate() {
     if (flow_.tabPending && due(now_, flow_.commitAt))
         homeSelectTab(home.nav);
     if (flow_.pendingTab >= 0 && due(now_, flow_.swapAt)) {
+        rememberHomeFocus();
         home.tab = static_cast<size_t>(flow_.pendingTab);
+        home.rows.clear();
         flow_.pendingTab = -1;
         flow_.shown = home.tab;
         home.row = home.column = 0;
@@ -559,6 +564,7 @@ void Application::homeUpdate() {
         flow_.focusId.clear();
         rebuildHome();
         home.row = defaultRow(home);
+        restoreHomeFocus();
         homeFocus(true);
     }
     // A refresh, a mutation while editing or a jump between rows can leave the focus on a card the row

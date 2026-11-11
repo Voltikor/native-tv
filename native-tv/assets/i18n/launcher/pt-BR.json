@@ -5216,5 +5216,41 @@
   "launcher.quick.fullSettings": {
     "from": "Full settings",
     "text": "Configurações completas"
+  },
+  "launcher.edit.hidden": {
+    "from": "Hidden apps",
+    "text": "Apps ocultos"
+  },
+  "launcher.dimming.title": {
+    "from": "Idle dimming",
+    "text": "Escurecimento por inatividade"
+  },
+  "launcher.dimming.auto": {
+    "from": "Auto (OLED only)",
+    "text": "Automático (somente OLED)"
+  },
+  "launcher.dimming.on": {
+    "from": "On",
+    "text": "Ativado"
+  },
+  "launcher.dimming.off": {
+    "from": "Off",
+    "text": "Desativado"
+  },
+  "launcher.profiles.delete": {
+    "from": "Delete profile",
+    "text": "Excluir perfil"
+  },
+  "launcher.profiles.confirmDelete": {
+    "from": "Confirm deletion",
+    "text": "Confirmar exclusão"
+  },
+  "launcher.profiles.deletePrompt": {
+    "from": "Press OK again to delete {name}. Back cancels.",
+    "text": "Pressione OK novamente para excluir {name}. Voltar cancela."
+  },
+  "launcher.profiles.deleteFailed": {
+    "from": "The profile could not be deleted",
+    "text": "Não foi possível excluir o perfil"
   }
 }

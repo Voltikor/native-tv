@@ -4,10 +4,39 @@
 #include <algorithm>
 
 namespace nativetv {
+namespace {
+std::string focusKey(const HomeState &home) {
+    return home.tabs[home.tab].key + ":" + home.rows[home.row].key + ":" + home.rows[home.row].group;
+}
+}
+void Application::rememberHomeFocus() {
+    auto &home = state_.home;
+    if (home.tab >= home.tabs.size() || home.row >= home.rows.size() ||
+        home.column >= home.rows[home.row].cards.size()) return;
+    auto &saved = home.rowFocus[focusKey(home)];
+    saved.column = home.column;
+    saved.id = home.rows[home.row].cards[home.column].id;
+}
+void Application::restoreHomeFocus() {
+    auto &home = state_.home;
+    if (home.tab >= home.tabs.size() || home.row >= home.rows.size()) { home.column = 0; return; }
+    const auto saved = home.rowFocus.find(focusKey(home));
+    const auto &cards = home.rows[home.row].cards;
+    home.column = saved == home.rowFocus.end() ? 0 : clampIndex(saved->second.column, cards.size());
+    if (saved != home.rowFocus.end())
+        for (size_t i = 0; i < cards.size(); ++i)
+            if (cards[i].id == saved->second.id) { home.column = i; break; }
+}
 void Application::rebuildHome() {
     // The cards being moved are the person's own order until it is saved.
-    if (state_.home.editing)
+    if (state_.home.editing || state_.home.arranging)
         return;
+    rememberHomeFocus();
+    std::string rowKey, group;
+    if (state_.home.row < state_.home.rows.size()) {
+        rowKey = state_.home.rows[state_.home.row].key;
+        group = state_.home.rows[state_.home.row].group;
+    }
     state_.home.tabs = homeTabs(state_.catalogue);
     auto &home = state_.home;
     home.tab = clampIndex(home.tab, home.tabs.size());
@@ -18,6 +47,8 @@ void Application::rebuildHome() {
     home.picksTaken = false; // homeData() takes the spotlight out of the whole top picks row
     home.arranging = false; // the rows are the server's again
     home.row = clampIndex(home.row, home.rows.size());
+    for (size_t i = 0; i < home.rows.size(); ++i)
+        if (home.rows[i].key == rowKey && home.rows[i].group == group) { home.row = i; break; }
     if (home.row < home.rows.size()) {
         const auto &cards = home.rows[home.row].cards;
         home.column = clampIndex(home.column, cards.size());
@@ -29,6 +60,7 @@ void Application::rebuildHome() {
     if (std::find(stops.begin(), stops.end(), home.nav) == stops.end())
         home.nav = home.tab;
     homeData();
+    restoreHomeFocus();
     dirty_ = true;
 }
 std::vector<CardRow> Application::homeRowsFor(const std::string &tab) const {
@@ -204,6 +236,12 @@ void Application::response(const Response &response) {
                 services_.language(locale_->language());
                 languageChanged_ = true;
             }
+        }
+        if (state_.catalogue["profile"].string() != data["profile"].string()) {
+            state_.home.rowFocus.clear();
+            state_.home.rows.clear();
+            state_.home.row = state_.home.column = 0;
+            state_.home.editing = state_.home.arranging = false;
         }
         state_.catalogue = data;
         followTheme(data);

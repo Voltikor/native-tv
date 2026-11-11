@@ -180,14 +180,14 @@ void Application::back() {
                 homeArrangeDone();
         } else if (state_.home.editing)
             homeEditDone(false);
-        else if (state_.home.tab != 0 || flow_.pendingTab > 0) {
-            state_.home.navigation = false;
+        else if (state_.home.navigation || state_.home.tab != 0 || flow_.pendingTab > 0) {
+            state_.home.navigation = true;
             state_.home.nav = 0;
             homeSelectTab(0);
         } else if (!state_.home.navigation) {
             if (state_.home.row) {
                 state_.home.row = 0;
-                state_.home.column = clampIndex(state_.home.column, state_.home.rows[0].cards.size());
+                restoreHomeFocus();
             } else
                 state_.home.navigation = true;
         }

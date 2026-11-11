@@ -66,8 +66,8 @@ int main() {
                   kinds[1].cards[1].id == "c",
               "Apps sorted by kind come as one row per kind, in the owner's order");
         auto flat = homeRows("home", byKind, Json(), Json());
-        check(flat.size() == 1 && flat[0].cards.size() == 3 && flat[0].cards[0].id == "b",
-              "Home's apps row follows the kinds' order");
+        check(flat.size() == 1 && flat[0].cards.size() == 3 && flat[0].cards[0].id == "a" && flat[0].cards[1].id == "b",
+              "Home keeps the owner's app order independently of category grouping");
         // The Apps page and Home's row have their own hidden apps (`hidden.appsTab` and `hidden.app`):
         // a kind whose apps are all hidden on the page loses its row there, and nothing carries over.
         Json hiddenByKind = Json::parse(

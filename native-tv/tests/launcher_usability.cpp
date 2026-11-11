@@ -1,0 +1,94 @@
+#include "overlay_harness.hpp"
+
+using namespace overlay_test;
+
+namespace {
+std::string apps() {
+    return R"({"ok":true,"profile":"main","apps":[{"id":"a","title":"Alpha","kind":"video"},{"id":"b","title":"Beta","kind":"music"},{"id":"c","title":"Gamma","kind":"video"},{"id":"d","title":"Delta","kind":"music"}],"kinds":[{"key":"video","label":"Movies & TV"},{"key":"music","label":"Music & audio"}],"order":{"app":["a","b","c","d"]},"layout":{"rows":["app"],"hidden":{},"showLgHome":false,"showInputs":false},"profiles":[{"id":"main","name":"Main","active":true}]})";
+}
+
+void dimmingChecks() {
+    struct Case { const char *mode; bool oled, dims; };
+    for (const Case &test : {Case{"auto", false, false}, Case{"auto", true, true},
+                             Case{"on", false, true}, Case{"off", true, false}}) {
+        Json catalogue = Json::parse(apps());
+        catalogue.set("oledPanel", Json::flag(test.oled));
+        Json layout = catalogue["layout"];
+        layout.set("idleDimming", Json::text(test.mode));
+        World world(catalogue.dump().c_str());
+        world.settle(34000);
+        check(world.snapshot()["idle"].boolean() == test.dims, "Idle dimming follows Auto/On/Off and the panel type");
+    }
+}
+
+void rowMemoryChecks() {
+    World world(apps().c_str());
+    Json items = Json::array();
+    for (int i = 1; i <= 14; ++i)
+        items.add(fields({{"id", Json::numeric(i)}, {"type", Json::text("movie")}, {"title", Json::text("Movie " + std::to_string(i))}}));
+    Json rows = Json::array();
+    rows.add(fields({{"key", Json::text("trending")}, {"items", items}}));
+    world.reply("discover", fields({{"ok", Json::flag(true)}, {"enabled", Json::flag(true)}, {"titlesEnabled", Json::flag(true)}, {"rows", rows}}).dump());
+    world.settle(500);
+    world.press({Key::Right, Key::Right, Key::Right});
+    check(world.snapshot()["column"].number() == 3, "The fourth app is focused");
+    world.press(Key::Down);
+    check(world.snapshot()["column"].number() == 0, "An unvisited row starts on its first item");
+    world.press({Key::Right, Key::Right});
+    const std::string movie = world.snapshot()["focusCard"].string();
+    world.press(Key::Up);
+    check(world.snapshot()["focusCard"].string() == "d", "The apps row remembers its own item");
+    world.press(Key::Down);
+    check(world.snapshot()["focusCard"].string() == movie, "The movie row remembers a different item");
+    world.press(Key::Up);
+    Json refreshed = Json::parse(apps());
+    refreshed.set("order", fields({{"app", Json::parse(R"(["d","a","b","c"])")}}));
+    world.reply("catalogue", refreshed.dump());
+    check(world.snapshot()["focusCard"].string() == "d" && world.snapshot()["column"].number() == 0,
+          "A refreshed row follows the saved item id rather than its former index");
+}
+
+void barBackChecks() {
+    for (bool search : {false, true})
+    for (bool hold : {false, true}) {
+        World world;
+        world.press(Key::Up);
+        for (int i = 0; i < 10; ++i) world.press(Key::Right);
+        if (search) world.press(Key::Left);
+        check(!world.app.canOpenRecents(), "Toolbar focus does not arm the recent-app hold gesture");
+        if (hold) world.app.longBack(); else world.press(Key::Back);
+        world.settle(500);
+        check(world.screen() == "home" && world.snapshot()["tab"].string() == "home" &&
+              world.snapshot()["nav"].number() == 0 && world.transport.count("recents") == 0,
+              "Back and held Back from the gear return focus to Inicio");
+    }
+}
+
+void carriedAppChecks() {
+    World world(apps().c_str());
+    world.press(Key::Up);
+    world.press(Key::Right);
+    world.press(Key::Ok, 1200);
+    world.app.longPress();
+    world.press(Key::Right);
+    check(world.snapshot()["focusCard"].string() == "a" && world.snapshot()["rowHead"].string() == "c,a",
+          "Holding OK immediately picks the app up so an arrow moves it without selecting its neighbour");
+    world.reply("catalogue", apps());
+    check(world.snapshot()["arranging"].boolean() && world.snapshot()["focusCard"].string() == "a",
+          "A refresh preserves the app being carried");
+}
+}
+
+int main() {
+    try {
+        dimmingChecks();
+        rowMemoryChecks();
+        barBackChecks();
+        carriedAppChecks();
+        std::printf("%d launcher usability checks passed\n", checkCount());
+        return 0;
+    } catch (const std::exception &error) {
+        std::fprintf(stderr, "FAIL: %s\n", error.what());
+        return 1;
+    }
+}

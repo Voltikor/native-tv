@@ -8,7 +8,7 @@ The dashboard can also run directly on the TV's home screen, driven by the remot
 
 It is drawn by the Native Tv client in the style of Google TV: a dark page with one accent colour, cards that lift and glow when they are focused, and a top bar with the profile, the tabs, the clock and the name Native Tv. The pages below are its own screens, not web pages. Its type, colour, shape, spacing, focus, motion and icons follow Google's TV Design Kit (Material 3); [Material 3 Expressive](../development/material-3-expressive.md) records the values and where the client differs.
 
-Because the panel is an OLED, no screen of the app holds still at full brightness: thirty seconds without a key or a click dim it to two thirds black, and the first key or click after that only wakes it. This holds for Home, Live, Settings, the catalogue and the setup pages alike; the TV's own screen saver is left as it is set.
+Idle dimming defaults to Auto: on an OLED panel, thirty seconds without a key or click dim the launcher to two thirds black, and the first input afterwards only wakes it. LCD/NanoCell panels do not dim automatically. Quick settings offers Auto, On and Off; LG's own screen saver and panel protections are left as they are set.
 
 **Language** in Quick settings or Settings selects Automatic (the TV's language), English or Português (Brasil). The choice applies to native screens and movie metadata, and is independent of the browser dashboard. [Native launcher translations](../development/launcher-translations.md) describes the fallback and storage.
 
@@ -34,6 +34,28 @@ The **Live** tab is the TV's own readings as cards: the processor's load with a 
 From Home, open the gear's **Quick settings**, scroll to **Full settings**, and press OK.
 This opens the native Settings page, including **Settings → TV theme**.
 
+Quick settings also has **Idle dimming**: **Auto (OLED only)**, **On**, and **Off**.
+Auto uses the TV's panel detection; LCD/NanoCell TVs stay bright. This dims only the
+launcher and does not change LG's OLED protection settings or its screen saver.
+The choice applies to every profile. A disabled dimmer also stops consuming the
+first key merely to wake the launcher.
+
+Home and Apps remember the focused item separately for each row. Back from the
+Search or Settings button returns to the Home tab; it does not open recent apps.
+The long-Back gesture for recent apps applies only while a content row is focused.
+
+Holding OK on an app picks it up immediately. Home's apps can be reordered across
+categories. On the Apps page, an app moves within its category; put it down with
+OK before selecting another app or moving the category. Hidden apps cannot steal
+the focus of an app being carried. While editing Home's apps, Down reaches the
+hidden apps so they can be shown again.
+
+In **Who's watching?**, Down reaches the active profile's colours, then its actions.
+Right from **Rename profile** selects **Delete profile**. Deletion names the profile
+and requires a second OK within five seconds; Back cancels. The last profile has
+no delete action, and the server independently rejects removing it. Deleting the
+active profile loads the surviving profile selected by the server.
+
 **Settings** is two panes that are always on screen: the dashboard's ten sections (Metrics, Apps, OLED Care, Game, Screen Saver, Home, Privacy, Service Menu, System and Settings) in a list on the left, a third of the width, and the focused section's page on the right. A section that this TV does not have, such as OLED Care on an LCD, is left out. Moving through the list shows each section's page beside it at once. Each page is split into named subsections of a few rows (Apps has Installed, LG launcher, Quick Access, System apps, Kept ready and LG bloatware), shown as a row of pills above the rows, with only the chosen subsection's rows below. Under the rows, a panel says what the focused row is and what OK does to it. On Screen Saver, the first page lists the screen savers with **Start screen saver** under them, and Options holds when it starts (where the TV reports it) and its brightness. Settings are switches, which slide when they change, values that OK steps to the next of (shown between two chevrons), actions, and links that open another page. Settings opens from the Native Tv tile on LG's home screen and, while [Native Tv Home](../dashboard/home.md) is the home screen, from its **Native Tv** tile: that tile is this app, already in front, so OK opens Settings in the app and asks the server for no launch. Settings is a page of its own, without the Home bar: Up from the first row stops at the section's tabs, and Back leaves for where Settings was opened from.
 
 ![Settings on a B3: the sections on the left and the Metrics page on the right](../screenshots/tv-settings.png)
@@ -55,7 +77,7 @@ A change shows the moment OK is pressed: the switch has already slid and a faint
 * **Google TV** (`n-google-tv`) is the default: ambient artwork behind Home and the filled white focus pill.
 * **OLED Care** (`n-oled-care`) is for OLED panels. The canvas is `#000000`, so pixels that are off do not wear. App icons rest at 62% brightness and the focused one is at full. Focus is a thin ring, the selected tab an underline, and Settings rows have no background until focused. The whole screen moves a few pixels as the minutes pass: up to 8 px sideways and 6 px up or down, in whole pixels, at most 3 px between two minutes. Its Home is the apps, the inputs and two cards from the panel's own figures (its hours with the compensation cycle's progress, and the hours to the Pixel Refresher), and OK on a card opens OLED Care in Settings. It has no hero, no film or series picks and no YouTube row, so it asks neither TMDB nor YouTube for anything, and without TMDB there is no title search. The [design notes](../development/material-3-expressive.md#n-oled-care) give each value and its reason.
 
-The idle behaviour is the same in every theme: the dim after 30 seconds and the screen saver's start time in Settings are not the theme's.
+The idle dimming mode applies in every theme. The screen saver's start time remains a separate setting.
 
 **OK** on a theme shows it at once and saves it, and a sheet asks **Keep OLED Care?**. **Keep** ends it. **Go back**, Back, or ten seconds without a key put the previous theme back, and so does a save the TV refuses. A change made from the phone's [Server tab](../dashboard/server.md) reaches the open app with Home's next ten-second refresh.
 

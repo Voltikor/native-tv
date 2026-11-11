@@ -277,6 +277,20 @@ int main() {
     auto invalidLanguage = updateHomeLayout(localized.document, languagePatch);
     assert(!invalidLanguage.response["ok"].boolean());
     assert(invalidLanguage.document.dump() == localized.document.dump());
+    Json dimPatch = Json::parse(R"({"idleDimming":"off"})");
+    auto noDim = updateHomeLayout(document, dimPatch);
+    assert(noDim.response["ok"].boolean() && homeLayout(noDim.document)["idleDimming"].string() == "off");
+    auto changedProfile = updateHomeProfile(noDim.document, addProfile);
+    assert(changedProfile.document["idleDimming"].string() == "off");
+    for (const auto &profile : changedProfile.document["profiles"].items())
+        assert(!profile["layout"].has("idleDimming"));
+    dimPatch.set("idleDimming", Json::text("unsupported"));
+    auto badDim = updateHomeLayout(noDim.document, dimPatch);
+    assert(!badDim.response["ok"].boolean() && badDim.document.dump() == noDim.document.dump());
+    Json lastRemove = Json::parse(R"({"action":"remove","id":"main"})");
+    Json singleDocument = normalizeHomeDocument(Json::object());
+    auto lastResult = updateHomeProfile(singleDocument, lastRemove);
+    assert(!lastResult.response["ok"].boolean() && lastResult.document.dump() == singleDocument.dump());
     std::cout << "Native Home profiles and layouts passed.\n";
     return 0;
 }
