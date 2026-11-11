@@ -1,6 +1,6 @@
 # Native launcher translations
 
-The launcher has its own **Language** picker, reached from Quick settings or
+The launcher has its own **Language** picker, reached through Quick settings → Full settings → Settings, or
 Settings. **Automatic — follow TV** reads `localeInfo.locales.UI` from the TV's
 preferences at launch. English and Português (Brasil) can be selected explicitly.
 The daemon saves the choice atomically as `language` in `home.json` through the

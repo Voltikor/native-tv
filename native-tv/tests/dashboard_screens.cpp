@@ -815,6 +815,7 @@ void writes() {
     Application web(network, "dashboard:settings");
     reply(web, "settings:data:settings", section("setup"));
     uint32_t w = run(web, 16, 700);
+    web.key(Key::Down); // Home settings is the first row; network is the next.
     check(web.snapshot()["focus"].string() == "Web dashboard" &&
               web.snapshot()["focusOn"].boolean(),
           "The web dashboard is on");
@@ -904,6 +905,7 @@ void writes() {
     Application refusedWeb(refusedNetwork, "dashboard:settings");
     reply(refusedWeb, "settings:data:settings", section("setup"));
     uint32_t refusedAt = run(refusedWeb, 16, 700);
+    refusedWeb.key(Key::Down);
     refusedWeb.key(Key::Ok);
     check(refusedWeb.shows("Switching…") && refusedWeb.snapshot()["busy"].boolean(),
           "A refused network switch also says it is switching until the answer");

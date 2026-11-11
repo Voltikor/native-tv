@@ -49,7 +49,7 @@ downloads; the app uses the committed pack offline.
 
 ## Tile shapes and wide artwork
 
-Quick settings → Home settings → App tile shape cycles Round, Rounded square, Squircle and Rectangle.
+Quick settings → Full settings → Settings → Home settings → App tile shape cycles Round, Rounded square, Squircle and Rectangle.
 Round remains the default; the choice is stored in the active profile's layout.
 Square tiles have rounded corners. Rectangles use a 16:9 frame and retain the
 same height, with row spacing, scrolling and pointer targets using the wider size.
