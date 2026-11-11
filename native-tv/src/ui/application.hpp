@@ -50,7 +50,7 @@ struct HeroArt {
     Color wallTint = neutralWash(); // what pages without art wash in
 };
 struct HomeState {
-    struct RowFocus { size_t column = 0; std::string id; };
+    struct RowFocus { size_t column = 0; std::string identity; };
     std::map<std::string, RowFocus> rowFocus;
     size_t tab = 0, row = 0, column = 0, nav = 0;
     bool navigation = false;
@@ -151,6 +151,7 @@ class Application : private ScreenHost {
     kit::Glyphs *glyphs_ = &legacyGlyphs_;
     Pictures *pictures_ = nullptr;
     Scene scene_;
+    std::string hoveredHit_;
     ScreenRegistry registry_;
     std::unique_ptr<ScreenView> screen_;
     bool barFocus_ = false, ambientOnly_ = false;
@@ -294,10 +295,11 @@ class Application : private ScreenHost {
     void longBack();
     bool canOpenRecents() const {
         return state_.screen == Screen::Home && !state_.home.navigation &&
-               !state_.home.editing && !state_.home.arranging;
+               flow_.pendingTab < 0 && !state_.home.editing && !state_.home.arranging;
     }
     void input(const std::string &text);
     void click(float x, float y);
+    void hover(float x, float y);
     bool activate(const std::string &id);
     void imageReady(const std::string &path);
     void imageFailed(const std::string &path);

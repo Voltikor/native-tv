@@ -59,6 +59,18 @@ void rowMemoryChecks() {
     check(world.snapshot()["column"].number() == 0, "An unvisited row starts on its first item");
     world.press({Key::Right, Key::Right});
     const std::string movie = world.snapshot()["focusCard"].string();
+    world.settle(700);
+    for (const char *channel : {"catalogue", "discover", "catalogue"}) {
+        world.reply(channel, std::string(channel) == "catalogue" ? apps() :
+            fields({{"ok", Json::flag(true)}, {"enabled", Json::flag(true)},
+                    {"titlesEnabled", Json::flag(true)}, {"rows", rows}}).dump());
+        world.settle(700);
+        check(world.snapshot()["focusCard"].string() == movie &&
+                  world.motion("f:1.2") > .99 && world.motion("f:1.7") < .01,
+              "Refreshing a split highlights row keeps the visible focus on its saved movie");
+        check(world.snapshot()["heroTitle"].string() == "Movie 9",
+              "The highlights focus and hero still name the same movie after refresh");
+    }
     world.press(Key::Up);
     check(world.snapshot()["focusCard"].string() == "d", "The apps row remembers its own item");
     world.press(Key::Down);
@@ -108,7 +120,7 @@ void carriedAppChecks() {
 }
 
 void tabBackChecks() {
-    for (uint32_t delay : {0u, 100u, 800u})
+    for (uint32_t delay : {0u, 100u, 200u, 800u})
     for (Key next : {Key::Down, Key::Ok, Key::Back}) {
         World world(apps().c_str());
         world.press({Key::Up, Key::Right});
@@ -205,6 +217,182 @@ void homeResumeChecks() {
               "The next input stays on Inicio after Home resumes the app");
     }
 }
+
+void tabTransitionChecks() {
+    for (const char *target : {"tab:0", "tab:1"}) {
+        World world(apps().c_str());
+        if (std::string(target) == "tab:0") {
+            world.app.activate("tab:1");
+            world.settle(900);
+        }
+        check(world.app.activate(target), "The destination tab is reachable");
+        check(!world.app.canOpenRecents(), "A tab transition cannot arm the held-Back gesture");
+        const Json leaving = world.snapshot();
+        world.press({Key::Down, Key::Right, Key::Ok});
+        world.app.activate("card:0:0");
+        world.app.longPress();
+        world.app.longBack();
+        check(world.screen() == "home" && world.snapshot()["row"].number() == leaving["row"].number() &&
+                  world.snapshot()["column"].number() == leaving["column"].number() &&
+                  world.transport.count("action") == 0 && world.transport.count("recents") == 0,
+              "Inputs during a tab transition cannot select or open an item on the leaving page");
+        world.settle(900);
+        check(world.snapshot()["tab"].string() == (std::string(target) == "tab:0" ? "home" : "apps"),
+              "The destination tab appears without another input");
+        world.press(Key::Right);
+        check(world.snapshot()["column"].number() == 1,
+              "Controls work again after the destination page arrives");
+    }
+}
+
+void registeredTabChecks() {
+    for (int tab : {0, 1}) {
+        World world(apps().c_str());
+        world.app.open("live");
+        world.press(Key::Up);
+        for (int i = 0; i < 10; ++i) world.press(Key::Left);
+        for (int i = 0; i <= tab; ++i) world.press(Key::Right);
+        world.press(Key::Down, 900);
+        check(world.screen() == "home" &&
+                  world.snapshot()["tab"].string() == (tab ? "apps" : "home") &&
+                  !world.snapshot()["navigation"].boolean(),
+              "Down from a registered screen opens the highlighted Home tab");
+    }
+}
+
+void changingTabsChecks() {
+    Json live = Json::parse(apps());
+    live["layout"].set("showLive", Json::flag(true));
+    live.set("sources", fields({{"channels", Json::numeric(1)}}));
+    World world(apps().c_str());
+    world.app.activate("tab:1");
+    world.settle(900);
+    world.reply("catalogue", live.dump());
+    check(world.snapshot()["tab"].string() == "apps", "Inserting Live keeps Apps selected by name");
+    world.press(Key::Up);
+    for (int i = 0; i < 10; ++i) world.press(Key::Right);
+    world.reply("catalogue", apps());
+    check(world.snapshot()["tab"].string() == "apps" && world.snapshot()["nav"].number() == 3,
+          "Removing Live preserves the selected page and Settings toolbar focus");
+    World pending(apps().c_str());
+    pending.app.activate("tab:1");
+    pending.reply("catalogue", live.dump());
+    pending.settle(900);
+    check(pending.snapshot()["tab"].string() == "apps", "An in-flight Apps destination follows its name");
+    World removed(live.dump().c_str());
+    removed.app.activate("tab:1");
+    removed.reply("catalogue", apps());
+    removed.settle(900);
+    check(removed.snapshot()["tab"].string() == "home", "A removed pending tab falls back to Inicio");
+}
+
+void titleIdentityChecks() {
+    auto feed = [](const Json &items) {
+        Json rows = Json::array();
+        rows.add(fields({{"key", Json::text("trending")}, {"items", items}}));
+        return fields({{"ok", Json::flag(true)}, {"rows", rows}}).dump();
+    };
+    Json pair = Json::parse(R"([{"id":"42","type":"movie","title":"Movie 42"},{"id":"42","type":"tv","title":"Series 42"}])");
+    World world(apps().c_str());
+    world.reply("discover", feed(pair));
+    world.press(Key::Down, 700);
+    world.press(Key::Right, 700);
+    check(world.snapshot()["heroTitle"].string() == "Series 42", "Equal movie/TV IDs still change the hero");
+    world.reply("discover", feed(pair));
+    world.settle(700);
+    check(world.snapshot()["column"].number() == 1 && world.snapshot()["heroTitle"].string() == "Series 42",
+          "Refreshing equal movie/TV IDs preserves the selected media type");
+    Json split = Json::array();
+    split.add(pair[size_t(0)]);
+    for (int i = 1; i < 6; ++i)
+        split.add(fields({{"id", Json::text(std::to_string(i))}, {"type", Json::text("movie")},
+                          {"title", Json::text("Other movie")}}));
+    split.add(pair[size_t(1)]);
+    World spotlight(apps().c_str());
+    spotlight.reply("discover", feed(split));
+    spotlight.press(Key::Down, 700);
+    check(spotlight.snapshot()["rowCards"].number() == 1 &&
+              spotlight.snapshot()["heroTitle"].string() == "Series 42" &&
+              spotlight.motion("dots") < .01 && spotlight.motion("dot:0") < .01,
+          "A movie in the carousel does not remove its TV namesake from the row");
+}
+}
+
+namespace {
+bool pointerOutline(World &world) {
+    for (const Node &node : world.app.scene().nodes)
+        if (node.value == "pointer:hover")
+            return true;
+    return false;
+}
+
+void pointAt(World &world, const std::string &id) {
+    const Scene scene = world.app.scene();
+    for (const Hit &hit : scene.hits)
+        if (hit.id == id) {
+            world.app.hover(hit.rect.x + hit.rect.w / 2, hit.rect.y + hit.rect.h / 2);
+            return;
+        }
+    throw std::runtime_error("No pointer target: " + id);
+}
+
+void pointerChecks() {
+    for (const char *shape : {"round", "square", "squircle", "rectangle"}) {
+        Json catalogue = Json::parse(apps());
+        catalogue["layout"].set("appShape", Json::text(shape));
+        World world(catalogue.dump().c_str());
+        world.settle(600);
+        const std::string focused = world.snapshot()["focusCard"].string();
+        const size_t requests = world.transport.requests.size();
+        pointAt(world, "card:0:1");
+        check(pointerOutline(world), "Air cursor highlights an app without clicking it");
+        check(world.snapshot()["focusCard"].string() == focused &&
+                  world.transport.requests.size() == requests,
+              "Hover does not activate apps or move the remote's selection");
+        for (const Node &node : world.app.scene().nodes)
+            if (node.value == "pointer:hover")
+                check(node.squircle == (std::string(shape) == "squircle") && node.ring.outer > 0,
+                      "Hover follows the tile shape and paints a visible outline");
+        world.app.hover(-1, -1);
+        check(!pointerOutline(world), "Leaving a target clears pointer feedback");
+        pointAt(world, "nav:settings");
+        check(pointerOutline(world) && world.screen() == "home",
+              "Hovering Settings highlights it without opening it");
+        world.press(Key::Right);
+        check(!pointerOutline(world), "Remote input clears the pointer highlight");
+        pointAt(world, "nav:tab:1");
+        check(world.snapshot()["tab"].string() == "home", "Hovering a tab never switches pages");
+        world.app.open("quick");
+        world.reply("quick:stats", statsJson);
+        world.settle(500);
+        check(!pointerOutline(world), "Opening a screen clears the previous hover target");
+        const Scene drawer = world.app.scene();
+        for (const Hit &hit : drawer.hits) {
+            if (!hit.hoverable || hit.id.compare(0, 6, "quick:") != 0) continue;
+            pointAt(world, hit.id);
+            check(pointerOutline(world), "Quick settings controls support pointer feedback");
+            break;
+        }
+        // An empty corner of the panel must not outline the entire drawer.
+        world.app.hover(1910, 1070);
+        check(!pointerOutline(world), "Modal background targets do not get hover outlines");
+        pointAt(world, "card:0:1");
+        check(!pointerOutline(world), "The drawer blocks hover on Home underneath it");
+    }
+    World pending(apps().c_str());
+    pending.press({Key::Up, Key::Right, Key::Ok});
+    pointAt(pending, "card:0:1");
+    check(!pointerOutline(pending), "Leaving-page targets cannot highlight during a tab transition");
+    World recents(apps().c_str());
+    recents.app.open("recents");
+    recents.settle(500);
+    check(!hasHit(recents.app.scene(), "card:0:1"),
+          "Recent apps removes pointer targets belonging to the covered Home page");
+    pointAt(recents, "back");
+    check(pointerOutline(recents), "Empty recent apps has a pointer-accessible way back");
+    recents.app.activate("back");
+    check(recents.screen() == "home", "The pointer can leave an empty recent-apps overlay");
+}
 }
 
 int main() {
@@ -216,7 +404,12 @@ int main() {
         tabBackChecks();
         scrollingBarChecks();
         homeResumeChecks();
+        tabTransitionChecks();
         carriedAppChecks();
+        registeredTabChecks();
+        changingTabsChecks();
+        titleIdentityChecks();
+        pointerChecks();
         std::printf("%d launcher usability checks passed\n", checkCount());
         return 0;
     } catch (const std::exception &error) {

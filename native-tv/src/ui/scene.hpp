@@ -166,6 +166,7 @@ struct Node {
 struct Hit {
     Rect rect;
     std::string id;
+    bool hoverable = true;
 };
 
 // Strings kept once and referred to by id, so a frame that repeats last frame's strings (hit ids,

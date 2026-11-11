@@ -426,7 +426,7 @@ void overviewSheet(kit::Paint paint, const std::string &title, const std::string
     Scene &scene = paint.scene;
     kit::veil(paint, .82f * open);
     // What is under the sheet cannot be clicked through it.
-    scene.hits.push_back({{0, 0, kit::canvas::width, kit::canvas::height}, "details:sheet"});
+    scene.hits.push_back({{0, 0, kit::canvas::width, kit::canvas::height}, "details:sheet", false});
     scene.pushOpacity(open);
     scene.pushTransform(Transform::translate(0, 24 * (1 - open)));
     Rect panel = {260, 150, 1400, 780};

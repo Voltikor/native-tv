@@ -288,13 +288,13 @@ class QuickScreen final : public ScreenView {
         else
             kit::ambientWall(paint, 1, host.view().home.art.wallTint);
         kit::veil(paint, .62f * open); // the one dim scrim over the page
-        scene.hits.push_back({{0, 0, kPanelX, kit::canvas::height}, "quick:close"});
+        scene.hits.push_back({{0, 0, kPanelX, kit::canvas::height}, "quick:close", false});
 
         scene.pushTransform(Transform::translate(slide, 0));
         Node &panel = scene.shape({kPanelX, 0, kPanelW, kit::canvas::height}, kit::color::surface1);
         panel.corners = {kit::radius::xl, 0, 0, kit::radius::xl};
         panel.ring = {1, 0, kit::alpha::outline};
-        scene.hits.push_back({{kPanelX, 0, kPanelW, kit::canvas::height}, "quick:panel"});
+        scene.hits.push_back({{kPanelX, 0, kPanelW, kit::canvas::height}, "quick:panel", false});
         paint.glyphs.text(scene, {kPanelX + kPad, 56, kRowW, kit::type::headline.line}, title(),
                           kit::type::headline, kit::color::onSurface);
 

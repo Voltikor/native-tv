@@ -5,6 +5,7 @@
 
 namespace nativetv {
 void Application::route(const std::string &path) {
+    hoveredHit_.clear();
     if (state_.home.arranging) homeArrangeDone();
     if (state_.home.editing) homeEditDone(false);
     confirmId_.clear();
@@ -232,10 +233,12 @@ void Application::screenKey(Key key) {
     if (key == Key::Right && position + 1 < stops.size())
         ++position;
     home.nav = stops[position];
-    if (key == Key::Down) {
+    const bool enterTab = key == Key::Down && home.nav < home.tabs.size() &&
+                          static_cast<int>(home.nav) != screen_->barTab();
+    if (key == Key::Down && !enterTab) {
         barFocus_ = home.navigation = false;
         screen_->focus(*this);
-    } else if (key == Key::Ok) {
+    } else if (key == Key::Ok || enterTab) {
         barFocus_ = home.navigation = false;
         if (home.nav < home.tabs.size()) {
             size_t tab = home.nav;

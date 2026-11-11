@@ -431,6 +431,32 @@ void Application::buildFrame() {
             scene.hits[i].rect.y += drift.y;
         }
     }
+    if (!hoveredHit_.empty()) {
+        for (const Hit &hit : scene.hits) {
+            if (hit.id != hoveredHit_ || !hit.hoverable)
+                continue;
+            float radius = 12;
+            bool squircle = false;
+            // Match the painted outline, including round icons and squircle tiles.
+            for (const Node &node : scene.nodes) {
+                if (node.kind != Node::Kind::Rectangle && node.kind != Node::Kind::Image)
+                    continue;
+                const Transform transform = node.transform.then(node.group);
+                const Rect box = transform.apply(node.rect);
+                if (std::fabs(box.x - hit.rect.x) < 2 && std::fabs(box.y - hit.rect.y) < 2 &&
+                    std::fabs(box.w - hit.rect.w) < 2 && std::fabs(box.h - hit.rect.h) < 2) {
+                    radius = node.radius * transform.sx;
+                    squircle = node.squircle;
+                    break;
+                }
+            }
+            Node &outline = scene.shape(hit.rect, {0, 0, 0, 0}, radius);
+            outline.ring = {0, kit::elevation::focusRingWidth, kit::elevation::focusRingColor};
+            outline.squircle = squircle;
+            outline.value = "pointer:hover";
+            break;
+        }
+    }
     drawIdleDim(paint);
 }
 const Scene &Application::frame() {

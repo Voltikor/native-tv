@@ -183,9 +183,7 @@ bool ambientOnly(const Application &app) {
     return forced || app.ambientOnly();
 }
 
-// What the loop acts on. Anything else (mouse motion, a window move or exposure) is let go
-// during the pause between frames: the window manager or a Magic Remote pointer can send them at
-// the display rate, and each one used to cut the 30 fps ambient pause short.
+// Motion updates hover during pacing without cutting the ambient frame interval short.
 bool endsPause(const SDL_Event &event) {
     switch (event.type) {
     case SDL_QUIT:
@@ -518,6 +516,9 @@ int main(int argc, char **argv) {
                     if (event.type == SDL_QUIT)
                         quit = true;
                     else if (event.type == SDL_WINDOWEVENT && !stops) {
+                        if (event.window.event == SDL_WINDOWEVENT_LEAVE ||
+                            event.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
+                            app.hover(-1, -1);
                         // A bounded run (`--time`, `--duration-ms`) has to reach its end
                         // and draw whatever the window manager does with focus.
                         if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST ||
@@ -588,7 +589,12 @@ int main(int argc, char **argv) {
                         }
                     } else if (event.type == SDL_TEXTINPUT)
                         app.input(event.text.text);
-                    else if (event.type == SDL_MOUSEBUTTONUP &&
+                    else if (event.type == SDL_MOUSEMOTION) {
+                        int w, h;
+                        SDL_GetWindowSize(gl.window(), &w, &h);
+                        if (w > 0 && h > 0)
+                            app.hover(event.motion.x * 1920.0f / w, event.motion.y * 1080.0f / h);
+                    } else if (event.type == SDL_MOUSEBUTTONUP &&
                              event.button.button == SDL_BUTTON_LEFT) {
                         int w, h;
                         SDL_GetWindowSize(gl.window(), &w, &h);
@@ -761,6 +767,15 @@ int main(int argc, char **argv) {
                                 SDL_PushEvent(&woken);
                                 break;
                             }
+                            if (woken.type == SDL_MOUSEMOTION) {
+                                int w, h;
+                                SDL_GetWindowSize(gl.window(), &w, &h);
+                                if (w > 0 && h > 0)
+                                    app.hover(woken.motion.x * 1920.0f / w,
+                                              woken.motion.y * 1080.0f / h);
+                            } else if (woken.type == SDL_WINDOWEVENT &&
+                                       woken.window.event == SDL_WINDOWEVENT_LEAVE)
+                                app.hover(-1, -1);
                         }
                     }
                 } else

@@ -37,6 +37,7 @@ void drawRecents(kit::Paint paint, const Frame &frame) {
     const RecentState &recent = frame.state.recents;
     const Motion &motion = frame.motion;
     Scene &scene = paint.scene;
+    scene.hits.clear(); // The modal blocks pointer targets on Home underneath it.
     float open = static_cast<float>(std::min(1.0, motion.value("rec")));
     if (open <= .002f)
         return;
@@ -55,6 +56,8 @@ void drawRecents(kit::Paint paint, const Frame &frame) {
         if (recent.load == RecentState::Load::Failed && !recent.status.empty())
             paint.glyphs.text(scene, {kit::canvas::safeX, 280, 1400, kit::type::body.line},
                               recent.status, kit::type::body, kit::color::onSurface3);
+        pill(paint, {kit::canvas::width - kit::canvas::safeX - 200, 176, 200, 56},
+             say::msg("launcher.key.back", "Back"), "back", 0);
     } else {
         paint.glyphs.text(scene, kit::geometry::pageSubtitle(1000),
                           localizedPlural("launcher.recents.openCount", "{count} app open", "{count} apps open", recent.cards.size()), kit::type::body,

@@ -1,6 +1,7 @@
 #include "domain/say.hpp"
 #include "ui/application.hpp"
 #include "ui/controller_helpers.hpp"
+#include "ui/home_layout.hpp"
 #include <algorithm>
 
 namespace nativetv {
@@ -15,7 +16,7 @@ void Application::rememberHomeFocus() {
         home.column >= home.rows[home.row].cards.size()) return;
     auto &saved = home.rowFocus[focusKey(home)];
     saved.column = home.column;
-    saved.id = home.rows[home.row].cards[home.column].id;
+    saved.identity = home::identity(home.rows[home.row].cards[home.column]);
 }
 void Application::restoreHomeFocus() {
     auto &home = state_.home;
@@ -25,7 +26,7 @@ void Application::restoreHomeFocus() {
     home.column = saved == home.rowFocus.end() ? 0 : clampIndex(saved->second.column, cards.size());
     if (saved != home.rowFocus.end())
         for (size_t i = 0; i < cards.size(); ++i)
-            if (cards[i].id == saved->second.id) { home.column = i; break; }
+            if (home::identity(cards[i]) == saved->second.identity) { home.column = i; break; }
 }
 void Application::rebuildHome() {
     // The cards being moved are the person's own order until it is saved.
@@ -37,12 +38,24 @@ void Application::rebuildHome() {
         rowKey = state_.home.rows[state_.home.row].key;
         group = state_.home.rows[state_.home.row].group;
     }
-    state_.home.tabs = homeTabs(state_.catalogue);
     auto &home = state_.home;
-    home.tab = clampIndex(home.tab, home.tabs.size());
+    const auto previousTabs = home.tabs;
+    home.tabs = homeTabs(state_.catalogue);
+    auto remapTab = [&](size_t index) -> size_t {
+        if (index < previousTabs.size())
+            for (size_t i = 0; i < home.tabs.size(); ++i)
+                if (home.tabs[i].key == previousTabs[index].key) return i;
+        return 0;
+    };
+    home.tab = remapTab(home.tab);
+    home.nav = !previousTabs.empty() && home.nav >= previousTabs.size()
+                   ? home.tabs.size() + home.nav - previousTabs.size() : remapTab(home.nav);
+    flow_.shown = remapTab(flow_.shown);
+    if (flow_.pendingTab >= 0)
+        flow_.pendingTab = static_cast<int>(remapTab(static_cast<size_t>(flow_.pendingTab)));
     std::string oldId;
     if (home.row < home.rows.size() && home.column < home.rows[home.row].cards.size())
-        oldId = home.rows[home.row].cards[home.column].id;
+        oldId = home::identity(home.rows[home.row].cards[home.column]);
     home.rows = homeRowsFor(home.tabs[home.tab].key);
     home.picksTaken = false; // homeData() takes the spotlight out of the whole top picks row
     home.arranging = false; // the rows are the server's again
@@ -53,7 +66,7 @@ void Application::rebuildHome() {
         const auto &cards = home.rows[home.row].cards;
         home.column = clampIndex(home.column, cards.size());
         for (size_t i = 0; i < cards.size(); ++i)
-            if (cards[i].id == oldId)
+            if (home::identity(cards[i]) == oldId)
                 home.column = i;
     }
     auto stops = navigationStops(state_);
@@ -61,6 +74,7 @@ void Application::rebuildHome() {
         home.nav = home.tab;
     homeData();
     restoreHomeFocus();
+    homeFocus();
     dirty_ = true;
 }
 std::vector<CardRow> Application::homeRowsFor(const std::string &tab) const {

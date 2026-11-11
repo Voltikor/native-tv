@@ -6,6 +6,10 @@
 
 namespace nativetv {
 void Application::key(Key key) {
+    if (!hoveredHit_.empty()) {
+        hoveredHit_.clear();
+        dirty_ = true;
+    }
     if (state_.screen == Screen::Splash)
         return;
     // The first key after the screen dimmed only wakes it, on every screen.
@@ -27,7 +31,9 @@ void Application::key(Key key) {
         recentsFocus();
     } else if (state_.screen == Screen::Home) {
         auto &home = state_.home;
-        // A key that arrives while the page is changing acts on the page that is leaving.
+        // Back can cancel the destination; other inputs wait for its rows to replace the old ones.
+        if (flow_.pendingTab >= 0)
+            return;
         if (home.navigation) {
             auto stops = navigationStops(state_);
             auto current = std::find(stops.begin(), stops.end(), home.nav);
@@ -147,8 +153,30 @@ std::string controllerHit(const ViewState &state, const std::string &id) {
     return id;
 }
 } // namespace
+void Application::hover(float x, float y) {
+    std::string target;
+    if (x >= 0 && y >= 0 && state_.screen != Screen::Splash &&
+        !(state_.screen == Screen::Home && flow_.pendingTab >= 0)) {
+        wake();
+        // Use the last painted targets, not a fresh layout for every motion event.
+        for (auto it = scene_.hits.rbegin(); it != scene_.hits.rend(); ++it)
+            if (it->rect.contains(x, y)) {
+                if (it->hoverable && !controllerHit(state_, it->id).empty())
+                    target = it->id;
+                break;
+            }
+    }
+    if (target != hoveredHit_) {
+        hoveredHit_ = target;
+        dirty_ = true;
+    }
+}
 void Application::click(float x, float y) {
+    hoveredHit_.clear();
+    dirty_ = true;
     if (wake())
+        return;
+    if (state_.screen == Screen::Home && flow_.pendingTab >= 0)
         return;
     Scene visible = scene();
     for (auto it = visible.hits.rbegin(); it != visible.hits.rend(); ++it)
@@ -272,8 +300,9 @@ void Application::longPress() {
     }
 }
 void Application::longBack() {
-    if (state_.screen != Screen::Home || state_.home.arranging || state_.home.editing)
-        return; // the hold is not a request for the recent apps while rows or apps are moved
+    if (state_.screen != Screen::Home || flow_.pendingTab >= 0 || state_.home.arranging ||
+        state_.home.editing)
+        return; // no recent apps while the page changes or rows/apps are moved
     if (state_.home.navigation) {
         back();
         return;

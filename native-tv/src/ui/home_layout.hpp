@@ -11,6 +11,11 @@ namespace nativetv {
 namespace home {
 constexpr size_t kSpotlightMax = 6;
 
+// Movies and series have separate ID spaces.
+inline std::string identity(const Card &card) {
+    return card.kind + ":" + card.data["type"].string() + ":" + card.id;
+}
+
 // Hue in degrees, saturation and lightness in 0..1.
 inline Color hsl(float hue, float saturation, float lightness) {
     float chroma = (1 - std::fabs(2 * lightness - 1)) * saturation, h = hue / 60;

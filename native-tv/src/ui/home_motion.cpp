@@ -80,7 +80,7 @@ size_t anchorRow(const HomeState &home) {
 std::string rowTitleOf(const ViewState &state, const Card &card) {
     auto holds = [&](const CardRow &row) {
         for (const auto &candidate : row.cards)
-            if (candidate.id == card.id && candidate.kind == card.kind)
+            if (home::identity(candidate) == home::identity(card))
                 return true;
         return false;
     };
@@ -218,7 +218,7 @@ void Application::homeData() {
             cards.erase(std::remove_if(cards.begin(), cards.end(),
                                        [&home](const Card &card) {
                                            for (const Card &shown : home.spotlight)
-                                               if (shown.id == card.id && shown.kind == card.kind)
+                                               if (home::identity(shown) == home::identity(card))
                                                    return true;
                                            return false;
                                        }),
@@ -529,6 +529,7 @@ void Application::homeSelectTab(size_t tab) {
     if (home.arranging) homeArrangeDone();
     if (home.editing) homeEditDone(false);
     flow_.pendingTab = static_cast<int>(tab);
+    hoveredHit_.clear();
     flow_.swapAt = now_ + kPageSwapMs;
     // The Apps page's icons are asked for while the old page leaves, so its entrance does not wait
     // for them.
@@ -605,7 +606,7 @@ void Application::homeUpdate() {
             want = home.hero;
         else if (!home.rows[0].cards.empty())
             want = home.rows[0].cards[0];
-        std::string wantId = want.kind + ":" + want.id, shownId = home.art.shownId;
+        std::string wantId = home::identity(want), shownId = home.art.shownId;
         if (wantId != flow_.wantId) {
             flow_.wantId = wantId;
             flow_.want = want;
@@ -653,11 +654,11 @@ void Application::homeRetargetHero(const Card &card, bool instant) {
         path = artOf(home.spotlight[std::min(home.spotIndex, home.spotlight.size() - 1)]);
         artAlpha = kWallpaperAlpha;
     }
-    art.shownId = card.kind + ":" + card.id;
+    art.shownId = home::identity(card);
     home.hero = card;
     // The slideshow resumes from whichever card the hero now shows.
     for (size_t i = 0; i < home.spotlight.size(); ++i)
-        if (home.spotlight[i].id == card.id && home.spotlight[i].kind == card.kind)
+        if (home::identity(home.spotlight[i]) == home::identity(card))
             home.spotIndex = i;
     int outgoing = art.newest, incoming = 1 - outgoing;
     bool hadArt = !art.image[outgoing].empty();
@@ -698,14 +699,14 @@ void Application::homeRetargetHero(const Card &card, bool instant) {
     // The dots describe the carousel: they fade while the hero shows a focused card instead.
     bool featured = false;
     for (const Card &shown : home.spotlight)
-        featured = featured || (shown.id == card.id && shown.kind == card.kind);
+        featured = featured || home::identity(shown) == home::identity(card);
     if (instant)
         motion_.set("dots", featured ? 1 : 0);
     else
         motion_.tween("dots", featured ? 1 : 0, ms::fast, easing(ease::out));
     for (size_t i = 0; i < home::kSpotlightMax; ++i) {
-        bool current = i < home.spotlight.size() && home.spotlight[i].id == card.id &&
-                       home.spotlight[i].kind == card.kind;
+        bool current = i < home.spotlight.size() &&
+                       home::identity(home.spotlight[i]) == home::identity(card);
         if (instant)
             motion_.set(home::id("dot", i), current ? 1 : 0);
         else
