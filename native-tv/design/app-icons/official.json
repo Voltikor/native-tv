@@ -27,7 +27,8 @@
         "appletvplus",
         "com.apple.atve.androidtv.appletv"
       ],
-      "publisher": "Apple"
+      "publisher": "Apple",
+      "inset": 24
     },
     "bandplay": {
       "package": "br.com.band.guiatv",

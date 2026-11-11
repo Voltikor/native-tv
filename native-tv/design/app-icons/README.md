@@ -14,6 +14,9 @@ Transparency is preserved; the TV app's existing background shows through those
 regions, so a store icon alone does not establish an adaptive icon's background.
 Emby's complete icon is fitted to 76% of the square, with transparent padding,
 to keep its ANDROID TV caption inside the circular mask. Its source is unchanged.
+Apple TV has a baked-in glossy rounded-square border. Its generated tile trims
+24 source pixels from each edge to remove the top/bottom bevel slivers under
+the circular mask. The logo and original source file remain unchanged.
 
 Coverage includes every video/music alias in `src/service/app_kinds.cpp`, plus
 additional streaming services including Bandplay, Claro tv+, DAZN, Looke, MUBI,

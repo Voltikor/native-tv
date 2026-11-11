@@ -105,6 +105,11 @@ def official_icon(entry, size):
         if image.format != "PNG" or image.width != image.height or not size <= image.width <= 2048:
             raise ValueError("Official artwork must be a square PNG: " + str(path))
         art = image.convert("RGBA")
+        inset = entry.get("inset", 0)
+        if not isinstance(inset, int) or not 0 <= inset < image.width // 4:
+            raise ValueError("Official artwork inset is outside the safe range")
+        if inset:
+            art = art.crop((inset, inset, image.width - inset, image.height - inset))
         fit = entry.get("fit", 1)
         if not 0 < fit <= 1:
             raise ValueError("Official artwork fit must be between zero and one")
