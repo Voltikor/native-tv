@@ -112,7 +112,7 @@ void openChecks() {
     world.reply("quick:now", R"({"ok":true,"kind":"input","port":1})");
     world.settle(300);
     check(world.snapshot()["volume"].number() == 24 && world.snapshot()["light"].number() == 70 &&
-              world.snapshot()["rows"].number() == 12 && world.snapshot()["focus"].string() == "Volume",
+              world.snapshot()["rows"].number() == 13 && world.snapshot()["focus"].string() == "Volume",
           "The drawer shows the volume and light the TV reported");
     check(world.app.shows("Picture mode") && world.app.shows("Cinema") && world.app.shows("OLED light") &&
               world.app.shows("Console"),
