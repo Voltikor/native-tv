@@ -36,13 +36,17 @@ result() {   # action; also whether the dashboard is off, and the old tile's fat
 }
 
 # This app is the tile from now on: say so, which also stops the server's own
-# installer offering or refreshing the one deploy.sh added, then retire that
-# one if it is not open. Its answer is passed back for the launch page.
+# installer offering the old web tile. Keep the native client required by Home;
+# retire only the older web tile. Its answer is passed back for the launch page.
 adopt() {
   # Records where the app lives, so the server can tell when it is uninstalled.
   dirname "$HERE" > "$D/.from-homebrew-channel"
   if grep -q '"type"[[:space:]]*:[[:space:]]*"native"' "$D/assets/dashboard-app/appinfo.json"; then
-    sh "$D/assets/dashboard-app/install-app.sh" install >/dev/null 2>&1
+    if sh "$D/assets/dashboard-app/install-app.sh" status | grep -q '"installed":true'; then
+      sh "$D/assets/dashboard-app/install-app.sh" refresh >/dev/null 2>&1
+    else
+      sh "$D/assets/dashboard-app/install-app.sh" install >/dev/null 2>&1
+    fi
     OLD_TILE='{"ok":true,"retired":false,"reason":"native-home-client"}'
   else
     OLD_TILE=$(sh "$D/assets/dashboard-app/install-app.sh" retire 2>/dev/null | tail -1)
