@@ -4565,10 +4565,6 @@
     "from": "Screen off",
     "text": "Apagar tela"
   },
-  "tv.quick.screensaver": {
-    "from": "Screensaver",
-    "text": "Protetor de tela"
-  },
   "tv.quick.settings": {
     "from": "Home settings",
     "text": "Configurações do Início"

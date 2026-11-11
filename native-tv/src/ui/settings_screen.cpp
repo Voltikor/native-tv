@@ -124,7 +124,7 @@ class SettingsScreen final : public ScreenView {
             // Where Settings was opened from; Home as it was when that was Home.
             std::string from = host.cameFrom();
             bool sibling = from.empty() || from.compare(0, 9, "dashboard") == 0 ||
-                           from == "settings" || from == "catalog" || from == "live" ||
+                           from == "settings" || from == "catalog" || from == "live" || from == "launcher-settings" ||
                            from.compare(0, 7, "tvtheme") == 0 ||
                            from.compare(0, 4, "tab:") == 0;
             host.open(sibling ? "home" : returnRoute(from));
@@ -552,6 +552,16 @@ class SettingsScreen final : public ScreenView {
         pages_ = sub_.empty() ? settingPages(key, rows) : std::vector<SettingPage>{SettingPage()};
         if (!sub_.empty())
             pages_[0].items = settingItems(key, rows);
+        if (key == "settings" && sub_.empty()) {
+            SettingItem appearance;
+            appearance.id = "launcher-layout";
+            appearance.kind = SettingItem::Kind::Link;
+            appearance.icon = "apps";
+            appearance.title = say::msg("tv.quick.settings", "Home settings");
+            appearance.action = say::msg("tv.settings.open", "Open");
+            appearance.command = navigate("launcher-settings");
+            pages_[0].items.insert(pages_[0].items.begin(), appearance);
+        }
         // Metrics are the page Live shows as cards; the way there is the first row.
         if (key == "system" && sub_.empty()) {
             SettingItem live;

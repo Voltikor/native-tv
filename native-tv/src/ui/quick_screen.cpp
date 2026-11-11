@@ -120,7 +120,7 @@ class QuickScreen final : public ScreenView {
     };
 
   public:
-    explicit QuickScreen(Level level = Level::Main) : level_(level) {}
+    explicit QuickScreen(Level level = Level::Main) : level_(level), standalone_(level == Level::Layout) {}
 
     std::string name() const override {
         return level_ == Level::Main ? "quick" : std::string("quick:") + levelName(level_);
@@ -175,7 +175,7 @@ class QuickScreen final : public ScreenView {
         // The switches follow what is shown, so a refusal that takes one back moves it back.
         if (level_ == Level::Layout)
             for (size_t i = 0; i < rows_.size(); ++i)
-                host.motion().tween("quick:t:" + std::to_string(i), layoutFlag(host, rows_[i].id) ? 1 : 0,
+                if (rows_[i].kind == Row::Kind::Switch) host.motion().tween("quick:t:" + std::to_string(i), layoutFlag(host, rows_[i].id) ? 1 : 0,
                                     kit::motion::ms::fast, easing(kit::motion::ease::out));
         // The spinner turns while anything is being read.
         return !loaded_ || retryAt_ > 0;
@@ -215,7 +215,9 @@ class QuickScreen final : public ScreenView {
     bool back(ScreenHost &host) override {
         if (closing_)
             return true;
-        if (level_ != Level::Main)
+        if (standalone_)
+            close(host, returnRoute(host.cameFrom()));
+        else if (level_ != Level::Main)
             toMain(host);
         else
             close(host, returnRoute(host.cameFrom()));
@@ -522,14 +524,10 @@ class QuickScreen final : public ScreenView {
             add(Row::Kind::Plain, "sound", "speaker", msg("tv.quick.sound", "Sound output"), "", true);
             add(Row::Kind::Plain, "input", "hdmi", msg("tv.quick.input", "Input"), "", true);
             add(Row::Kind::Plain, "sleep", "clock", msg("tv.quick.sleep", "Sleep timer"), "", true);
-            add(Row::Kind::Plain, "saver", "monitor", msg("tv.quick.screensaver", "Screensaver"));
             add(Row::Kind::Plain, "off", "power", msg("tv.quick.screenOff", "Screen off"));
             add(Row::Kind::Plain, "recents", "apps", msg("tv.quick.recents", "Recent apps"), "", true);
             add(Row::Kind::Plain, "profile", "profile", msg("tv.quick.profile", "Profile"), "", true);
-            add(Row::Kind::Plain, "layout", "gear", msg("tv.quick.settings", "Home settings"), "", true);
-            add(Row::Kind::Plain, "language", "globe", msg("launcher.language.title", "Language"), "", true);
             add(Row::Kind::Plain, "full-settings", "gear", msg("launcher.quick.fullSettings", "Full settings"), "", true);
-            add(Row::Kind::Plain, "idleDimming", "light", msg("launcher.dimming.title", "Idle dimming"));
         } else if (level_ == Level::Picture) {
             for (const auto &mode : s["picture"]["modes"].items())
                 add(Row::Kind::Choice, mode["value"].string(), "picture", mode["label"].string(),
@@ -559,6 +557,7 @@ class QuickScreen final : public ScreenView {
                     if (title.first == entry.key)
                         add(Row::Kind::Switch, entry.key, entry.icon, title.second);
             add(Row::Kind::Plain, "appShape", "apps", msg("launcher.shape.title", "App tile shape"));
+            add(Row::Kind::Plain, "idleDimming", "light", msg("launcher.dimming.title", "Idle dimming"));
         }
         if (rows.empty())
             add(Row::Kind::Plain, "", "", msg("tv.quick.nothing", "Nothing to choose from"), "", false, true);
@@ -752,8 +751,10 @@ class QuickScreen final : public ScreenView {
             return;
         const Row &row = rows_[focus_];
         if (level_ != Level::Main) {
-            if (direction < 0)
-                toMain(host);
+            if (direction < 0) {
+                if (standalone_) close(host, returnRoute(host.cameFrom()));
+                else toMain(host);
+            }
             return;
         }
         if (row.id == "volume")
@@ -838,6 +839,15 @@ class QuickScreen final : public ScreenView {
         const Row &row = rows_[focus_];
         if (rowDim(row) && !row.go)
             return;
+        if (row.id == "idleDimming") {
+            const std::string before = host.view().catalogue["layout"]["idleDimming"].string("auto");
+            const std::string shown = host.optimistic().text("layout.idleDimming", before);
+            host.optimistic().set("layout.idleDimming",
+                Json::text(shown == "auto" ? "on" : shown == "on" ? "off" : "auto"),
+                Json::text(before), layoutWrite("idleDimming"));
+            host.invalidate();
+            return;
+        }
         if (level_ != Level::Main) {
             choose(host, row);
             return;
@@ -859,28 +869,16 @@ class QuickScreen final : public ScreenView {
             openLevel(host, Level::Input);
         else if (row.id == "sleep")
             openLevel(host, Level::Sleep);
-        else if (row.id == "layout")
-            openLevel(host, Level::Layout);
-        else if (row.id == "saver" || row.id == "off") {
+        else if (row.id == "off") {
             // The TV acts; the drawer is already gone, and a refusal is said by the layer.
-            host.optimistic().run("quick.act", controlWrite(row.id == "saver" ? "screensaver" : "screenOff"));
+            host.optimistic().run("quick.act", controlWrite("screenOff"));
             close(host, returnRoute(host.cameFrom()));
         } else if (row.id == "recents")
             close(host, "recents");
         else if (row.id == "profile")
             close(host, "profiles");
-        else if (row.id == "language")
-            close(host, "language");
         else if (row.id == "full-settings")
             close(host, "dashboard:settings");
-        else if (row.id == "idleDimming") {
-            const std::string before = host.view().catalogue["layout"]["idleDimming"].string("auto");
-            const std::string shown = host.optimistic().text("layout.idleDimming", before);
-            host.optimistic().set("layout.idleDimming",
-                Json::text(shown == "auto" ? "on" : shown == "on" ? "off" : "auto"),
-                Json::text(before), layoutWrite("idleDimming"));
-            host.invalidate();
-        }
     }
     void choose(ScreenHost &host, const Row &row) {
         if (level_ == Level::Layout && row.id == "appShape") {
@@ -929,6 +927,7 @@ class QuickScreen final : public ScreenView {
     }
 
     Level level_;
+    bool standalone_ = false;
     Json stats_ = Json::object();
     std::string nowPort_;
     std::vector<Row> rows_;
@@ -947,6 +946,8 @@ class QuickScreen final : public ScreenView {
 } // namespace
 
 std::unique_ptr<ScreenView> makeQuickScreen(const std::string &route) {
+    if (route == "launcher-settings")
+        return std::unique_ptr<ScreenView>(new QuickScreen(Level::Layout));
     return route == "quick" ? std::unique_ptr<ScreenView>(new QuickScreen()) : nullptr;
 }
 } // namespace nativetv

@@ -112,7 +112,7 @@ void openChecks() {
     world.reply("quick:now", R"({"ok":true,"kind":"input","port":1})");
     world.settle(300);
     check(world.snapshot()["volume"].number() == 24 && world.snapshot()["light"].number() == 70 &&
-              world.snapshot()["rows"].number() == 14 && world.snapshot()["focus"].string() == "Volume",
+              world.snapshot()["rows"].number() == 10 && world.snapshot()["focus"].string() == "Volume",
           "The drawer shows the volume and light the TV reported");
     check(world.app.shows("Picture mode") && world.app.shows("Cinema") && world.app.shows("OLED light") &&
               world.app.shows("Console"),
@@ -355,8 +355,7 @@ void shapeCycleChecks() {
         Json catalogue = Json::parse(catalogueJson);
         catalogue["layout"].set("appShape", Json::text(modes[i]));
         world.reply("catalogue", catalogue.dump());
-        world.focusRow(10);
-        world.press(Key::Ok);
+        world.app.open("launcher-settings");
         world.settle(400);
         world.focusRow(6);
         world.press(Key::Ok);
@@ -369,8 +368,7 @@ void shapeCycleChecks() {
 
 void shapeOptionChecks() {
     Quick world;
-    world.focusRow(10);
-    world.press(Key::Ok);
+    world.app.open("launcher-settings");
     world.settle(400);
     world.focusRow(6);
     check(world.snapshot()["focus"].string() == "App tile shape" && world.app.shows("Round"),
@@ -388,11 +386,10 @@ void shapeOptionChecks() {
 
 void switchChecks() {
     Quick world;
-    world.focusRow(10);
+    world.app.open("launcher-settings");
     world.settle(400);
-    check(world.snapshot()["focus"].string() == "Home settings" && world.motion("quick:sy") < -100,
-          "The list scrolls to keep the focused row in view");
-    world.press(Key::Ok);
+    check(world.screen() == "quick:layout",
+          "Home settings remains accessible through its dedicated route");
     world.settle(400);
     check(world.screen() == "quick:layout" && world.app.shows("24-hour clock") && world.app.shows("App names"),
           "Home settings lists the switches");
@@ -438,18 +435,8 @@ void switchChecks() {
 // ---- Actions ----------------------------------------------------------------------------------------
 
 void actionChecks() {
-    Quick world;
-    world.focusRow(6);
-    check(world.snapshot()["focus"].string() == "Screensaver", "Screensaver is a row");
-    world.press(Key::Ok);
-    check(world.snapshot()["closing"].boolean(), "OK starts it and the drawer closes at once");
-    check(world.on("w:quick.act")[0].body["action"].string() == "screensaver", "The write starts the screensaver");
-    world.settle(900);
-    check(world.screen() == "home", "Home is back");
-    world.answer(world.on("w:quick.act")[0], false, "Busy");
-    check(world.toasted("That did not work: Busy"), "A refusal after the drawer has gone is still said");
     Quick off;
-    off.focusRow(7);
+    off.focusRow(6);
     off.press(Key::Ok);
     check(off.on("w:quick.act")[0].body["action"].string() == "screenOff", "Screen off posts its action");
     Quick input;
@@ -471,13 +458,13 @@ void actionChecks() {
 
 void navigationChecks() {
     Quick recents;
-    recents.focusRow(8);
+    recents.focusRow(7);
     check(recents.snapshot()["focus"].string() == "Recent apps", "Recent apps is a row");
     recents.press(Key::Ok);
     recents.settle(900);
     check(recents.screen() == "quick:recents", "The row opens the recent apps");
     Quick profile;
-    profile.focusRow(9);
+    profile.focusRow(8);
     check(profile.snapshot()["focus"].string() == "Profile" && profile.app.shows("B3"),
           "The profile row names the profile after the TV");
     profile.press(Key::Ok);
@@ -528,12 +515,39 @@ void navigationChecks() {
           "The newest volume is sent although the drawer has gone");
 }
 
+void compactMenuChecks() {
+    Quick world;
+    const char *expected[] = {"Volume", "Picture mode", "OLED light", "Sound output", "Input",
+                              "Sleep timer", "Screen off", "Recent apps", "Profile", "Full settings"};
+    for (const char *title : expected) {
+        check(world.snapshot()["focus"].string() == title, "Quick settings contains only the agreed everyday shortcuts");
+        world.press(Key::Down);
+    }
+    check(world.snapshot()["rows"].number() == 10, "Quick settings is reduced from fourteen to ten rows");
+}
+
 void fullSettingsChecks() {
     Quick world;
-    world.focusRow(12);
+    world.focusRow(9);
     check(world.snapshot()["focus"].string() == "Full settings", "The drawer exposes full Settings");
     world.press(Key::Ok, 900);
     check(world.screen() == "dashboard:settings", "Full settings opens the native Settings page");
+    world.reply("settings:data:settings", R"({"ok":true,"writable":true})");
+    world.settle(500);
+    check(world.app.shows("Home settings") && world.app.shows("Language"),
+          "Full Settings exposes the configuration removed from the quick menu");
+    check(world.app.activate("set:row:0"), "The Home settings link is reachable");
+    world.settle(900);
+    check(world.screen() == "quick:layout" && world.app.shows("App tile shape"),
+          "Home settings opens the appearance controls");
+    world.press(Key::Back, 900);
+    check(world.screen() == "dashboard:settings", "Back from appearance returns to full Settings");
+    world.reply("settings:data:settings", R"({"ok":true,"writable":true})");
+    world.settle(500);
+    world.app.activate("set:row:0");
+    world.settle(900);
+    world.press(Key::Left, 900);
+    check(world.screen() == "dashboard:settings", "Left from appearance returns to full Settings, not the quick menu");
     world.press(Key::Back, 300);
     world.press(Key::Back, 300);
     check(world.screen() == "home", "Back from full Settings returns to Home");
@@ -542,10 +556,11 @@ void fullSettingsChecks() {
 
 void dimmingOptionChecks() {
     Quick world;
-    world.focusRow(13);
+    world.app.open("launcher-settings");
+    world.focusRow(7);
     world.settle(900);
     check(world.snapshot()["focus"].string() == "Idle dimming" && world.app.shows("Auto (OLED only)"),
-          "Quick settings exposes automatic panel-aware dimming");
+          "Home settings exposes automatic panel-aware dimming");
     world.press(Key::Ok, 250);
     check(world.on("w:layout.idleDimming").back().body["idleDimming"].string() == "on", "OK changes Auto to On");
     world.press(Key::Ok, 250);
@@ -572,6 +587,7 @@ int main() {
         actionChecks();
         navigationChecks();
         fullSettingsChecks();
+        compactMenuChecks();
         dimmingOptionChecks();
         std::printf("%d native quick-drawer checks passed\n", checkCount());
         return 0;

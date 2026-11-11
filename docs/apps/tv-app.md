@@ -10,7 +10,7 @@ It is drawn by the Native Tv client in the style of Google TV: a dark page with 
 
 Idle dimming defaults to Auto: on an OLED panel, thirty seconds without a key or click dim the launcher to two thirds black, and the first input afterwards only wakes it. LCD/NanoCell panels do not dim automatically. Quick settings offers Auto, On and Off; LG's own screen saver and panel protections are left as they are set.
 
-**Language** in Quick settings or Settings selects Automatic (the TV's language), English or Português (Brasil). The choice applies to native screens and movie metadata, and is independent of the browser dashboard. [Native launcher translations](../development/launcher-translations.md) describes the fallback and storage.
+**Language** in full Settings selects Automatic (the TV's language), English or Português (Brasil). The choice applies to native screens and movie metadata, and is independent of the browser dashboard. [Native launcher translations](../development/launcher-translations.md) describes the fallback and storage.
 
 ### How smooth it is
 
@@ -164,7 +164,7 @@ The app can be added or removed at any time:
 
 ### App tile shape
 
-Open **Quick settings → Home settings → App tile shape** and press OK to cycle
+Open **Quick settings → Full settings → Settings → Home settings → App tile shape** and press OK to cycle
 **Round**, **Rounded square**, **Squircle** and **Rectangle**. The choice belongs to the active profile;
 Round is the default. Rectangle uses 16:9 artwork where available, and otherwise
 centers the complete square icon without stretching or cropping it.
@@ -175,3 +175,11 @@ Existing saved `square` preferences remain rounded squares; `squircle` is a
 separate per-profile value. The renderer reuses its existing vertex layout and
 render passes, with a flat interior and the curve evaluated around the edge.
 TV GPU timing remains to be measured.
+
+### Quick settings
+
+The quick drawer keeps Volume, Picture mode, Backlight (OLED light on OLED TVs),
+Sound output, Input, Sleep timer, Screen off, Recent apps, Profile and Full settings.
+Language is in Full settings → Settings. Home settings there holds the launcher
+layout, tile shape and idle dimming options. Screensaver controls remain in the
+Screen Saver section of full Settings.
