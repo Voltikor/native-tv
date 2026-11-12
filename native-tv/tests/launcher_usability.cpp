@@ -193,6 +193,29 @@ void scrollingBarChecks() {
 }
 
 void homeResumeChecks() {
+    World pending;
+    pending.app.activate("tab:1");
+    pending.press(Key::Home, 900);
+    pending.press(Key::Down, 900);
+    check(pending.snapshot()["tab"].string() == "home",
+          "Home cancels a pending Apps transition and keeps subsequent input on Inicio");
+    for (const char *target : {"tab:0", "tab:1", "tool:1", "tool:2", "tool:0"}) {
+        World world;
+        world.app.activate(target);
+        world.settle(900);
+        world.press(Key::Home);
+        world.settle(900);
+        check(world.screen() == "home" && world.snapshot()["tab"].string() == "home" &&
+                  world.snapshot()["navigation"].boolean() && world.snapshot()["nav"].number() == 0,
+              "Keyboard Home returns every launcher page to Inicio without a focus cycle");
+        const size_t catalogueReads = world.transport.count("catalogue");
+        world.press(Key::Home);
+        check(std::fabs(world.motion("pgx")) < .001 && std::fabs(world.motion("ER:0")) < .001 &&
+                  world.transport.count("catalogue") == catalogueReads,
+              "Repeated Home keeps the existing scene and does not refresh its catalogue");
+        world.press(Key::Down, 900);
+        check(world.snapshot()["tab"].string() == "home", "Down stays on Inicio after keyboard Home");
+    }
     for (const char *target : {"tab:0", "tab:1", "tool:1", "tool:2", "tool:0"}) {
         World world;
         check(world.app.activate(target), "The starting page is reachable");

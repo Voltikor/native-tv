@@ -132,14 +132,8 @@ void Application::active(bool value) {
         capsAt_ = std::min(capsAt_, now_ + 300);
         if (state_.screen != Screen::Splash) {
             // Home's webOS stub reactivates the running client instead of starting it again.
-            if (resumed) {
-                if (state_.screen != Screen::Home)
-                    route("home:resume");
-                state_.home.nav = 0;
-                state_.home.navigation = true;
-                homeSelectTab(0);
-                homeFocus();
-            }
+            if (resumed)
+                returnHome();
             syncWallpaper();
             refresh();
         }

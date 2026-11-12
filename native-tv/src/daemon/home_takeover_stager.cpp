@@ -33,6 +33,7 @@ const char *const kAppInfo =
     "  \"resolution\": \"1920x1080\",\n"
     "  \"visible\": false,\n"
     "  \"disableBackHistoryAPI\": true,\n"
+    "  \"handlesRelaunch\": true,\n"
     "  \"appCategory\": [\n"
     "    \"home\"\n"
     "  ]\n"

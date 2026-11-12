@@ -4,6 +4,17 @@
 #include <algorithm>
 
 namespace nativetv {
+void Application::returnHome() {
+    if (state_.screen != Screen::Home)
+        route("home:resume");
+    if (state_.home.arranging) homeArrangeDone();
+    if (state_.home.editing) homeEditDone(false);
+    state_.home.nav = 0;
+    state_.home.navigation = true;
+    homeSelectTab(0);
+    homeFocus();
+    dirty_ = true;
+}
 void Application::route(const std::string &path) {
     hoveredHit_.clear();
     if (state_.home.arranging) homeArrangeDone();

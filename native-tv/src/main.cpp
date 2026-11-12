@@ -39,6 +39,8 @@ bool translate(SDL_Keycode code, Key &key) {
         key = Key::Up;
     else if (code == SDLK_DOWN)
         key = Key::Down;
+    else if (code == SDLK_HOME)
+        key = Key::Home;
     else if (code == SDLK_RETURN || code == SDLK_KP_ENTER)
         key = Key::Ok;
     else if (code == SDLK_ESCAPE || code == SDLK_AC_BACK || code == 461 || code == 0x100019c)
@@ -144,6 +146,8 @@ Key scriptedKey(const std::string &name) {
         return Key::Down;
     if (name == "back")
         return Key::Back;
+    if (name == "home")
+        return Key::Home;
     if (name == "red")
         return Key::Red;
     if (name == "delete")

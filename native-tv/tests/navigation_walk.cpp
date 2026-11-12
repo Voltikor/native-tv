@@ -381,6 +381,8 @@ struct Walk {
             return "PageDown";
         case Key::Delete:
             return "Delete";
+        case Key::Home:
+            return "Home";
         }
         return "?";
     }

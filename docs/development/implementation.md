@@ -1635,8 +1635,11 @@ for a client that cannot run, and LG's Home comes back for one that cannot stay 
   exits, so the next launch of the app found a client that was gone and started none (the Home key stayed on the stub).
   Without the registration a launch of the client behind the stub left the stub in front for good: the log showed the
   launch at 0, 15 and 30 s, and no window change.
-- *The Home key.* It reaches LG's filters and opens `com.webos.app.home`, the stub, which asks for the client's Home screen again each time
-  it is shown (`visibilitychange`, `webOSRelaunch`) and never while hidden. The client is meant to go to its Home screen on any launch or
+- *The Home key.* It reaches LG's filters and opens `com.webos.app.home`, the stub. Its `handlesRelaunch: true` keeps repeat launches in the
+  background. If `getForegroundAppInfo` names the native client, the stub sends keyboard Home (`networkinput/test/sendKeyCode`, Linux code
+  102), which the client handles as navigation to Início without refreshing or hiding its window. From another app, the stub launches the
+  client with `screen: home`. A refused background call activates the visible redirect and retains the daemon's launch watch. Cold loads
+  and visible retries retain the original launch path; hidden retries do nothing. The client is meant to go to its Home screen on any launch or
   return to the front, so that it does not depend on sam passing the new parameters to a client that is running. The app is also the
   tile's, so Home's recent apps leave it out, as they do the other apps that are Home itself. Its tile in the apps rows is the client itself, so `catalogueRow` (domain/home.cpp) makes OK on it the client's `dashboard` route, Settings, instead of an `/api/home/open` launch: sam would be asked for the app already in front and nothing would change.
 

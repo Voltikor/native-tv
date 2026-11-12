@@ -12,6 +12,11 @@ void Application::key(Key key) {
     }
     if (state_.screen == Screen::Splash)
         return;
+    if (key == Key::Home) {
+        wake();
+        returnHome();
+        return;
+    }
     // The first key after the screen dimmed only wakes it, on every screen.
     if (wake())
         return;

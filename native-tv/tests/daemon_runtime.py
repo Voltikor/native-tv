@@ -14688,7 +14688,7 @@ class DaemonRuntimeTests(unittest.TestCase):
                     "title": "Home", "icon": "assets/icon80.png",
                     "largeIcon": "assets/icon130.png", "iconColor": "#000000",
                     "bgColor": "#000000", "resolution": "1920x1080",
-                    "visible": False, "disableBackHistoryAPI": True,
+                    "visible": False, "disableBackHistoryAPI": True, "handlesRelaunch": True,
                     "appCategory": ["home"]
                 })
                 self.assertEqual(appDirectory.resolve(), staged.resolve())

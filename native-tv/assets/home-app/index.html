@@ -13,7 +13,8 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;cursor:none}
 /*
  * LG's Home, as the TV opens it: mounted over LG's Home under its id
  * (src/daemon/home_takeover_*). It has no screen. It asks the app manager for
- * the native client's Home screen and shows black until the client is in front.
+ * the native client's Home screen. Relaunches stay in the background so an
+ * already-visible client never has to give way to this empty page.
  * The client is the Native Tv tile's app, com.tvweb.dashboard: the one native
  * app sam is told of, which opens the dashboard unless a screen is named.
  *
@@ -39,46 +40,71 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;cursor:none}
   }
 
   // webOS.service where the platform provides it; the bridge under it otherwise.
-  function call(parameters) {
+  function call(uri, parameters, success, failure) {
+    var slash = uri.indexOf('/', 'luna://'.length);
     var service = window.webOS && window.webOS.service;
     if (service && typeof service.request === 'function') {
-      service.request('luna://com.webos.applicationManager', {
-        method: 'launch',
+      service.request(uri.slice(0, slash), {
+        method: uri.slice(slash + 1),
         parameters: parameters,
-        onSuccess: answered,
-        onFailure: retry
+        onSuccess: function (reply) {
+          if (reply && reply.returnValue === true) success(reply);
+          else failure();
+        },
+        onFailure: failure
       });
     } else if (window.PalmServiceBridge) {
       var bridge = new window.PalmServiceBridge();
       bridge.onservicecallback = function (message) {
         var reply = null;
         try { reply = JSON.parse(message); } catch (e) {}
-        answered(reply);
+        if (reply && reply.returnValue === true) success(reply);
+        else failure();
       };
-      bridge.call('luna://com.webos.applicationManager/launch', JSON.stringify(parameters));
+      bridge.call(uri, JSON.stringify(parameters));
     } else {
-      retry();
+      failure();
     }
   }
 
-  // At load, and each time this page is shown again: the Home key opens this
-  // app over the client, which is then asked for its Home screen once more.
-  // Never while hidden, or a launch that kept failing would take the screen
-  // from whatever is on it once it worked.
-  function launch() {
+  function foregroundFallback() {
+    // Older firmware may refuse the input call. The existing visible redirect
+    // and daemon watch remain the fallback; never retry a hidden Home request.
+    if (window.PalmSystem && typeof window.PalmSystem.activate === 'function')
+      window.PalmSystem.activate();
+    retry();
+  }
+
+  function launch(background) {
     clearTimeout(timer);
-    if (document.visibilityState === 'hidden') return;
+    if (document.visibilityState === 'hidden' && background !== true) return;
     try {
-      call({ id: APP_ID, params: { screen: 'home' } });
+      if (background === true) {
+        call('luna://com.webos.applicationManager/getForegroundAppInfo', {}, function (reply) {
+          if (reply.appId === APP_ID) {
+            // Linux KEY_HOME is keyboard Home, not the remote's system Home:
+            // only the foreground native client receives this navigation command.
+            call('luna://com.webos.service.networkinput/test/sendKeyCode',
+              { keyCode: 102 }, answered, foregroundFallback);
+          } else {
+            call('luna://com.webos.applicationManager/launch',
+              { id: APP_ID, params: { screen: 'home' } }, answered, foregroundFallback);
+          }
+        }, foregroundFallback);
+      } else {
+        call('luna://com.webos.applicationManager/launch',
+          { id: APP_ID, params: { screen: 'home' } }, answered, retry);
+      }
     } catch (e) {
-      retry();
+      if (background === true) foregroundFallback();
+      else retry();
     }
   }
 
   document.addEventListener('visibilitychange', function () {
     if (document.visibilityState === 'visible') launch();
   });
-  document.addEventListener('webOSRelaunch', launch);
+  document.addEventListener('webOSRelaunch', function () { launch(true); });
   launch();
 })();
 </script>

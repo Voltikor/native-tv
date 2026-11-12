@@ -17,7 +17,7 @@ namespace nativetv {
 struct ViewState;
 class Optimistic;
 
-enum class Key { Left, Right, Up, Down, Ok, Back, Red, PageUp, PageDown, Delete };
+enum class Key { Left, Right, Up, Down, Ok, Back, Red, PageUp, PageDown, Delete, Home };
 
 // What the application offers a screen while it runs.
 class ScreenHost {

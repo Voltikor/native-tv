@@ -253,6 +253,7 @@ class Application : private ScreenHost {
     void askAdminPin(const Response &response);
     void back();
     void screenKey(Key key);
+    void returnHome();
     void homeArrange(Key key);
     void homeArrangeHide();
     void homeArrangeMoveKind(Key key);
